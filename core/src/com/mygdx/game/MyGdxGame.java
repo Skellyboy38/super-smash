@@ -15,6 +15,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	HomeScreen home;
 	OrthographicCamera cam;
 	Texture picture;
+	float locationX;
+	boolean moveRight;
 	
 	@Override
 	public void create () {
@@ -23,14 +25,24 @@ public class MyGdxGame extends ApplicationAdapter {
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
 		picture = new Texture("background.jpg");
+		locationX = 0F;
+		moveRight = true;
 	}
 
 	@Override
 	public void render () {
+		if(moveRight)
+			locationX += 1;
+		if(!moveRight)
+			locationX -= 1;
+		if(locationX >= GAME_WIDTH - picture.getWidth())
+			moveRight = false;
+		if(locationX <= 0)
+			moveRight = true;
 		cam.update();
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
-		batch.draw(picture, 100, 0);
+		batch.draw(picture, locationX, 0);
 		batch.end();
 	}
 	
