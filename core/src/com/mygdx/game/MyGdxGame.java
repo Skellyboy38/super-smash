@@ -14,6 +14,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	HomeScreen home;
 	OrthographicCamera cam;
+	Texture picture;
 	
 	@Override
 	public void create () {
@@ -21,6 +22,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		home = new HomeScreen(batch);
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
+		picture = new Texture("background.jpg");
 	}
 
 	@Override
@@ -28,7 +30,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		cam.update();
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
-		//home.render();
+		batch.draw(picture, 100, 0);
 		batch.end();
 	}
 	
