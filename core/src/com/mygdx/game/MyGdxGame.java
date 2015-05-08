@@ -14,9 +14,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	HomeScreen home;
 	OrthographicCamera cam;
-	Texture picture;
-	float locationX;
-	boolean moveRight;
 	
 	@Override
 	public void create () {
@@ -24,25 +21,14 @@ public class MyGdxGame extends ApplicationAdapter {
 		home = new HomeScreen(batch);
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
-		picture = new Texture("background.jpg");
-		locationX = 0F;
-		moveRight = true;
 	}
 
 	@Override
 	public void render () {
-		if(moveRight)
-			locationX += 1;
-		if(!moveRight)
-			locationX -= 1;
-		if(locationX >= GAME_WIDTH - picture.getWidth())
-			moveRight = false;
-		if(locationX <= 0)
-			moveRight = true;
 		cam.update();
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
-		batch.draw(picture, locationX, 0);
+		home.render();
 		batch.end();
 	}
 	
