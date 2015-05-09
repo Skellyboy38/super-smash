@@ -6,30 +6,24 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.screens.HomeScreen;
 
 public class MyGdxGame extends ApplicationAdapter {
 	public static final int GAME_WIDTH = 1400;
 	public static final int GAME_HEIGHT = 800;
-	SpriteBatch batch;
 	HomeScreen home;
-	OrthographicCamera cam;
+	Stage stage;
 	
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		home = new HomeScreen(batch);
-		cam = new OrthographicCamera();
-		cam.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
+		stage = new Stage();
+		home = new HomeScreen(stage);
 	}
 
 	@Override
 	public void render () {
-		cam.update();
-		batch.setProjectionMatrix(cam.combined);
-		batch.begin();
 		home.render();
-		batch.end();
 	}
 	
 	@Override
