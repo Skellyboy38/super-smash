@@ -11,8 +11,9 @@ public class HomeScreen extends Screen{
 	Button quit;
 	SpriteBatch batch;
 	Texture background;
-	float locationX;
+	public float locationX;
 	boolean moveRight;
+	MenuScreen menu = new MenuScreen(batch);
 	
 	public HomeScreen(SpriteBatch batch) {
 		this.batch = batch;

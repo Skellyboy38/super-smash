@@ -1,8 +1,23 @@
 package com.mygdx.game.screens;
 
-public abstract class Screen {
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+public class Screen {
+	private SpriteBatch batch;
 	
-	abstract public void render();
+	public Screen(){
+		
+	}
 	
-	abstract public void update();
+	public Screen(SpriteBatch batch){
+		this.batch = batch;
+	}
+	public void render(){
+		
+	}
+	
+	public void update(){
+		
+	}
+	
 }
