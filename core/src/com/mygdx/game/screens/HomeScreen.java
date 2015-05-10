@@ -45,7 +45,6 @@ public class HomeScreen extends Screen{
 		picture = new Texture("homeScreen/background.jpg");
 		background = new Image(picture);
 		skin.addRegions(buttonAtlas);
-        Gdx.input.setInputProcessor(stage);
         font = new BitmapFont();
         textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = font;
@@ -61,6 +60,14 @@ public class HomeScreen extends Screen{
             	return true;
             }
         });
+	}
+	
+	public void show() {
+		Gdx.input.setInputProcessor(stage);
+	}
+	
+	public Stage getStage () {
+		return stage;
 	}
 	//Updates the location of the background - will add event listeners for the button(s) here
 	public void update() {

@@ -57,7 +57,6 @@ public class PlayScreen extends Screen{
 		background = new Image(picture);
 		skin1.addRegions(buttonAtlas1);
 		skin2.addRegions(buttonAtlas2);
-        Gdx.input.setInputProcessor(stage);
         font = new BitmapFont();
         textButtonStyle1 = new TextButtonStyle();
         textButtonStyle2 = new TextButtonStyle();
@@ -67,27 +66,36 @@ public class PlayScreen extends Screen{
         textButtonStyle2.up = skin2.getDrawable("player2nine");
         button1 = new TextButton("", textButtonStyle1);
         button2 = new TextButton("", textButtonStyle2);
-        button1.setPosition(100, MyGdxGame.GAME_HEIGHT - 400);
         button1.setHeight(200);
         button1.setWidth(200);
-        button2.setPosition(MyGdxGame.GAME_WIDTH - 400, MyGdxGame.GAME_HEIGHT - 400);
+        button1.setPosition(100, MyGdxGame.GAME_HEIGHT - (button1.getHeight()+100));
         button2.setHeight(200);
         button2.setWidth(200);
+        button2.setPosition(MyGdxGame.GAME_WIDTH - (button2.getWidth()+100), MyGdxGame.GAME_HEIGHT - (button2.getHeight()+100));
         
         button1.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	button1.setHeight(300);
-            	button1.setWidth(300);
+            	button1.setHeight(button1.getHeight()+10);
+            	button1.setWidth(button1.getWidth()+10);
             	return true;
             }
         });
         
         button2.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	game.changeScreen(twoPlayer);
+            	button2.setHeight(button2.getHeight()+10);
+            	button2.setWidth(button2.getWidth()+10);
             	return true;
             }
         });
+	}
+	
+	public void show() {
+		Gdx.input.setInputProcessor(stage);
+	}
+	
+	public Stage getStage() {
+		return stage;
 	}
 
 	public void render() {

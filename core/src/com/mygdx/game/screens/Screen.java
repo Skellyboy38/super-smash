@@ -6,4 +6,5 @@ public class Screen {
 	
 	public void update() {}
 	
+	public void show() {}
 }

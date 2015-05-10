@@ -23,10 +23,12 @@ public class MyGdxGame extends ApplicationAdapter {
 		twoPlayer = new TwoPlayerCharacterSelect();
 		play = new PlayScreen(this, onePlayer, twoPlayer);
 		home = new HomeScreen(this, play);
+		home.show();
 		screen = home;
 	}
 	
 	public void changeScreen(Screen toChange) {
+		toChange.show();
 		screen = toChange;
 	}
 
