@@ -75,8 +75,7 @@ public class PlayScreen extends Screen{
         
         button1.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	button1.setHeight(button1.getHeight()+10);
-            	button1.setWidth(button1.getWidth()+10);
+            	game.changeScreen(onePlayer);
             	return true;
             }
         });

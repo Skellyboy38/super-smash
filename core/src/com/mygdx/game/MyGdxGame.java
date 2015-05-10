@@ -19,7 +19,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		screen = new Screen();
-		onePlayer = new OnePlayerCharacterSelect();
+		onePlayer = new OnePlayerCharacterSelect(this);
 		twoPlayer = new TwoPlayerCharacterSelect();
 		play = new PlayScreen(this, onePlayer, twoPlayer);
 		home = new HomeScreen(this, play);
