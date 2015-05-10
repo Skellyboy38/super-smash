@@ -1,24 +1,32 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.screens.HomeScreen;
+import com.mygdx.game.screens.PlayScreen;
+import com.mygdx.game.screens.Screen;
 
 public class MyGdxGame extends ApplicationAdapter {
 	public static final int GAME_WIDTH = 1400;
 	public static final int GAME_HEIGHT = 800;
+	Screen screen;
 	HomeScreen home;
-	Stage stage;
+	PlayScreen play;
 	
 	@Override
 	public void create () {
-		stage = new Stage();
-		home = new HomeScreen(stage);
+		screen = new Screen();
+		play = new PlayScreen();
+		home = new HomeScreen(this, play);
+		screen = home;
+	}
+	
+	public void changeScreen(Screen toChange) {
+		screen = toChange;
 	}
 
 	@Override
 	public void render () {
-		home.render();
+		screen.render();
 	}
 	
 	@Override

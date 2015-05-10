@@ -1,8 +1,9 @@
 package com.mygdx.game.screens;
 
-public abstract class Screen {
+public class Screen {
 	
-	abstract public void render();
+	public void render() {}
 	
-	abstract public void update();
+	public void update() {}
+	
 }
