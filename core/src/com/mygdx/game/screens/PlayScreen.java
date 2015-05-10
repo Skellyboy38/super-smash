@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -16,6 +18,9 @@ public class PlayScreen extends Screen{
 	private Image background;
 	private float locationX;
 	private boolean moveRight;
+	private MyGdxGame game;
+	private Screen onePlayer;
+	private Screen twoPlayer;
 	
 	//Objects necessary for the stage 
 	private Stage stage;
@@ -30,7 +35,10 @@ public class PlayScreen extends Screen{
     private TextureAtlas buttonAtlas1;
     private TextureAtlas buttonAtlas2;
 	
-	public PlayScreen() {
+	public PlayScreen(MyGdxGame game, Screen onePlayer, Screen twoPlayer) {
+		this.onePlayer = onePlayer;
+		this.twoPlayer = twoPlayer;
+		this.game = game;
 		moveRight = true;
 		locationX = 0F;
 		stage = new Stage();
@@ -59,13 +67,27 @@ public class PlayScreen extends Screen{
         textButtonStyle2.up = skin2.getDrawable("player2nine");
         button1 = new TextButton("", textButtonStyle1);
         button2 = new TextButton("", textButtonStyle2);
-        button1.setPosition(100, 100);
-        button1.setHeight(300);
-        button1.setWidth(300);
-        button2.setPosition(500, 100);
-        button2.setHeight(300);
-        button2.setWidth(300);
+        button1.setPosition(100, MyGdxGame.GAME_HEIGHT - 400);
+        button1.setHeight(200);
+        button1.setWidth(200);
+        button2.setPosition(MyGdxGame.GAME_WIDTH - 400, MyGdxGame.GAME_HEIGHT - 400);
+        button2.setHeight(200);
+        button2.setWidth(200);
         
+        button1.addListener(new InputListener() {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            	button1.setHeight(300);
+            	button1.setWidth(300);
+            	return true;
+            }
+        });
+        
+        button2.addListener(new InputListener() {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            	game.changeScreen(twoPlayer);
+            	return true;
+            }
+        });
 	}
 
 	public void render() {
