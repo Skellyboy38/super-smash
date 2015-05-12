@@ -1,27 +1,30 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.mygdx.game.screens.HomeScreen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.screens.OnePlayerCharacterSelect;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.screens.Screen;
+import com.mygdx.game.screens.HomeScreen;
 import com.mygdx.game.screens.TwoPlayerCharacterSelect;
 
 public class MyGdxGame extends ApplicationAdapter {
 	public static final int GAME_WIDTH = 1400;
 	public static final int GAME_HEIGHT = 800;
+	SpriteBatch batch;
 	Screen screen;
 	HomeScreen home;
 	PlayScreen play;
-	OnePlayerCharacterSelect onePlayer;
-	TwoPlayerCharacterSelect twoPlayer;
+	OnePlayerCharacterSelect player1;
+	TwoPlayerCharacterSelect player2;
+	OrthographicCamera cam;
 	
 	@Override
 	public void create () {
-		screen = new Screen();
-		onePlayer = new OnePlayerCharacterSelect(this);
-		twoPlayer = new TwoPlayerCharacterSelect();
-		play = new PlayScreen(this, onePlayer, twoPlayer);
+		player1 = new OnePlayerCharacterSelect(this);
+		player2 = new TwoPlayerCharacterSelect();
+		play = new PlayScreen(this, player1, player2);
 		home = new HomeScreen(this, play);
 		home.show();
 		screen = home;
@@ -35,6 +38,11 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 		screen.render();
+		update();
+	}
+	
+	public void update(){
+		
 	}
 	
 	@Override
