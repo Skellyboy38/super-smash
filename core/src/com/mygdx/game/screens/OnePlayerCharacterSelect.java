@@ -62,6 +62,10 @@ public class OnePlayerCharacterSelect extends Screen{
 		stage.addActor(button5);
 		stage.addActor(button6);
 	}
+	
+	public void addScreens() {
+		
+	}
 
 	public void create() {
 		picture = new Texture("CharacterSelectScreen/background.png");

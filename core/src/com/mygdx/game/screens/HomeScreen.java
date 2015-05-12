@@ -2,11 +2,13 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -25,18 +27,27 @@ public class HomeScreen extends Screen{
     private TextureAtlas buttonAtlas;
     private float opacity;
     private boolean decreaseOpacity;
+    private Texture picture;
+	private Image background;
 	
-	public HomeScreen(MyGdxGame game, Screen next) {
+	public HomeScreen(MyGdxGame game) {
 		stage = new Stage();
 		opacity = 0F;
 		decreaseOpacity = true;
-		this.next = next;
 		this.game = game;
 		create();
+		stage.addActor(background);
         stage.addActor(button);
 	}
+	
+	public void addScreens(Screen next) {
+		this.next = next;
+	}
+	
 	//Creates the necessary objects for the stage (skin, images, font, textButtonStyle, buttons and textureAtlas)
 	public void create() {
+		picture = new Texture("homeScreen/background.png");
+		background = new Image(picture);
 		skin = new Skin();
 		buttonAtlas = new TextureAtlas("homeScreen/button/logo.pack");
 		skin.addRegions(buttonAtlas);
