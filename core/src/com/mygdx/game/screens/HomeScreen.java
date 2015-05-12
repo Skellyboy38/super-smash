@@ -1,23 +1,18 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.mygdx.game.MyGdxGame;
 
 public class HomeScreen extends Screen{
-	private Texture picture;
-	private Image background;
-	private float locationX;
-	private boolean moveRight;
 	private MyGdxGame game;
 	private Screen next;
 	
@@ -28,31 +23,34 @@ public class HomeScreen extends Screen{
     private BitmapFont font;
     private Skin skin;
     private TextureAtlas buttonAtlas;
+    private float opacity;
+    private boolean decreaseOpacity;
 	
 	public HomeScreen(MyGdxGame game, Screen next) {
 		stage = new Stage();
+		opacity = 0F;
+		decreaseOpacity = true;
 		this.next = next;
 		this.game = game;
-		locationX = 0;
 		create();
-        stage.addActor(background);
         stage.addActor(button);
 	}
 	//Creates the necessary objects for the stage (skin, images, font, textButtonStyle, buttons and textureAtlas)
 	public void create() {
 		skin = new Skin();
-		buttonAtlas = new TextureAtlas("homeScreen/buttons/buttons.pack");
-		picture = new Texture("homeScreen/background.jpg");
-		background = new Image(picture);
+		buttonAtlas = new TextureAtlas("homeScreen/button/logo.pack");
 		skin.addRegions(buttonAtlas);
         font = new BitmapFont();
+        font.setColor(Color.RED);
+        font.setScale(4);
         textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = font;
-        textButtonStyle.up = skin.getDrawable("button");
-        button = new TextButton("Play", textButtonStyle);
-        button.setPosition(100, 100);
-        button.setHeight(300);
-        button.setWidth(300);
+        textButtonStyle.up = skin.getDrawable("background2");
+        button = new TextButton("CLICK TO PLAY", textButtonStyle);
+        button.setHeight(600);
+        button.setWidth(800);
+        button.setPosition(MyGdxGame.GAME_WIDTH/2 - (button.getWidth()/2), MyGdxGame.GAME_HEIGHT/2 - (button.getHeight()/2));
+        
         //Creates an event listener for the button which makes screen point to the playScreen
         button.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -71,15 +69,19 @@ public class HomeScreen extends Screen{
 	}
 	//Updates the location of the background - will add event listeners for the button(s) here
 	public void update() {
-		if(moveRight)
-			locationX += 1;
-		if(!moveRight)
-			locationX -= 1;
-		if(locationX >= MyGdxGame.GAME_WIDTH - background.getWidth())
-			moveRight = false;
-		if(locationX <= 0)
-			moveRight = true;
-		background.setPosition(locationX, 0);
+		if(decreaseOpacity) {
+			opacity -= 0.01;
+		}
+		else {
+			opacity += 0.01;
+		}
+		if(opacity >= 1) {
+			decreaseOpacity = true;
+		}
+		if(opacity <= 0) {
+			decreaseOpacity = false;
+		}
+		font.setColor(0,0,0,opacity);
 	}
 	
 	public void render() {
@@ -94,6 +96,5 @@ public class HomeScreen extends Screen{
 		skin.dispose();
 		buttonAtlas.dispose();
 		font.dispose();
-		picture.dispose();
 	}
 }
