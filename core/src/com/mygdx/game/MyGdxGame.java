@@ -29,7 +29,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		
 		home.addScreens(play);
 		play.addScreens(player1, player2, home);
-		player1.addScreens();
+		player1.addScreens(play);
 		home.show();
 		screen = home;
 	}

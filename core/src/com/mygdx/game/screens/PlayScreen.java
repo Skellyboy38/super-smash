@@ -16,8 +16,6 @@ import com.mygdx.game.MyGdxGame;
 public class PlayScreen extends Screen{
 	private Texture picture;
 	private Image background;
-	private float locationX;
-	private boolean moveRight;
 	private MyGdxGame game;
 	private Screen onePlayer;
 	private Screen twoPlayer;
@@ -42,8 +40,6 @@ public class PlayScreen extends Screen{
 	
 	public PlayScreen(MyGdxGame game) {
 		this.game = game;
-		moveRight = true;
-		locationX = 0F;
 		stage = new Stage();
 		create();
         stage.addActor(background);
@@ -91,7 +87,7 @@ public class PlayScreen extends Screen{
         button2.setPosition(MyGdxGame.GAME_WIDTH - (button2.getWidth()+100), MyGdxGame.GAME_HEIGHT - (button2.getHeight()+100));
         button3.setHeight(200);
         button3.setWidth(200);
-        button3.setPosition(100,100);
+        button3.setPosition(50,50);
         
         button1.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -131,15 +127,7 @@ public class PlayScreen extends Screen{
 	}
 
 	public void update() {
-		if(moveRight)
-			locationX += 1;
-		if(!moveRight)
-			locationX -= 1;
-		if(locationX >= MyGdxGame.GAME_WIDTH - background.getWidth())
-			moveRight = false;
-		if(locationX <= 0)
-			moveRight = true;
-		background.setPosition(locationX, 0);	
+			
 	}
 	
 	public void dispose() {

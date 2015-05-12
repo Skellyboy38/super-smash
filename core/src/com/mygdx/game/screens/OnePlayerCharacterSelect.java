@@ -18,6 +18,7 @@ public class OnePlayerCharacterSelect extends Screen{
 	private Image background;
 	private MyGdxGame game;
 	private BitmapFont font;
+	private Screen back;
 
 	private Stage stage;
 	private TextButton button1;
@@ -26,24 +27,28 @@ public class OnePlayerCharacterSelect extends Screen{
 	private TextButton button4;
 	private TextButton button5;
 	private TextButton button6;
+	private TextButton backButton;
 	private TextButtonStyle textButtonStyle1;
 	private TextButtonStyle textButtonStyle2;
 	private TextButtonStyle textButtonStyle3;
 	private TextButtonStyle textButtonStyle4;
 	private TextButtonStyle textButtonStyle5;
 	private TextButtonStyle textButtonStyle6;
+	private TextButtonStyle textButtonStyleBack;
 	private Skin skin1;
 	private Skin skin2;
 	private Skin skin3;
 	private Skin skin4;
 	private Skin skin5;
 	private Skin skin6;
+	private Skin skinBack;
 	private TextureAtlas buttonAtlas1;
 	private TextureAtlas buttonAtlas2;
 	private TextureAtlas buttonAtlas3;
 	private TextureAtlas buttonAtlas4;
 	private TextureAtlas buttonAtlas5;
 	private TextureAtlas buttonAtlas6;
+	private TextureAtlas buttonAtlasBack;
 	
 	private float buttonHeight;
 	private float buttonWidth;
@@ -61,10 +66,11 @@ public class OnePlayerCharacterSelect extends Screen{
 		stage.addActor(button4);
 		stage.addActor(button5);
 		stage.addActor(button6);
+		stage.addActor(backButton);
 	}
 	
-	public void addScreens() {
-		
+	public void addScreens(Screen back) {
+		this.back = back;
 	}
 
 	public void create() {
@@ -77,6 +83,7 @@ public class OnePlayerCharacterSelect extends Screen{
 		createC4();
 		createC5();
 		createC6();
+		createBackButton();
 	}
 
 	public void createC1() {
@@ -217,6 +224,28 @@ public class OnePlayerCharacterSelect extends Screen{
         button6.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             	//Add event later
+            	return true;
+            }
+        });
+	}
+	
+	public void createBackButton() {
+		skinBack = new Skin();
+		buttonAtlasBack = new TextureAtlas("back/goBack.pack");
+		
+		skinBack.addRegions(buttonAtlasBack);
+        textButtonStyleBack = new TextButtonStyle();
+        textButtonStyleBack.font = font;
+        textButtonStyleBack.up = skinBack.getDrawable("backButton");
+        backButton = new TextButton("", textButtonStyleBack);
+        
+        backButton.setHeight(200);
+        backButton.setWidth(200);
+        backButton.setPosition(50,50);
+        
+        backButton.addListener(new InputListener() {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            	game.changeScreen(back);
             	return true;
             }
         });
