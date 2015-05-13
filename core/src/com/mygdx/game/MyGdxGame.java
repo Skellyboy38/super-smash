@@ -22,10 +22,11 @@ public class MyGdxGame extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		batch = new SpriteBatch();
 		player1 = new OnePlayerCharacterSelect(this);
 		player2 = new TwoPlayerCharacterSelect(this);
 		play = new PlayScreen(this);
-		home = new HomeScreen(this);
+		home = new HomeScreen(this, batch);
 		
 		home.addScreens(play);
 		play.addScreens(player1, player2, home);

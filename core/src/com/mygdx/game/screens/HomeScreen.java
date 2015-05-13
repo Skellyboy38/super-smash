@@ -1,9 +1,9 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -26,15 +26,18 @@ public class HomeScreen extends Screen{
     private Skin skin;
     private TextureAtlas buttonAtlas;
     private float opacity;
-    private boolean decreaseOpacity;
     private Texture picture;
 	private Image background;
+	private SpriteBatch batch;
+	long a = 0;
+	long b = 0;
+	long c = 0;
 	
-	public HomeScreen(MyGdxGame game) {
+	public HomeScreen(MyGdxGame game, SpriteBatch batch) {
 		stage = new Stage();
-		opacity = 0F;
-		decreaseOpacity = true;
+		opacity = 1F;
 		this.game = game;
+		this.batch = batch;
 		create();
 		stage.addActor(background);
         stage.addActor(button);
@@ -48,19 +51,21 @@ public class HomeScreen extends Screen{
 	public void create() {
 		picture = new Texture("homeScreen/background.png");
 		background = new Image(picture);
+		background.setHeight(MyGdxGame.GAME_HEIGHT);
+		background.setWidth(MyGdxGame.GAME_WIDTH);
 		skin = new Skin();
-		buttonAtlas = new TextureAtlas("homeScreen/button/logo.pack");
+		buttonAtlas = new TextureAtlas("homeScreen/button/button.pack");
 		skin.addRegions(buttonAtlas);
-        font = new BitmapFont();
-        font.setColor(Color.RED);
-        font.setScale(4);
+        font = new BitmapFont(Gdx.files.classpath("com/badlogic/gdx/utils/arial-15.fnt"), Gdx.files.classpath("com/badlogic/gdx/utils/arial-15.png"), false);
+        font.setScale(3);
+        font.setColor(255,255,255,opacity);
         textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = font;
-        textButtonStyle.up = skin.getDrawable("background2");
-        button = new TextButton("CLICK TO PLAY", textButtonStyle);
-        button.setHeight(600);
-        button.setWidth(800);
-        button.setPosition(MyGdxGame.GAME_WIDTH/2 - (button.getWidth()/2), MyGdxGame.GAME_HEIGHT/2 - (button.getHeight()/2));
+        textButtonStyle.up = skin.getDrawable("buttonGood");
+        button = new TextButton("", textButtonStyle);
+        button.setHeight(100);
+        button.setWidth(500);
+        button.setPosition(MyGdxGame.GAME_WIDTH/2 - (button.getWidth()/2), MyGdxGame.GAME_HEIGHT/2 - 220);
         
         //Creates an event listener for the button which makes screen point to the playScreen
         button.addListener(new InputListener() {
@@ -80,25 +85,19 @@ public class HomeScreen extends Screen{
 	}
 	//Updates the location of the background - will add event listeners for the button(s) here
 	public void update() {
-		if(decreaseOpacity) {
-			opacity -= 0.01;
-		}
-		else {
-			opacity += 0.01;
-		}
-		if(opacity >= 1) {
-			decreaseOpacity = true;
-		}
-		if(opacity <= 0) {
-			decreaseOpacity = false;
-		}
-		font.setColor(0,0,0,opacity);
+		a++;
+		b=b+2;
+		c=c+3;
+		font.setColor(a,b,c,1);
 	}
 	
 	public void render() {
 		update();
 		stage.act();
 		stage.draw();
+		batch.begin();
+		font.draw(batch, "CLICK TO PLAY", MyGdxGame.GAME_WIDTH/2 - 170, MyGdxGame.GAME_HEIGHT/2 - 150);
+		batch.end();
 	}
 	
 	//Called when the home screen is no longer needed (disposes of all the instance variables)
