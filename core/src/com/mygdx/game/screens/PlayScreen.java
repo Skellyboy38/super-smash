@@ -27,6 +27,8 @@ public class PlayScreen extends Screen{
 	
     private TextButton button1;
     private TextButton button2;
+    private TextButton buttonOptions;
+    private TextButton buttonData;
     private TextButton button3;
     private TextButtonStyle textButtonStyle1;
     private TextButtonStyle textButtonStyle3;
@@ -43,6 +45,8 @@ public class PlayScreen extends Screen{
         stage.addActor(button1);
         stage.addActor(button2);
         stage.addActor(button3);
+        stage.addActor(buttonOptions);
+        stage.addActor(buttonData);
 	}
 	
 	public void addScreens(Screen onePlayer, Screen twoPlayer, Screen back) {
@@ -73,6 +77,8 @@ public class PlayScreen extends Screen{
         textButtonStyle3.up = skin3.getDrawable("backButton");
         button1 = new TextButton("One player", textButtonStyle1);
         button2 = new TextButton("Multiplayer", textButtonStyle1);
+        buttonOptions = new TextButton("Options", textButtonStyle1);
+        buttonData = new TextButton("Data", textButtonStyle1);
         button3 = new TextButton("", textButtonStyle3);
         button1.setHeight(75);
         button1.setWidth(250);
@@ -80,6 +86,12 @@ public class PlayScreen extends Screen{
         button2.setHeight(75);
         button2.setWidth(250);
         button2.setPosition(90 + (MyGdxGame.GAME_WIDTH-200)/4, MyGdxGame.GAME_HEIGHT/2+250);
+        buttonOptions.setHeight(75);
+        buttonOptions.setWidth(250);
+        buttonOptions.setPosition(90 + (MyGdxGame.GAME_WIDTH-200)/2, MyGdxGame.GAME_HEIGHT/2+250);
+        buttonData.setHeight(75);
+        buttonData.setWidth(250);
+        buttonData.setPosition(90 + 3*(MyGdxGame.GAME_WIDTH-200)/4, MyGdxGame.GAME_HEIGHT/2+250);
         button3.setHeight(200);
         button3.setWidth(200);
         button3.setPosition(50,50);
@@ -95,6 +107,20 @@ public class PlayScreen extends Screen{
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             	button2.setHeight(button2.getHeight()+10);
             	button2.setWidth(button2.getWidth()+10);
+            	return true;
+            }
+        });
+        buttonOptions.addListener(new InputListener() {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            	buttonOptions.setHeight(buttonOptions.getHeight()+10);
+            	buttonOptions.setWidth(buttonOptions.getWidth()+10);
+            	return true;
+            }
+        });
+        buttonData.addListener(new InputListener() {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            	buttonData.setHeight(buttonData.getHeight()+10);
+            	buttonData.setWidth(buttonData.getWidth()+10);
             	return true;
             }
         });
