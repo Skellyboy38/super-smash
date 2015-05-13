@@ -239,8 +239,8 @@ public class OnePlayerCharacterSelect extends Screen{
         textButtonStyleBack.up = skinBack.getDrawable("backButton");
         backButton = new TextButton("", textButtonStyleBack);
         
-        backButton.setHeight(200);
-        backButton.setWidth(200);
+        backButton.setHeight(100);
+        backButton.setWidth(100);
         backButton.setPosition(50,50);
         
         backButton.addListener(new InputListener() {

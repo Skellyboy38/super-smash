@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.mygdx.game.MyGdxGame;
+import java.util.Random;
 
 public class PlayScreen extends Screen{
 	private Texture picture;
@@ -20,6 +21,7 @@ public class PlayScreen extends Screen{
 	private Screen onePlayer;
 	private Screen twoPlayer;
 	private Screen back;
+	private Random rand;
 	
 	//Objects necessary for the stage 
 	private Stage stage;
@@ -28,7 +30,7 @@ public class PlayScreen extends Screen{
     private TextButton button1;
     private TextButton button2;
     private TextButton buttonOptions;
-    private TextButton buttonData;
+    private TextButton buttonItem;
     private TextButton button3;
     private TextButtonStyle textButtonStyle1;
     private TextButtonStyle textButtonStyle3;
@@ -38,6 +40,7 @@ public class PlayScreen extends Screen{
     private TextureAtlas buttonAtlas3;
 	
 	public PlayScreen(MyGdxGame game) {
+		rand = new Random();
 		this.game = game;
 		stage = new Stage();
 		create();
@@ -46,7 +49,7 @@ public class PlayScreen extends Screen{
         stage.addActor(button2);
         stage.addActor(button3);
         stage.addActor(buttonOptions);
-        stage.addActor(buttonData);
+        stage.addActor(buttonItem);
 	}
 	
 	public void addScreens(Screen onePlayer, Screen twoPlayer, Screen back) {
@@ -75,10 +78,10 @@ public class PlayScreen extends Screen{
         textButtonStyle1.over = skin1.getDrawable("ButtonDown");
         textButtonStyle1.checkedOver = skin1.getDrawable("ButtonDown");
         textButtonStyle3.up = skin3.getDrawable("backButton");
-        button1 = new TextButton("One player", textButtonStyle1);
+        button1 = new TextButton("Single player", textButtonStyle1);
         button2 = new TextButton("Multiplayer", textButtonStyle1);
         buttonOptions = new TextButton("Options", textButtonStyle1);
-        buttonData = new TextButton("Data", textButtonStyle1);
+        buttonItem = new TextButton("Items", textButtonStyle1);
         button3 = new TextButton("", textButtonStyle3);
         button1.setHeight(75);
         button1.setWidth(250);
@@ -89,11 +92,11 @@ public class PlayScreen extends Screen{
         buttonOptions.setHeight(75);
         buttonOptions.setWidth(250);
         buttonOptions.setPosition(90 + (MyGdxGame.GAME_WIDTH-200)/2, MyGdxGame.GAME_HEIGHT/2+250);
-        buttonData.setHeight(75);
-        buttonData.setWidth(250);
-        buttonData.setPosition(90 + 3*(MyGdxGame.GAME_WIDTH-200)/4, MyGdxGame.GAME_HEIGHT/2+250);
-        button3.setHeight(200);
-        button3.setWidth(200);
+        buttonItem.setHeight(75);
+        buttonItem.setWidth(250);
+        buttonItem.setPosition(90 + 3*(MyGdxGame.GAME_WIDTH-200)/4, MyGdxGame.GAME_HEIGHT/2+250);
+        button3.setHeight(100);
+        button3.setWidth(100);
         button3.setPosition(50,50);
         
         button1.addListener(new InputListener() {
@@ -105,22 +108,20 @@ public class PlayScreen extends Screen{
         
         button2.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	button2.setHeight(button2.getHeight()+10);
-            	button2.setWidth(button2.getWidth()+10);
+            	game.changeScreen(onePlayer);
             	return true;
             }
         });
         buttonOptions.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	buttonOptions.setHeight(buttonOptions.getHeight()+10);
-            	buttonOptions.setWidth(buttonOptions.getWidth()+10);
+            	buttonOptions.setHeight(buttonOptions.getHeight()/1.1F);
+            	buttonOptions.setWidth(buttonOptions.getWidth()/1.1F);
             	return true;
             }
         });
-        buttonData.addListener(new InputListener() {
+        buttonItem.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	buttonData.setHeight(buttonData.getHeight()+10);
-            	buttonData.setWidth(buttonData.getWidth()+10);
+            	buttonItem.setPosition(rand.nextFloat()*1200, rand.nextFloat()*700);
             	return true;
             }
         });
