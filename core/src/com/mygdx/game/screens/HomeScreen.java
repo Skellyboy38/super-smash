@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,12 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.MyGdxGame;
 
 public class HomeScreen extends Screen{
 	private MyGdxGame game;
 	private Screen next;
+	Graphics.DisplayMode[] modes = Gdx.graphics.getDisplayModes();
 	
 	//Objects necessary for the stage 
 	private Stage stage;
@@ -35,7 +36,7 @@ public class HomeScreen extends Screen{
 	long c = 0;
 	
 	public HomeScreen(MyGdxGame game, SpriteBatch batch) {
-		//stage = new Stage(new FitViewport(game.GAME_WIDTH, game.GAME_HEIGHT));
+		super(game);
 		stage = new Stage();
 		opacity = 1F;
 		this.game = game;
@@ -78,6 +79,26 @@ public class HomeScreen extends Screen{
         });
 	}
 	
+	public void toggleFullScreen() {
+		if(Gdx.graphics.isFullscreen()) {
+			Gdx.graphics.setDisplayMode(game.GAME_WIDTH, game.GAME_HEIGHT,false);
+		}
+		else {
+			Graphics.DisplayMode m = null;
+			for(Graphics.DisplayMode mode: Gdx.graphics.getDisplayModes()) {
+				if(m == null) {
+					m = mode;
+				} else {
+					if(m.width < mode.width) {
+						m = mode;
+					}
+				}
+			}
+			
+			Gdx.graphics.setDisplayMode(m);
+		}
+	}
+	
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
 	}
@@ -94,6 +115,7 @@ public class HomeScreen extends Screen{
 	}
 	
 	public void render() {
+		super.render();
 		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		update();
 		stage.act();

@@ -41,6 +41,7 @@ public class PlayScreen extends Screen{
     private TextureAtlas buttonAtlas3;
 	
 	public PlayScreen(MyGdxGame game) {
+		super(game);
 		rand = new Random();
 		this.game = game;
 		stage = new Stage();
@@ -144,6 +145,7 @@ public class PlayScreen extends Screen{
 	}
 
 	public void render() {
+		super.render();
 		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		update();
 		stage.act();

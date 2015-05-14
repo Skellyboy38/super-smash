@@ -35,6 +35,7 @@ public class OnePlayerCharacterSelect extends Screen{
 	private float buttonWidth;
 
 	public OnePlayerCharacterSelect(MyGdxGame game) {
+		super(game);
 		stage = new Stage();
 		this.game = game;
 		
@@ -65,7 +66,7 @@ public class OnePlayerCharacterSelect extends Screen{
 		background = new Image(picture);
 		background.setHeight(game.GAME_HEIGHT);
 		background.setWidth(game.GAME_WIDTH);
-		background.setPosition(-10, -20);
+		background.setPosition(0, 0);
 		buttonHeight = 75;
 		buttonWidth = 75;
 		createBackButton();
@@ -117,6 +118,7 @@ public class OnePlayerCharacterSelect extends Screen{
 	}
 
 	public void render() {
+		super.render();
 		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		update();
 		stage.act();

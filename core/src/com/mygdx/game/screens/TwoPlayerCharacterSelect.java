@@ -7,6 +7,7 @@ public class TwoPlayerCharacterSelect extends Screen{
 	private MyGdxGame game;
 	
 	public TwoPlayerCharacterSelect(MyGdxGame game) {
+		super(game);
 		this.game = game;
 	}
 	
