@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,8 +13,11 @@ import com.mygdx.game.screens.HomeScreen;
 import com.mygdx.game.screens.TwoPlayerCharacterSelect;
 
 public class MyGdxGame extends ApplicationAdapter {
-	public static final int GAME_WIDTH = 1400;
-	public static final int GAME_HEIGHT = 800;
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	public double width = screenSize.getWidth();
+	public double height = screenSize.getHeight();
+	public final int GAME_WIDTH = (int)width;
+	public final int GAME_HEIGHT = (int)height;
 	SpriteBatch batch;
 	Screen screen;
 	HomeScreen home;

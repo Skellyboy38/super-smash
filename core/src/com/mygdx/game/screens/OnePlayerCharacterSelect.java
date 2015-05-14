@@ -56,8 +56,8 @@ public class OnePlayerCharacterSelect extends Screen{
 	public OnePlayerCharacterSelect(MyGdxGame game) {
 		stage = new Stage();
 		this.game = game;
-		buttonHeight = MyGdxGame.GAME_HEIGHT/3;
-		buttonWidth = MyGdxGame.GAME_WIDTH/6 - 140/6;
+		buttonHeight = game.GAME_HEIGHT/3;
+		buttonWidth = game.GAME_WIDTH/6 - 140/6;
 		create();
 		stage.addActor(background);
 		stage.addActor(button1);
@@ -76,6 +76,8 @@ public class OnePlayerCharacterSelect extends Screen{
 	public void create() {
 		picture = new Texture("CharacterSelectScreen/background.png");
 		background = new Image(picture);
+		background.setHeight((float)game.height);
+		background.setWidth((float)game.width);
 		
 		createC1();
 		createC2();
@@ -100,7 +102,7 @@ public class OnePlayerCharacterSelect extends Screen{
         
         button1.setHeight(buttonHeight);
         button1.setWidth(buttonWidth);
-        button1.setPosition(20, MyGdxGame.GAME_HEIGHT/2 - button1.getHeight()/2);
+        button1.setPosition(20, game.GAME_HEIGHT/2 - button1.getHeight()/2);
         
         button1.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -123,7 +125,7 @@ public class OnePlayerCharacterSelect extends Screen{
         
         button2.setHeight(buttonHeight);
         button2.setWidth(buttonWidth);
-        button2.setPosition(40 + button1.getWidth(), MyGdxGame.GAME_HEIGHT/2 - button1.getHeight()/2);
+        button2.setPosition(40 + button1.getWidth(), game.GAME_HEIGHT/2 - button1.getHeight()/2);
         
         button2.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -146,7 +148,7 @@ public class OnePlayerCharacterSelect extends Screen{
         
         button3.setHeight(buttonHeight);
         button3.setWidth(buttonWidth);
-        button3.setPosition(60 + button2.getWidth() + button1.getWidth(), MyGdxGame.GAME_HEIGHT/2 - button1.getHeight()/2);
+        button3.setPosition(60 + button2.getWidth() + button1.getWidth(), game.GAME_HEIGHT/2 - button1.getHeight()/2);
         
         button3.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -169,7 +171,7 @@ public class OnePlayerCharacterSelect extends Screen{
         
         button4.setHeight(buttonHeight);
         button4.setWidth(buttonWidth);
-        button4.setPosition(80 + button3.getWidth() + button2.getWidth() + button1.getWidth(), MyGdxGame.GAME_HEIGHT/2 - button3.getHeight()/2);
+        button4.setPosition(80 + button3.getWidth() + button2.getWidth() + button1.getWidth(), game.GAME_HEIGHT/2 - button3.getHeight()/2);
         
         button4.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -192,7 +194,7 @@ public class OnePlayerCharacterSelect extends Screen{
         
         button5.setHeight(buttonHeight);
         button5.setWidth(buttonWidth);
-        button5.setPosition(100 + button4.getWidth() + button3.getWidth() + button2.getWidth() + button1.getWidth(), MyGdxGame.GAME_HEIGHT/2 - button3.getHeight()/2);
+        button5.setPosition(100 + button4.getWidth() + button3.getWidth() + button2.getWidth() + button1.getWidth(), game.GAME_HEIGHT/2 - button3.getHeight()/2);
         
         button5.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -219,7 +221,7 @@ public class OnePlayerCharacterSelect extends Screen{
         
         button6.setHeight(buttonHeight);
         button6.setWidth(buttonWidth);
-        button6.setPosition(120 + button5.getWidth() + button4.getWidth() + button3.getWidth() + button2.getWidth() + button1.getWidth(), MyGdxGame.GAME_HEIGHT/2 - button3.getHeight()/2);
+        button6.setPosition(120 + button5.getWidth() + button4.getWidth() + button3.getWidth() + button2.getWidth() + button1.getWidth(), game.GAME_HEIGHT/2 - button3.getHeight()/2);
         
         button6.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
