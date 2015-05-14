@@ -19,56 +19,43 @@ public class OnePlayerCharacterSelect extends Screen{
 	private MyGdxGame game;
 	private BitmapFont font;
 	private Screen back;
+	private TextButton[] buttons;
+	public static final int NUM_CHARACTERS = 20;
 
 	private Stage stage;
-	private TextButton button1;
-	private TextButton button2;
-	private TextButton button3;
-	private TextButton button4;
-	private TextButton button5;
-	private TextButton button6;
 	private TextButton backButton;
-	private TextButtonStyle textButtonStyle1;
-	private TextButtonStyle textButtonStyle2;
-	private TextButtonStyle textButtonStyle3;
-	private TextButtonStyle textButtonStyle4;
-	private TextButtonStyle textButtonStyle5;
-	private TextButtonStyle textButtonStyle6;
+	private TextButtonStyle textButtonStyle;
 	private TextButtonStyle textButtonStyleBack;
-	private Skin skin1;
-	private Skin skin2;
-	private Skin skin3;
-	private Skin skin4;
-	private Skin skin5;
-	private Skin skin6;
+	private Skin skin;
 	private Skin skinBack;
-	private TextureAtlas buttonAtlas1;
-	private TextureAtlas buttonAtlas2;
-	private TextureAtlas buttonAtlas3;
-	private TextureAtlas buttonAtlas4;
-	private TextureAtlas buttonAtlas5;
-	private TextureAtlas buttonAtlas6;
+	private TextureAtlas buttonAtlas;
 	private TextureAtlas buttonAtlasBack;
-	
+
 	private float buttonHeight;
 	private float buttonWidth;
 
 	public OnePlayerCharacterSelect(MyGdxGame game) {
 		stage = new Stage();
 		this.game = game;
-		buttonHeight = game.GAME_HEIGHT/3;
-		buttonWidth = game.GAME_WIDTH/6 - 140/6;
+		
+		font = new BitmapFont();
+		skin = new Skin();
+		buttonAtlas = new TextureAtlas("CharacterSelectScreen/pictures/locked.pack");
+		skin.addRegions(buttonAtlas);
+		textButtonStyle = new TextButtonStyle();
+		textButtonStyle.font = font;
+		textButtonStyle.up = skin.getDrawable("Locked");
+		textButtonStyle.over = skin.getDrawable("Locked_hover");
+		textButtonStyle.checkedOver = skin.getDrawable("Locked_hover");
+		
 		create();
 		stage.addActor(background);
-		stage.addActor(button1);
-		stage.addActor(button2);
-		stage.addActor(button3);
-		stage.addActor(button4);
-		stage.addActor(button5);
-		stage.addActor(button6);
 		stage.addActor(backButton);
+		for(int i = 0; i < buttons.length; i++) {
+			stage.addActor(buttons[i]);
+		}
 	}
-	
+
 	public void addScreens(Screen back) {
 		this.back = back;
 	}
@@ -78,179 +65,53 @@ public class OnePlayerCharacterSelect extends Screen{
 		background = new Image(picture);
 		background.setHeight((float)game.height);
 		background.setWidth((float)game.width);
-		
-		createC1();
-		createC2();
-		createC3();
-		createC4();
-		createC5();
-		createC6();
+		buttonHeight = background.getHeight()/7;
+		buttonWidth = background.getWidth()/10;
 		createBackButton();
+		createButtons();
 	}
 
-	public void createC1() {
-		skin1 = new Skin();
-		buttonAtlas1 = new TextureAtlas("CharacterSelectScreen/c1/c1.pack");
-		
-		skin1.addRegions(buttonAtlas1);
-        font = new BitmapFont();
-        textButtonStyle1 = new TextButtonStyle();
-        textButtonStyle1.font = font;
-        textButtonStyle1.up = skin1.getDrawable("gameandwatch01");
-        textButtonStyle1.down = skin1.getDrawable("gameandwatch02");
-        button1 = new TextButton("", textButtonStyle1);
-        
-        button1.setHeight(buttonHeight);
-        button1.setWidth(buttonWidth);
-        button1.setPosition(20, game.GAME_HEIGHT/2 - button1.getHeight()/2);
-        
-        button1.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	//Add event later
-            	return true;
-            }
-        });
+	public void createButtons() {
+		float initialPositionX = 0;
+		float initialPositionY = background.getHeight()/2 + 100;
+		buttons = new TextButton[NUM_CHARACTERS];
+		for(int i = 0; i < buttons.length; i++) {
+			if(i == 10) {
+				initialPositionY -= buttonHeight;
+				initialPositionX = 0;
+			}
+			buttons[i] = new TextButton("", textButtonStyle);
+			buttons[i].setHeight(buttonHeight);
+			buttons[i].setWidth(buttonWidth);
+			buttons[i].setPosition(initialPositionX, initialPositionY);
+			initialPositionX += buttonWidth;
+		}
 	}
 
-	public void createC2() {
-		skin2 = new Skin();
-		buttonAtlas2 = new TextureAtlas("CharacterSelectScreen/c2/c2.pack");
-		
-		skin2.addRegions(buttonAtlas2);
-        textButtonStyle2 = new TextButtonStyle();
-        textButtonStyle2.font = font;
-        textButtonStyle2.up = skin2.getDrawable("lucas01");
-        textButtonStyle2.down = skin2.getDrawable("lucas02");
-        button2 = new TextButton("", textButtonStyle2);
-        
-        button2.setHeight(buttonHeight);
-        button2.setWidth(buttonWidth);
-        button2.setPosition(40 + button1.getWidth(), game.GAME_HEIGHT/2 - button1.getHeight()/2);
-        
-        button2.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	//Add event later
-            	return true;
-            }
-        });
-	}
+	public void createBackButton() {
+		skinBack = new Skin();
+		buttonAtlasBack = new TextureAtlas("back/goBack.pack");
 
-	public void createC3() {
-		skin3 = new Skin();
-		buttonAtlas3 = new TextureAtlas("CharacterSelectScreen/c3/c3.pack");
-		
-		skin3.addRegions(buttonAtlas3);
-        textButtonStyle3 = new TextButtonStyle();
-        textButtonStyle3.font = font;
-        textButtonStyle3.up = skin3.getDrawable("mario01");
-        textButtonStyle3.down = skin3.getDrawable("mario02");
-        button3 = new TextButton("", textButtonStyle3);
-        
-        button3.setHeight(buttonHeight);
-        button3.setWidth(buttonWidth);
-        button3.setPosition(60 + button2.getWidth() + button1.getWidth(), game.GAME_HEIGHT/2 - button1.getHeight()/2);
-        
-        button3.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	//Add event later
-            	return true;
-            }
-        });
-	}
+		skinBack.addRegions(buttonAtlasBack);
+		textButtonStyleBack = new TextButtonStyle();
+		textButtonStyleBack.font = font;
+		textButtonStyleBack.up = skinBack.getDrawable("backButton");
+		backButton = new TextButton("", textButtonStyleBack);
 
-	public void createC4() {
-		skin4 = new Skin();
-		buttonAtlas4 = new TextureAtlas("CharacterSelectScreen/c4/c4.pack");
-		
-		skin4.addRegions(buttonAtlas4);
-        textButtonStyle4 = new TextButtonStyle();
-        textButtonStyle4.font = font;
-        textButtonStyle4.up = skin4.getDrawable("pacman01");
-        textButtonStyle4.down = skin4.getDrawable("pacman02");
-        button4 = new TextButton("", textButtonStyle4);
-        
-        button4.setHeight(buttonHeight);
-        button4.setWidth(buttonWidth);
-        button4.setPosition(80 + button3.getWidth() + button2.getWidth() + button1.getWidth(), game.GAME_HEIGHT/2 - button3.getHeight()/2);
-        
-        button4.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	//Add event later
-            	return true;
-            }
-        });
-	}
+		backButton.setHeight(100);
+		backButton.setWidth(100);
+		backButton.setPosition(50,50);
 
-	public void createC5() {
-		skin5 = new Skin();
-		buttonAtlas5 = new TextureAtlas("CharacterSelectScreen/c5/c5.pack");
-		
-		skin5.addRegions(buttonAtlas5);
-        textButtonStyle5 = new TextButtonStyle();
-        textButtonStyle5.font = font;
-        textButtonStyle5.up = skin5.getDrawable("sonic01");
-        textButtonStyle5.down = skin5.getDrawable("sonic02");
-        button5 = new TextButton("", textButtonStyle5);
-        
-        button5.setHeight(buttonHeight);
-        button5.setWidth(buttonWidth);
-        button5.setPosition(100 + button4.getWidth() + button3.getWidth() + button2.getWidth() + button1.getWidth(), game.GAME_HEIGHT/2 - button3.getHeight()/2);
-        
-        button5.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	//Add event later
-            	return true;
-            }
-        });
+		backButton.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				game.changeScreen(back);
+				return true;
+			}
+		});
 	}
 	
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-	}
-
-	public void createC6() {
-		skin6 = new Skin();
-		buttonAtlas6 = new TextureAtlas("CharacterSelectScreen/c6/c6.pack");
-		
-		skin6.addRegions(buttonAtlas6);
-        textButtonStyle6 = new TextButtonStyle();
-        textButtonStyle6.font = font;
-        textButtonStyle6.up = skin6.getDrawable("shulk01");
-        textButtonStyle6.down = skin6.getDrawable("shulk02");
-        button6 = new TextButton("", textButtonStyle6);
-        
-        button6.setHeight(buttonHeight);
-        button6.setWidth(buttonWidth);
-        button6.setPosition(120 + button5.getWidth() + button4.getWidth() + button3.getWidth() + button2.getWidth() + button1.getWidth(), game.GAME_HEIGHT/2 - button3.getHeight()/2);
-        
-        button6.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	//Add event later
-            	return true;
-            }
-        });
-	}
-	
-	public void createBackButton() {
-		skinBack = new Skin();
-		buttonAtlasBack = new TextureAtlas("back/goBack.pack");
-		
-		skinBack.addRegions(buttonAtlasBack);
-        textButtonStyleBack = new TextButtonStyle();
-        textButtonStyleBack.font = font;
-        textButtonStyleBack.up = skinBack.getDrawable("backButton");
-        backButton = new TextButton("", textButtonStyleBack);
-        
-        backButton.setHeight(100);
-        backButton.setWidth(100);
-        backButton.setPosition(50,50);
-        
-        backButton.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	game.changeScreen(back);
-            	return true;
-            }
-        });
 	}
 
 	public void render() {
@@ -260,6 +121,6 @@ public class OnePlayerCharacterSelect extends Screen{
 	}
 
 	public void update() {
-		
+
 	}
 }
