@@ -20,7 +20,7 @@ public class OnePlayerCharacterSelect extends Screen{
 	private BitmapFont font;
 	private Screen back;
 	private TextButton[] buttons;
-	public static final int NUM_CHARACTERS = 20;
+	public static final int NUM_CHARACTERS = 68;
 
 	private Stage stage;
 	private TextButton backButton;
@@ -63,22 +63,24 @@ public class OnePlayerCharacterSelect extends Screen{
 	public void create() {
 		picture = new Texture("CharacterSelectScreen/background.png");
 		background = new Image(picture);
-		background.setHeight((float)game.height);
-		background.setWidth((float)game.width);
-		buttonHeight = background.getHeight()/7;
-		buttonWidth = background.getWidth()/10;
+		background.setHeight(game.GAME_HEIGHT);
+		background.setWidth(game.GAME_WIDTH);
+		background.setPosition(-10, -20);
+		buttonHeight = 75;
+		buttonWidth = 75;
 		createBackButton();
 		createButtons();
 	}
 
 	public void createButtons() {
-		float initialPositionX = 0;
-		float initialPositionY = background.getHeight()/2 + 100;
+		float initialPositionX = 30;
+		float initialPositionY = 5*(background.getHeight()/6);
+		int numberButtonsPerRow = (int)((background.getWidth()-40)/buttonWidth);
 		buttons = new TextButton[NUM_CHARACTERS];
 		for(int i = 0; i < buttons.length; i++) {
-			if(i == 10) {
+			if(i%numberButtonsPerRow == 0) {
 				initialPositionY -= buttonHeight;
-				initialPositionX = 0;
+				initialPositionX = 30;
 			}
 			buttons[i] = new TextButton("", textButtonStyle);
 			buttons[i].setHeight(buttonHeight);
