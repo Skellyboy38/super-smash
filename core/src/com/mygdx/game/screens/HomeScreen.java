@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.MyGdxGame;
 
 public class HomeScreen extends Screen{
@@ -34,6 +35,7 @@ public class HomeScreen extends Screen{
 	long c = 0;
 	
 	public HomeScreen(MyGdxGame game, SpriteBatch batch) {
+		//stage = new Stage(new FitViewport(game.GAME_WIDTH, game.GAME_HEIGHT));
 		stage = new Stage();
 		opacity = 1F;
 		this.game = game;
@@ -92,6 +94,7 @@ public class HomeScreen extends Screen{
 	}
 	
 	public void render() {
+		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		update();
 		stage.act();
 		stage.draw();

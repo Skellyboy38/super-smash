@@ -117,6 +117,7 @@ public class OnePlayerCharacterSelect extends Screen{
 	}
 
 	public void render() {
+		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		update();
 		stage.act();
 		stage.draw();
