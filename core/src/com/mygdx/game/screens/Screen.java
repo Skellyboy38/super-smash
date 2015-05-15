@@ -13,7 +13,7 @@ public class Screen {
 	public Screen(SpriteBatch batch){
 	}
 	public void render(){
-		if(Gdx.input.isKeyPressed(131)) {
+		if(Gdx.input.isKeyPressed(131)) {		//If the escape key is pressed (which is key 131) called the method.
 			escPressed();
 		}
 	}
@@ -25,7 +25,7 @@ public class Screen {
 	}
 	
 	public void escPressed() {
-		if(Gdx.graphics.isFullscreen()) {
+		if(Gdx.graphics.isFullscreen()) {		//If the game is in full screen, minimize it with the following dimensions (false means it is not full screen).
 			Gdx.graphics.setDisplayMode(game.GAME_WIDTH, game.GAME_HEIGHT,false);
 		}
 		else {
@@ -34,12 +34,12 @@ public class Screen {
 				if(m == null) {
 					m = mode;
 				} else {
-					if(m.width < mode.width) {
+					if(m.width < mode.width) {		//Switches mode until it is the one with the largest width (full screen to be exact).
 						m = mode;
 					}
 				}
 			}
-			Gdx.graphics.setDisplayMode(m);
+			Gdx.graphics.setDisplayMode(m);	//Set the display mode of the game to the full screen mode.
 		}
 	}
 	

@@ -20,11 +20,9 @@ public class PlayScreen extends Screen{
 	private Image background;
 	private MyGdxGame game;
 	private Screen onePlayer;
-	private Screen twoPlayer;
 	private Screen back;
-	private Random rand;
+	private Random rand;		
 	
-	//Objects necessary for the stage 
 	private Stage stage;
 	private BitmapFont font;
 	
@@ -56,7 +54,6 @@ public class PlayScreen extends Screen{
 	
 	public void addScreens(Screen onePlayer, Screen twoPlayer, Screen back) {
 		this.onePlayer = onePlayer;
-		this.twoPlayer = twoPlayer;
 		this.back = back;
 	}
 	

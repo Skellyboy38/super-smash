@@ -18,9 +18,9 @@ public class OnePlayerCharacterSelect extends Screen{
 	private Image background;
 	private MyGdxGame game;
 	private BitmapFont font;
-	private Screen back;
-	private TextButton[] buttons;
-	public static final int NUM_CHARACTERS = 68;
+	private Screen back;			//The play screen.
+	private TextButton[] buttons;	//All the character choices are represented with their own button.
+	public static final int NUM_CHARACTERS = 68;		//The number of characters to choose from.
 
 	private Stage stage;
 	private TextButton backButton;
@@ -29,7 +29,7 @@ public class OnePlayerCharacterSelect extends Screen{
 	private Skin skin;
 	private Skin skinBack;
 	private TextureAtlas buttonAtlas;
-	private TextureAtlas buttonAtlasBack;
+	private TextureAtlas buttonAtlasBack;		//Anything with "back" at the end pertains to the back button.
 
 	private float buttonHeight;
 	private float buttonWidth;

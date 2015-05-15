@@ -1,7 +1,6 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,33 +15,32 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.mygdx.game.MyGdxGame;
 
 public class HomeScreen extends Screen{
-	private MyGdxGame game;
-	private Screen next;
-	Graphics.DisplayMode[] modes = Gdx.graphics.getDisplayModes();
+	private MyGdxGame game;		//The game object that every screen needs a reference to in order to change screen.
+	private Screen next;		//The play screen to jump to.
+	private Stage stage;		//Every screen needs its own stage in which to add buttons, images, etc (each stage is different from screen to screen).
 	
-	//Objects necessary for the stage 
-	private Stage stage;
-    private TextButton button;
+    private TextButton button;		//The TextButton, TextButtonStyle, Skin and TextureAtlas are necessary components to create a stylish button.
     private TextButtonStyle textButtonStyle;
-    private BitmapFont font;
     private Skin skin;
     private TextureAtlas buttonAtlas;
-    private float opacity;
-    private Texture picture;
+    
+    private BitmapFont font;		//The font that is used to write to the screen or to label a button.
+    
+    private Texture picture;		//Texture and Image are used for the background of the stage.
 	private Image background;
 	private SpriteBatch batch;
-	long a = 0;
+	long r = 0;			//Values used to alter the color of the text for the play button.
+	long g = 0;
 	long b = 0;
-	long c = 0;
 	
 	public HomeScreen(MyGdxGame game, SpriteBatch batch) {
-		super(game);
+		super(game);	
 		stage = new Stage();
-		opacity = 1F;
 		this.game = game;
 		this.batch = batch;
 		create();
-		stage.addActor(background);
+		
+		stage.addActor(background);	//Add the components to the stage (background and play button).
         stage.addActor(button);
 	}
 	
@@ -50,18 +48,20 @@ public class HomeScreen extends Screen{
 		this.next = next;
 	}
 	
-	//Creates the necessary objects for the stage (skin, images, font, textButtonStyle, buttons and textureAtlas)
 	public void create() {
 		picture = new Texture("homeScreen/background.png");
 		background = new Image(picture);
 		background.setHeight(game.GAME_HEIGHT);
 		background.setWidth(game.GAME_WIDTH);
+		
 		skin = new Skin();
 		buttonAtlas = new TextureAtlas("homeScreen/button/button.pack");
 		skin.addRegions(buttonAtlas);
-        font = new BitmapFont(Gdx.files.classpath("com/badlogic/gdx/utils/arial-15.fnt"), Gdx.files.classpath("com/badlogic/gdx/utils/arial-15.png"), false);
-        font.setScale(3);
-        font.setColor(255,255,255,opacity);
+		
+        font = new BitmapFont();
+        font.setScale(3);			//set scale amplifies the size of the text.
+        font.setColor(r,g,b,1);		//The color is represented in terms of RED/GREEN/BLUE, and the 1 is the opacity which ranges from 0 to 1.
+        
         textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = font;
         textButtonStyle.up = skin.getDrawable("buttonGood");
@@ -79,26 +79,6 @@ public class HomeScreen extends Screen{
         });
 	}
 	
-	public void toggleFullScreen() {
-		if(Gdx.graphics.isFullscreen()) {
-			Gdx.graphics.setDisplayMode(game.GAME_WIDTH, game.GAME_HEIGHT,false);
-		}
-		else {
-			Graphics.DisplayMode m = null;
-			for(Graphics.DisplayMode mode: Gdx.graphics.getDisplayModes()) {
-				if(m == null) {
-					m = mode;
-				} else {
-					if(m.width < mode.width) {
-						m = mode;
-					}
-				}
-			}
-			
-			Gdx.graphics.setDisplayMode(m);
-		}
-	}
-	
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
 	}
@@ -106,16 +86,18 @@ public class HomeScreen extends Screen{
 	public Stage getStage () {
 		return stage;
 	}
-	//Updates the location of the background - will add event listeners for the button(s) here
-	public void update() {
-		a++;
-		b=b+2;
-		c=c+3;
-		font.setColor(a,b,c,1);
+	
+	public void update() {		//The only change that happens on the home screen is the changing of colors for the text.
+		if(r < 100000 && g < 100000 && b < 100000) {	//Sets a limit to the values (without the cap it could throw an error eventually).
+			r++;
+			g=g+2;
+			b=b+3;
+			font.setColor(r,g,b,1);
+		}
 	}
 	
 	public void render() {
-		super.render();
+		super.render();		//Super.render() allows the game to screen for any buttons that are pressed (mainly the escape key to exit full screen).
 		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		update();
 		stage.act();
@@ -125,7 +107,6 @@ public class HomeScreen extends Screen{
 		batch.end();
 	}
 	
-	//Called when the home screen is no longer needed (disposes of all the instance variables)
 	public void dispose() {
 		stage.dispose();
 		skin.dispose();
