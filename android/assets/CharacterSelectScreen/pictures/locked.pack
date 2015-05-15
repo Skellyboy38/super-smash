@@ -6,21 +6,21 @@ repeat: none
 Locked
   rotate: false
   xy: 1, 1
-  size: 114, 129
-  orig: 114, 129
+  size: 160, 164
+  orig: 160, 164
   offset: 0, 0
   index: -1
 Locked_hover
   rotate: false
-  xy: 117, 1
-  size: 114, 129
-  orig: 114, 129
+  xy: 163, 1
+  size: 160, 164
+  orig: 160, 164
   offset: 0, 0
   index: -1
 locked_hover
   rotate: false
-  xy: 117, 1
-  size: 114, 129
-  orig: 114, 129
+  xy: 163, 1
+  size: 160, 164
+  orig: 160, 164
   offset: 0, 0
   index: -1
