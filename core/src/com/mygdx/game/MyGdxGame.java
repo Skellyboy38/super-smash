@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.screens.OnePlayerCharacterSelect;
+import com.mygdx.game.screens.OptionsScreen;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.screens.Screen;
 import com.mygdx.game.screens.HomeScreen;
@@ -23,18 +24,21 @@ public class MyGdxGame extends ApplicationAdapter {
 	PlayScreen play;
 	OnePlayerCharacterSelect player1;
 	TwoPlayerCharacterSelect player2;
+	OptionsScreen options;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		player1 = new OnePlayerCharacterSelect(this);
 		player2 = new TwoPlayerCharacterSelect(this);
+		options = new OptionsScreen(this);
 		play = new PlayScreen(this);
 		home = new HomeScreen(this, batch);				//Every screen should take in an instance of the game in order to perform the changeScreen() operation.
 		
 		home.addScreens(play);							//Add the screens that the specified screen interacts with (mostly for the purpose of changing the screen).
-		play.addScreens(player1, player2, home);
+		play.addScreens(player1, player2, home, options);
 		player1.addScreens(play);
+		options.addScreens(play);
 		home.show();				//Make all the input listeners point to the home page once the game starts.
 		screen = home;				//Sets the default screen to run the home screen at the beginning.
 	}

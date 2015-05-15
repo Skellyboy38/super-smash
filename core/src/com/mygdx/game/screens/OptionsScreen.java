@@ -1,5 +1,6 @@
 package com.mygdx.game.screens;
 
+import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,25 +14,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.mygdx.game.MyGdxGame;
 
-import java.util.Random;
-
-public class PlayScreen extends Screen{
+public class OptionsScreen extends Screen{
 	private Texture picture;
 	private Image background;
 	private MyGdxGame game;
 	private Screen onePlayer;
 	private Screen back;
-	private Screen options;
 	private Random rand;		
 	
 	private Stage stage;
 	private BitmapFont font;
 	
-    private TextButton button1;
-    private TextButton button2;
-    private TextButton buttonOptions;
-    private TextButton buttonItem;
-    private TextButton button3;
+    private TextButton buttonFX;
+    private TextButton buttonMusic;
+    private TextButton buttonData;
+    private TextButton buttonBack;
     private TextButtonStyle textButtonStyle1;
     private TextButtonStyle textButtonStyle3;
     private Skin skin1;
@@ -39,24 +36,21 @@ public class PlayScreen extends Screen{
     private TextureAtlas buttonAtlas1;
     private TextureAtlas buttonAtlas3;
 	
-	public PlayScreen(MyGdxGame game) {
+	public OptionsScreen(MyGdxGame game) {
 		super(game);
 		rand = new Random();
 		this.game = game;
 		stage = new Stage();
 		create();
         stage.addActor(background);
-        stage.addActor(button1);
-        stage.addActor(button2);
-        stage.addActor(button3);
-        stage.addActor(buttonOptions);
-        stage.addActor(buttonItem);
+        stage.addActor(buttonFX);
+        stage.addActor(buttonMusic);
+        stage.addActor(buttonData);
+        stage.addActor(buttonBack);
 	}
 	
-	public void addScreens(Screen onePlayer, Screen twoPlayer, Screen back, Screen options) {
-		this.onePlayer = onePlayer;
+	public void addScreens(Screen back) {
 		this.back = back;
-		this.options = options;
 	}
 	
 	public void create() {
@@ -79,54 +73,46 @@ public class PlayScreen extends Screen{
         textButtonStyle1.over = skin1.getDrawable("ButtonDown");
         textButtonStyle1.checkedOver = skin1.getDrawable("ButtonDown");
         textButtonStyle3.up = skin3.getDrawable("backButton");
-        button1 = new TextButton("Single player", textButtonStyle1);
-        button2 = new TextButton("Multiplayer", textButtonStyle1);
-        buttonOptions = new TextButton("Options", textButtonStyle1);
-        buttonItem = new TextButton("Items", textButtonStyle1);
-        button3 = new TextButton("", textButtonStyle3);
-        button1.setHeight(75);
-        button1.setWidth(250);
-        button1.setPosition(90,game.GAME_HEIGHT/2+250);
-        button2.setHeight(75);
-        button2.setWidth(250);
-        button2.setPosition(90 + (game.GAME_WIDTH-200)/4, game.GAME_HEIGHT/2+250);
-        buttonOptions.setHeight(75);
-        buttonOptions.setWidth(250);
-        buttonOptions.setPosition(90 + (game.GAME_WIDTH-200)/2, game.GAME_HEIGHT/2+250);
-        buttonItem.setHeight(75);
-        buttonItem.setWidth(250);
-        buttonItem.setPosition(90 + 3*(game.GAME_WIDTH-200)/4, game.GAME_HEIGHT/2+250);
-        button3.setHeight(100);
-        button3.setWidth(100);
-        button3.setPosition(50,50);
+        buttonFX = new TextButton("Sound Effects Volume", textButtonStyle1);
+        buttonMusic = new TextButton("Music Volume", textButtonStyle1);;
+        buttonData = new TextButton("Manage Data", textButtonStyle1);
+        buttonBack = new TextButton("", textButtonStyle3);
+        buttonFX.setHeight(75);
+        buttonFX.setWidth(250);
+        buttonFX.setPosition(90,game.GAME_HEIGHT/2+250);
+        buttonMusic.setHeight(75);
+        buttonMusic.setWidth(250);
+        buttonMusic.setPosition(90 + (game.GAME_WIDTH-200)/4, game.GAME_HEIGHT/2+250);
+        buttonData.setHeight(75);
+        buttonData.setWidth(250);
+        buttonData.setPosition(90 + 2*(game.GAME_WIDTH-200)/4, game.GAME_HEIGHT/2+250);
+        buttonBack.setHeight(100);
+        buttonBack.setWidth(100);
+        buttonBack.setPosition(50,50);
         
-        button1.addListener(new InputListener() {
+        buttonFX.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	game.changeScreen(onePlayer);
+            	buttonFX.setPosition(rand.nextFloat()*1200, rand.nextFloat()*700);
             	return true;
             }
         });
         
-        button2.addListener(new InputListener() {
+        buttonMusic.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	game.changeScreen(onePlayer);
+            	buttonMusic.setPosition(rand.nextFloat()*1200, rand.nextFloat()*700);
             	return true;
             }
         });
-        buttonOptions.addListener(new InputListener() {
+
+        
+        buttonData.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	game.changeScreen(options);
-            	return true;
-            }
-        });
-        buttonItem.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            	buttonItem.setPosition(rand.nextFloat()*1200, rand.nextFloat()*700);
+            	buttonData.setPosition(rand.nextFloat()*1200, rand.nextFloat()*700);
             	return true;
             }
         });
         
-        button3.addListener(new InputListener() {
+        buttonBack.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             	game.changeScreen(back);
             	return true;
@@ -161,5 +147,5 @@ public class PlayScreen extends Screen{
 		font.dispose();
 		picture.dispose();
 	}
-	
+
 }
