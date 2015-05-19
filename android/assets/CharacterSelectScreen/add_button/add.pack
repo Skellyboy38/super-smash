@@ -1,0 +1,12 @@
+
+add.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Add
+  rotate: false
+  xy: 1, 1
+  size: 625, 196
+  orig: 625, 196
+  offset: 0, 0
+  index: -1
