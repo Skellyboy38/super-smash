@@ -68,7 +68,7 @@ public class HomeScreen extends Screen{
         button = new TextButton("", textButtonStyle);
         button.setHeight(100);
         button.setWidth(500);
-        button.setPosition(game.GAME_WIDTH/2 - (button.getWidth()/2), game.GAME_HEIGHT/2 - 220);
+        button.setPosition(game.GAME_WIDTH/2 - (button.getWidth()/2), game.GAME_HEIGHT/4.5F);
         
         //Creates an event listener for the button which makes screen point to the playScreen
         button.addListener(new InputListener() {
@@ -103,7 +103,7 @@ public class HomeScreen extends Screen{
 		stage.act();
 		stage.draw();
 		batch.begin();
-		font.draw(batch, "CLICK TO PLAY", game.GAME_WIDTH/2 - 170, game.GAME_HEIGHT/2 - 150);
+		font.draw(batch, "CLICK TO PLAY", game.GAME_WIDTH/2 - 170, game.GAME_HEIGHT/4.5F + 70);
 		batch.end();
 	}
 	
