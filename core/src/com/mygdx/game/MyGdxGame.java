@@ -10,6 +10,7 @@ import com.mygdx.game.screens.OptionsScreen;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.screens.Screen;
 import com.mygdx.game.screens.HomeScreen;
+import com.mygdx.game.screens.StageSelectScreen;
 import com.mygdx.game.screens.TwoPlayerCharacterSelect;
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -25,10 +26,12 @@ public class MyGdxGame extends ApplicationAdapter {
 	OnePlayerCharacterSelect player1;
 	TwoPlayerCharacterSelect player2;
 	OptionsScreen options;
+	StageSelectScreen stageSelect;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		stageSelect = new StageSelectScreen(this, batch);
 		player1 = new OnePlayerCharacterSelect(this, batch);
 		player2 = new TwoPlayerCharacterSelect(this);
 		options = new OptionsScreen(this);
@@ -37,8 +40,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		
 		home.addScreens(play);							//Add the screens that the specified screen interacts with (mostly for the purpose of changing the screen).
 		play.addScreens(player1, player2, home, options);
-		player1.addScreens(play);
+		player1.addScreens(play, stageSelect);
 		options.addScreens(play);
+		stageSelect.addScreens(play, player1);
 		home.show();				//Make all the input listeners point to the home page once the game starts.
 		screen = home;				//Sets the default screen to run the home screen at the beginning.
 	}

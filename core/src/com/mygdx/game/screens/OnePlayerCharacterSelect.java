@@ -24,6 +24,7 @@ public class OnePlayerCharacterSelect extends Screen{
 	private MyGdxGame game;
 	private BitmapFont font;
 	private Screen back;			//The play screen.
+	private Screen next;
 	private TextButton[] buttons;	//All the character choices are represented with their own button.
 	private SpriteBatch batch;
 	private Array<Actor> addRemoveActors;
@@ -107,8 +108,9 @@ public class OnePlayerCharacterSelect extends Screen{
 		}
 	}
 
-	public void addScreens(Screen back) {
+	public void addScreens(Screen back, Screen next) {
 		this.back = back;
+		this.next = next;
 	}
 
 	public void create() {
@@ -412,6 +414,9 @@ public class OnePlayerCharacterSelect extends Screen{
 			batch.begin();
 			font.draw(batch, START_MESSAGE , game.GAME_WIDTH/5.747F, game.GAME_HEIGHT/1.05F);
 			batch.end();
+			if(Gdx.input.isKeyPressed(66)) {
+				game.changeScreen(next);
+			}
 		}
 	}
 }

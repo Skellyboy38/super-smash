@@ -20,6 +20,14 @@ public class Screen {
 	public void show() {
 		
 	}
+	
+	public void clear() {
+		
+	}
+	
+	public void addScreens() {
+		
+	}
 	public void update(){
 		
 	}
