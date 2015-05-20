@@ -348,6 +348,10 @@ public class OnePlayerCharacterSelect extends Screen{
 		for(int i = 0; i < buttons.length; i++) {
 			stage.addActor(buttons[i]);
 		}
+		token1.setPosition(game.GAME_WIDTH/3.926F, game.GAME_HEIGHT/3.091F);
+		token2.setPosition(game.GAME_WIDTH/2.228F, game.GAME_HEIGHT/3.091F);
+		token3.setPosition(game.GAME_WIDTH/1.554F, game.GAME_HEIGHT/3.091F);
+		token4.setPosition(game.GAME_WIDTH/1.191F, game.GAME_HEIGHT/3.091F);
 		
 	}
 
