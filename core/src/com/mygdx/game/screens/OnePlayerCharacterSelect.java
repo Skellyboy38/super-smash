@@ -3,6 +3,7 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,88 +17,74 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
 
 public class OnePlayerCharacterSelect extends Screen{
+	public static final int NUM_CHARACTERS = 68;		//The number of characters to choose from.
+	
 	private Texture picture;
 	private Image background;
 	private MyGdxGame game;
 	private BitmapFont font;
 	private Screen back;			//The play screen.
 	private TextButton[] buttons;	//All the character choices are represented with their own button.
+	private SpriteBatch batch;
+	private Array<Actor> addRemoveActors;
+	private Stage stage;
+	
 	private TextButton add1;
 	private TextButton add2;
 	private TextButton add3;
 	private TextButton add4;
+	
 	private TextButton remove1;
 	private TextButton remove2;
 	private TextButton remove3;
 	private TextButton remove4;
-	private boolean[] characterExists;	//Keeps track of which players are playing (1 to 4).
-	private boolean[] tokenMovable;
-	public static final int NUM_CHARACTERS = 68;		//The number of characters to choose from.
-	public final String START_MESSAGE = "Press Enter to start"; //When all characters are chosen, this message appears.
-	private boolean canStart;	//Determines whether or not the game can begin.
-	private Texture token;
+	
 	private TextButton token1;
 	private TextButton token2;
 	private TextButton token3;
 	private TextButton token4;
-	private TextButtonStyle tokenStyle;
-	private Skin tokenSkin;
-	private TextureAtlas tokenAtlas;
 	
-	private Array<Actor> addRemoveActors;
-
-	private Stage stage;
 	private TextButton backButton;
+	
+	private boolean[] characterExists;	//Keeps track of which players are playing (1 to 4).
+	private boolean[] tokenMovable;
+	public final String START_MESSAGE = "Press Enter to start"; //When all characters are chosen, this message appears.
+	private boolean canStart;	//Determines whether or not the game can begin.
+	
+	private TextButtonStyle tokenStyle;
 	private TextButtonStyle textButtonStyle;
 	private TextButtonStyle textButtonStyleBack;
 	private TextButtonStyle addStyle;
 	private TextButtonStyle removeStyle;
+	
+	private Skin tokenSkin;
 	private Skin skin;
 	private Skin addSkin;
 	private Skin removeSkin;
 	private Skin skinBack;
+	
+	private TextureAtlas tokenAtlas;
 	private TextureAtlas buttonAtlas;
 	private TextureAtlas buttonAtlasBack;		//Anything with "back" at the end pertains to the back button.
 	private TextureAtlas addAtlas;
 	private TextureAtlas removeAtlas;
-
+	
 	private float buttonHeight;
 	private float buttonWidth;
 
-	public OnePlayerCharacterSelect(MyGdxGame game) {
+	public OnePlayerCharacterSelect(MyGdxGame game, SpriteBatch batch) {
 		super(game);
+		this.game = game;
+		this.batch = batch;
 		canStart = false;
 		stage = new Stage();
-		this.game = game;
 		
 		tokenMovable = new boolean[] {false, false, false, false};
+		characterExists = new boolean[] {false, false, false, false};
 		addRemoveActors = new Array<Actor>();
 		font = new BitmapFont();
-		skin = new Skin();
-		buttonAtlas = new TextureAtlas("CharacterSelectScreen/pictures/locked.pack");
-		skin.addRegions(buttonAtlas);
-		textButtonStyle = new TextButtonStyle();
-		textButtonStyle.font = font;
-		textButtonStyle.up = skin.getDrawable("Locked");
-		textButtonStyle.over = skin.getDrawable("Locked_hover");
-		textButtonStyle.checkedOver = skin.getDrawable("Locked_hover");
-		
-		addStyle = new TextButtonStyle();
-		addSkin = new Skin();
-		addAtlas = new TextureAtlas("CharacterSelectScreen/add_button/add.pack");
-		addSkin.addRegions(addAtlas);
-		addStyle.font = font;
-		addStyle.up = addSkin.getDrawable("Add");
-		removeStyle = new TextButtonStyle();
-		removeSkin = new Skin();
-		removeAtlas = new TextureAtlas("CharacterSelectScreen/remove_button/remove.pack");
-		removeSkin.addRegions(removeAtlas);
-		removeStyle.font = font;
-		removeStyle.up = removeSkin.getDrawable("Remove");
-		characterExists = new boolean[4];
-		for(int i = 0; i < characterExists.length; i++) {
-			characterExists[i] = false;
-		}
+		font.setScale(2);
+		font.setColor(255,255,255,1);
 		
 		create();
 		addRemoveActors.add(add1);
@@ -125,11 +112,38 @@ public class OnePlayerCharacterSelect extends Screen{
 	}
 
 	public void create() {
+		skin = new Skin();
+		buttonAtlas = new TextureAtlas("CharacterSelectScreen/pictures/locked.pack");
+		skin.addRegions(buttonAtlas);
+		textButtonStyle = new TextButtonStyle();
+		textButtonStyle.font = font;
+		textButtonStyle.up = skin.getDrawable("Locked");
+		textButtonStyle.over = skin.getDrawable("Locked_hover");
+		textButtonStyle.checkedOver = skin.getDrawable("Locked_hover");
+		
+		addStyle = new TextButtonStyle();
+		addSkin = new Skin();
+		addAtlas = new TextureAtlas("CharacterSelectScreen/add_button/add.pack");
+		addSkin.addRegions(addAtlas);
+		addStyle.font = font;
+		addStyle.up = addSkin.getDrawable("Add");
+		removeStyle = new TextButtonStyle();
+		removeSkin = new Skin();
+		removeAtlas = new TextureAtlas("CharacterSelectScreen/remove_button/remove.pack");
+		removeSkin.addRegions(removeAtlas);
+		removeStyle.font = font;
+		removeStyle.up = removeSkin.getDrawable("Remove");
+		characterExists = new boolean[4];
+		
+		for(int i = 0; i < characterExists.length; i++) {
+			characterExists[i] = false;
+		}
 		picture = new Texture("CharacterSelectScreen/background.png");
 		background = new Image(picture);
 		background.setHeight(game.GAME_HEIGHT);
 		background.setWidth(game.GAME_WIDTH);
 		background.setPosition(0, 0);
+		background.setZIndex(0);
 		buttonHeight = 75;
 		buttonWidth = 75;
 		createBackButton();
@@ -162,6 +176,7 @@ public class OnePlayerCharacterSelect extends Screen{
 				addRemoveActors.get(0).remove();
 				stage.addActor(remove1);
 				stage.addActor(token1);
+				characterExists[0] = true;
 				return true;
 			}
 		});
@@ -175,6 +190,7 @@ public class OnePlayerCharacterSelect extends Screen{
 				addRemoveActors.get(1).remove();
 				stage.addActor(remove2);
 				stage.addActor(token2);
+				characterExists[1] = true;
 				return true;
 			}
 		});
@@ -188,6 +204,7 @@ public class OnePlayerCharacterSelect extends Screen{
 				addRemoveActors.get(2).remove();
 				stage.addActor(remove3);
 				stage.addActor(token3);
+				characterExists[2] = true;
 				return true;
 			}
 		});
@@ -201,6 +218,7 @@ public class OnePlayerCharacterSelect extends Screen{
 				addRemoveActors.get(3).remove();
 				stage.addActor(remove4);
 				stage.addActor(token4);
+				characterExists[3] = true;
 				return true;
 			}
 		});
@@ -214,6 +232,7 @@ public class OnePlayerCharacterSelect extends Screen{
 				addRemoveActors.get(4).remove();
 				stage.addActor(add1);
 				token1.remove();
+				characterExists[0] = false;
 				return true;
 			}
 		});
@@ -227,6 +246,7 @@ public class OnePlayerCharacterSelect extends Screen{
 				addRemoveActors.get(5).remove();
 				stage.addActor(add2);
 				token2.remove();
+				characterExists[1] = false;
 				return true;
 			}
 		});
@@ -240,6 +260,7 @@ public class OnePlayerCharacterSelect extends Screen{
 				addRemoveActors.get(6).remove();
 				stage.addActor(add3);
 				token3.remove();
+				characterExists[2] = false;
 				return true;
 			}
 		});
@@ -253,6 +274,7 @@ public class OnePlayerCharacterSelect extends Screen{
 				addRemoveActors.get(7).remove();
 				stage.addActor(add4);
 				token4.remove();
+				characterExists[3] = false;
 				return true;
 			}
 		});
@@ -352,15 +374,20 @@ public class OnePlayerCharacterSelect extends Screen{
 		token2.setPosition(game.GAME_WIDTH/2.228F, game.GAME_HEIGHT/3.091F);
 		token3.setPosition(game.GAME_WIDTH/1.554F, game.GAME_HEIGHT/3.091F);
 		token4.setPosition(game.GAME_WIDTH/1.191F, game.GAME_HEIGHT/3.091F);
+		canStart = false;
+		characterExists[0] = false;
+		characterExists[1] = false;
+		characterExists[2] = false;
+		characterExists[3] = false;
 		
 	}
 
 	public void render() {
 		super.render();
 		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		update();
 		stage.act();
 		stage.draw();
+		update();	//Call update last so that the background does not cover the play message.
 	}
 
 	public void update() {
@@ -375,6 +402,16 @@ public class OnePlayerCharacterSelect extends Screen{
 		}
 		if(tokenMovable[3]) {
 			token4.setPosition(Gdx.input.getX() - token1.getWidth()/2, game.GAME_HEIGHT - Gdx.input.getY() - token1.getHeight()/2);
+		}
+		if(characterExists[0] || characterExists[1] || characterExists[2] || characterExists[3]) {
+			canStart = true;
+		}
+		else
+			canStart = false;
+		if(canStart) {
+			batch.begin();
+			font.draw(batch, START_MESSAGE , game.GAME_WIDTH/5.747F, game.GAME_HEIGHT/1.05F);
+			batch.end();
 		}
 	}
 }

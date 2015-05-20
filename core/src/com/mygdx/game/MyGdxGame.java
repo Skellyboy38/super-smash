@@ -29,7 +29,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		player1 = new OnePlayerCharacterSelect(this);
+		player1 = new OnePlayerCharacterSelect(this, batch);
 		player2 = new TwoPlayerCharacterSelect(this);
 		options = new OptionsScreen(this);
 		play = new PlayScreen(this);
