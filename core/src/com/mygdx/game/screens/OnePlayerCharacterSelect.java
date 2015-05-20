@@ -31,14 +31,19 @@ public class OnePlayerCharacterSelect extends Screen{
 	private TextButton remove3;
 	private TextButton remove4;
 	private boolean[] characterExists;	//Keeps track of which players are playing (1 to 4).
+	private boolean[] tokenMovable;
 	public static final int NUM_CHARACTERS = 68;		//The number of characters to choose from.
 	public final String START_MESSAGE = "Press Enter to start"; //When all characters are chosen, this message appears.
 	private boolean canStart;	//Determines whether or not the game can begin.
 	private Texture token;
-	private Image token1;
-	private Image token2;
-	private Image token3;
-	private Image token4;
+	private TextButton token1;
+	private TextButton token2;
+	private TextButton token3;
+	private TextButton token4;
+	private TextButtonStyle tokenStyle;
+	private Skin tokenSkin;
+	private TextureAtlas tokenAtlas;
+	
 	private Array<Actor> addRemoveActors;
 
 	private Stage stage;
@@ -64,24 +69,8 @@ public class OnePlayerCharacterSelect extends Screen{
 		canStart = false;
 		stage = new Stage();
 		this.game = game;
-		token = new Texture("CharacterSelectScreen/pictures/token.png");
-		token1 = new Image(token);
-		token2 = new Image(token);
-		token3 = new Image(token);
-		token4 = new Image(token);
 		
-		token1.setPosition(game.GAME_WIDTH/3.926F, game.GAME_HEIGHT/3.091F);
-		token1.setHeight(50);
-		token1.setWidth(50);
-		token2.setPosition(game.GAME_WIDTH/2.228F, game.GAME_HEIGHT/3.091F);
-		token2.setHeight(50);
-		token2.setWidth(50);
-		token3.setPosition(game.GAME_WIDTH/1.554F, game.GAME_HEIGHT/3.091F);
-		token3.setHeight(50);
-		token3.setWidth(50);
-		token4.setPosition(game.GAME_WIDTH/1.191F, game.GAME_HEIGHT/3.091F);
-		token4.setHeight(50);
-		token4.setWidth(50);
+		tokenMovable = new boolean[] {false, false, false, false};
 		addRemoveActors = new Array<Actor>();
 		font = new BitmapFont();
 		skin = new Skin();
@@ -268,6 +257,54 @@ public class OnePlayerCharacterSelect extends Screen{
 			}
 		});
 		
+		tokenSkin = new Skin();
+		tokenAtlas = new TextureAtlas("CharacterSelectScreen/token/token.pack");
+		tokenSkin.addRegions(tokenAtlas);
+		tokenStyle = new TextButtonStyle();
+		tokenStyle.font = font;
+		tokenStyle.up = tokenSkin.getDrawable("Token");
+		
+		token1 = new TextButton("", tokenStyle);
+		token1.setPosition(game.GAME_WIDTH/3.926F, game.GAME_HEIGHT/3.091F);
+		token1.setHeight(50);
+		token1.setWidth(50);
+		token1.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				tokenMovable[0] = !tokenMovable[0];
+				return true;
+			}
+		});
+		token2 = new TextButton("", tokenStyle);
+		token2.setPosition(game.GAME_WIDTH/2.228F, game.GAME_HEIGHT/3.091F);
+		token2.setHeight(50);
+		token2.setWidth(50);
+		token2.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				tokenMovable[1] = !tokenMovable[1];
+				return true;
+			}
+		});
+		token3 = new TextButton("", tokenStyle);
+		token3.setPosition(game.GAME_WIDTH/1.554F, game.GAME_HEIGHT/3.091F);
+		token3.setHeight(50);
+		token3.setWidth(50);
+		token3.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				tokenMovable[2] = !tokenMovable[2];
+				return true;
+			}
+		});
+		token4 = new TextButton("", tokenStyle);
+		token4.setPosition(game.GAME_WIDTH/1.191F, game.GAME_HEIGHT/3.091F);
+		token4.setHeight(50);
+		token4.setWidth(50);
+		token4.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				tokenMovable[3] = !tokenMovable[3];
+				return true;
+			}
+		});
+		
 	}
 
 	public void createBackButton() {
@@ -323,6 +360,17 @@ public class OnePlayerCharacterSelect extends Screen{
 	}
 
 	public void update() {
-		
+		if(tokenMovable[0]) {
+			token1.setPosition(Gdx.input.getX() - token1.getWidth()/2, game.GAME_HEIGHT - Gdx.input.getY() - token1.getHeight()/2);
+		}
+		if(tokenMovable[1]) {
+			token2.setPosition(Gdx.input.getX() - token1.getWidth()/2, game.GAME_HEIGHT - Gdx.input.getY() - token1.getHeight()/2);
+		}
+		if(tokenMovable[2]) {
+			token3.setPosition(Gdx.input.getX() - token1.getWidth()/2, game.GAME_HEIGHT - Gdx.input.getY() - token1.getHeight()/2);
+		}
+		if(tokenMovable[3]) {
+			token4.setPosition(Gdx.input.getX() - token1.getWidth()/2, game.GAME_HEIGHT - Gdx.input.getY() - token1.getHeight()/2);
+		}
 	}
 }
