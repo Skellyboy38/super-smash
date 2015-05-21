@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.MyGdxGame;
 
 public class StageSelectScreen extends Screen{
@@ -119,11 +121,10 @@ public class StageSelectScreen extends Screen{
 				posX = game.GAME_WIDTH/divisor;
 				posY -= buttons[i].getHeight()*1.05F;
 			}
-			buttons[i].addListener(new InputListener() {
-				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+			buttons[i].addListener(new ClickListener() {
+				public void enter (InputEvent event, float x, float y, int pointer, Actor fromButton) {
 					drawZoomed = true;
 					positionX = -500;
-					return true;
 				}
 			});
 		}
