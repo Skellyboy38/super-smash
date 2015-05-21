@@ -1,0 +1,19 @@
+
+blank.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Blank1
+  rotate: false
+  xy: 1, 1
+  size: 390, 234
+  orig: 390, 234
+  offset: 0, 0
+  index: -1
+Blank2
+  rotate: false
+  xy: 393, 1
+  size: 390, 234
+  orig: 390, 234
+  offset: 0, 0
+  index: -1

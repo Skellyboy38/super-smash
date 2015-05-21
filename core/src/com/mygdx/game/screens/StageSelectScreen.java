@@ -15,8 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.mygdx.game.MyGdxGame;
 
 public class StageSelectScreen extends Screen{
+	public static final int NUMBER_STAGES = 10;
 	
 	private Texture backgroundTexture;
+	private Texture zoomed;
 	private Image background;
 	private Stage stage;
 	private TextButton[] buttons;
@@ -27,7 +29,6 @@ public class StageSelectScreen extends Screen{
 	private TextureAtlas atlas;
 	private Skin skin;
 	
-	private BitmapFont backFont;
 	private TextButtonStyle backStyle;
 	private TextureAtlas backAtlas;
 	private Skin backSkin;
@@ -36,6 +37,12 @@ public class StageSelectScreen extends Screen{
 	private SpriteBatch batch;
 	private Screen next;
 	private Screen back;
+	
+	private float buttonHeight;
+	private float buttonWidth;
+	private boolean drawZoomed;
+	private float positionX;
+	private float positionY;
 
 	public StageSelectScreen(MyGdxGame game, SpriteBatch batch) {
 		super(game);
@@ -43,12 +50,22 @@ public class StageSelectScreen extends Screen{
 		this.batch = batch;
 		font = new BitmapFont();
 		stage = new Stage();
+		buttons = new TextButton[NUMBER_STAGES];
+		buttonHeight = game.GAME_HEIGHT/5;
+		buttonWidth = game.GAME_WIDTH/10;
+		drawZoomed = false;
+		positionX = -500;
+		positionY = game.GAME_HEIGHT/3;
 		create();
 		stage.addActor(background);
 		stage.addActor(backButton);
+		for(int i = 0; i < buttons.length; i++) {
+			stage.addActor(buttons[i]);
+		}
 	}
 	
 	public void create() {
+		zoomed = new Texture("stageSelect/stage_image/Blank1.9.png");
 		backgroundTexture = new Texture("stageSelect/background.png");
 		background = new Image(backgroundTexture);
 		background.setPosition(0, 0);
@@ -61,6 +78,15 @@ public class StageSelectScreen extends Screen{
 		backSkin.addRegions(backAtlas);
 		backStyle.font = font;
 		backStyle.up = backSkin.getDrawable("backButton");
+		
+		style = new TextButtonStyle();
+		atlas = new TextureAtlas("stageSelect/stage_image/blank.pack");
+		skin = new Skin();
+		skin.addRegions(atlas);
+		style.font = font;
+		style.up = skin.getDrawable("Blank1");
+		style.over = skin.getDrawable("Blank2");
+		style.checkedOver = skin.getDrawable("Blank2");
 		createButtons();
 	}
 	
@@ -77,6 +103,27 @@ public class StageSelectScreen extends Screen{
             }
         });
 		
+		float posX = game.GAME_WIDTH/1.8F;
+		float posY = game.GAME_HEIGHT/1.5F;
+		
+		for(int i = 0; i < buttons.length; i++) {
+			buttons[i] = new TextButton("", style);
+			buttons[i].setHeight(buttonHeight);
+			buttons[i].setWidth(buttonWidth);
+			buttons[i].setPosition(posX, posY);
+			posX += buttons[i].getWidth()*1.05F;
+			if(posX + buttons[i].getWidth() > game.GAME_WIDTH) {
+				posX = game.GAME_WIDTH/2F;
+				posY -= buttons[i].getHeight()*1.05F;
+			}
+			buttons[i].addListener(new InputListener() {
+				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+					drawZoomed = true;
+					return true;
+				}
+			});
+		}
+		
 	}
 	
 	public void addScreens(Screen next, Screen back) {
@@ -85,7 +132,13 @@ public class StageSelectScreen extends Screen{
 	}
 	
 	public void update() {
-		
+		if(positionX >= game.GAME_WIDTH/20) {
+			drawZoomed = false;
+			positionX = -500;
+		}
+		else {
+			positionX = positionX + 10;
+		}
 	}
 	
 	public void show() {
@@ -97,6 +150,11 @@ public class StageSelectScreen extends Screen{
 		update();
 		stage.act();
 		stage.draw();
+		batch.begin();
+		if(drawZoomed) {
+			batch.draw(zoomed, positionX, positionY, 500, 400);
+		}
+		batch.end();
 	}
 	
 	public void clear() {
