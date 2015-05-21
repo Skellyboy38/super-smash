@@ -52,7 +52,7 @@ public class StageSelectScreen extends Screen{
 		stage = new Stage();
 		buttons = new TextButton[NUMBER_STAGES];
 		buttonHeight = game.GAME_HEIGHT/5;
-		buttonWidth = game.GAME_WIDTH/10;
+		buttonWidth = game.GAME_WIDTH/8;
 		drawZoomed = false;
 		positionX = -500;
 		positionY = game.GAME_HEIGHT/3;
@@ -99,11 +99,13 @@ public class StageSelectScreen extends Screen{
 		backButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
             	game.changeScreen(back);
+            	clear();
             	return true;
             }
         });
 		
-		float posX = game.GAME_WIDTH/1.8F;
+		float divisor = 1.8F;
+		float posX = game.GAME_WIDTH/divisor;
 		float posY = game.GAME_HEIGHT/1.5F;
 		
 		for(int i = 0; i < buttons.length; i++) {
@@ -113,12 +115,14 @@ public class StageSelectScreen extends Screen{
 			buttons[i].setPosition(posX, posY);
 			posX += buttons[i].getWidth()*1.05F;
 			if(posX + buttons[i].getWidth() > game.GAME_WIDTH) {
-				posX = game.GAME_WIDTH/2F;
+				divisor += 0.2F;
+				posX = game.GAME_WIDTH/divisor;
 				posY -= buttons[i].getHeight()*1.05F;
 			}
 			buttons[i].addListener(new InputListener() {
 				public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 					drawZoomed = true;
+					positionX = -500;
 					return true;
 				}
 			});
@@ -132,12 +136,11 @@ public class StageSelectScreen extends Screen{
 	}
 	
 	public void update() {
+		if(drawZoomed) {
+			positionX = positionX + 20;
+		}
 		if(positionX >= game.GAME_WIDTH/20) {
 			drawZoomed = false;
-			positionX = -500;
-		}
-		else {
-			positionX = positionX + 10;
 		}
 	}
 	
@@ -151,14 +154,12 @@ public class StageSelectScreen extends Screen{
 		stage.act();
 		stage.draw();
 		batch.begin();
-		if(drawZoomed) {
-			batch.draw(zoomed, positionX, positionY, 500, 400);
-		}
+		batch.draw(zoomed, positionX, positionY, 500, 400);
 		batch.end();
 	}
 	
 	public void clear() {
-		
+		positionX = -500;
 	}
 
 	
