@@ -1,5 +1,7 @@
 package com.mygdx.game.screens;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -18,6 +20,7 @@ import com.mygdx.game.MyGdxGame;
 
 public class StageSelectScreen extends Screen{
 	public static final int NUMBER_STAGES = 10;
+	private ArrayList<Character> characters;
 	
 	private Texture backgroundTexture;
 	private Texture zoomed;
@@ -128,12 +131,15 @@ public class StageSelectScreen extends Screen{
 				}
 			});
 		}
-		
 	}
 	
 	public void addScreens(Screen next, Screen back) {
 		this.next = next;
 		this.back = back;
+	}
+	
+	public void passCharacters(ArrayList<Character> characters) {
+		this.characters = characters;
 	}
 	
 	public void update() {
@@ -151,6 +157,7 @@ public class StageSelectScreen extends Screen{
 	
 	public void render() {
 		super.render();
+		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		update();
 		stage.act();
 		stage.draw();

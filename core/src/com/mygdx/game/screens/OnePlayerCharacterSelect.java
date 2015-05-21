@@ -1,5 +1,7 @@
 package com.mygdx.game.screens;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -28,6 +30,7 @@ public class OnePlayerCharacterSelect extends Screen{
 	private TextButton[] buttons;	//All the character choices are represented with their own button.
 	private SpriteBatch batch;
 	private Array<Actor> addRemoveActors;
+	private ArrayList<Character> characters;
 	private Stage stage;
 	
 	private TextButton add1;
@@ -79,6 +82,7 @@ public class OnePlayerCharacterSelect extends Screen{
 		this.batch = batch;
 		canStart = false;
 		stage = new Stage();
+		characters = new ArrayList<Character>();
 		
 		tokenMovable = new boolean[] {false, false, false, false};
 		characterExists = new boolean[] {false, false, false, false};
