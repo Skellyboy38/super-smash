@@ -87,31 +87,67 @@ public class Character {
 	}
 
 	private class StandingState extends State {
-		
+		Texture image;
+		Animation animation;
 		public StandingState() {
+
+		}
+		
+		public void update() {
+
+		}
+
+		public void render() {
 
 		}
 	}
 
 	private class WalkingState extends State {
-	
+		Texture image;
+		Animation animation;
 		public WalkingState() {
+
+		}
+		
+		public void update() {
+
+		}
+
+		public void render() {
 
 		}
 
 	}
 
 	private class RunningState extends State {
-		
+		Texture image;
+		Animation animation;
 		public RunningState() {
+
+		}
+		
+		public void update() {
+
+		}
+
+		public void render() {
 
 		}
 
 	}
 
 	private class JumpingState extends State {
-		
+		Texture image;
+		Animation animation;
 		public JumpingState() {
+
+		}
+		
+		public void update() {
+
+		}
+
+		public void render() {
 
 		}
 
