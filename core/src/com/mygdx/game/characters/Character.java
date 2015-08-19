@@ -23,6 +23,11 @@ public class Character {
 
 	public void render() {		//render calls the render method of whatever state the character is currently in.
 		currentState.render();
+		update();
+	}
+	
+	public void update() {
+		
 	}
 
 	public void changeState(State toChange) {		//Method to change states depending on user input.
@@ -30,72 +35,53 @@ public class Character {
 	}
 
 	private class State {
+		Texture image;
+		Animation animation;
 		public void render() {
-
+			update();
+		}
+		
+		public void update() {
+			
+		}
+		
+		public void updateImage(Texture newImage) {
+			image = newImage;
+		}
+		
+		public void updateAnimation(Animation newAnimation) {
+			animation = newAnimation;
 		}
 	}
 
 	private class StandingState extends State {
-		Texture image;
-		Animation animation;
+		
 		public StandingState() {
-
-		}
-
-		public void update() {
-
-		}
-
-		public void render() {
 
 		}
 	}
 
 	private class WalkingState extends State {
-		Texture image;
-		Animation animation;
+	
 		public WalkingState() {
 
 		}
 
-		public void update() {
-
-		}
-
-		public void render() {
-
-		}
 	}
 
 	private class RunningState extends State {
-		Texture image;
-		Animation animation;
+		
 		public RunningState() {
 
 		}
 
-		public void update() {
-
-		}
-
-		public void render() {
-
-		}
 	}
 
 	private class JumpingState extends State {
-		Texture image;
-		Animation animation;
+		
 		public JumpingState() {
 
 		}
 
-		public void update() {
-
-		}
-
-		public void render() {
-
-		}
 	}
 }
