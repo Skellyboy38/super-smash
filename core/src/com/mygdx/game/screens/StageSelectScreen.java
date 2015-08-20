@@ -17,10 +17,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.stages.FinalDestination;
+import com.mygdx.game.stages.Map;
 
 public class StageSelectScreen extends Screen{
 	public static final int NUMBER_STAGES = 10;
 	private ArrayList<Character> characters;
+	public FightScreen fight;
 	
 	private Texture backgroundTexture;
 	private Texture zoomed;
@@ -40,7 +43,6 @@ public class StageSelectScreen extends Screen{
 	
 	private MyGdxGame game;
 	private SpriteBatch batch;
-	private Screen next;
 	private Screen back;
 	
 	private float buttonHeight;
@@ -48,6 +50,7 @@ public class StageSelectScreen extends Screen{
 	private boolean drawZoomed;
 	private float positionX;
 	private float positionY;
+	private boolean canChangeScreen = true;
 
 	public StageSelectScreen(MyGdxGame game, SpriteBatch batch) {
 		super(game);
@@ -131,10 +134,20 @@ public class StageSelectScreen extends Screen{
 				}
 			});
 		}
+		
+		buttons[0].addListener(new ClickListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				FinalDestination finalDestination = new FinalDestination();
+				Map map = finalDestination;
+				fight = new FightScreen(game, batch, map, characters);
+				fight.addScreens(back);
+				game.changeScreen(fight);
+            	return true;
+            }
+		});
 	}
 	
-	public void addScreens(Screen next, Screen back) {
-		this.next = next;
+	public void addScreens(Screen back) {
 		this.back = back;
 	}
 	
@@ -168,6 +181,7 @@ public class StageSelectScreen extends Screen{
 	
 	public void clear() {
 		positionX = -500;
+		
 	}
 
 	

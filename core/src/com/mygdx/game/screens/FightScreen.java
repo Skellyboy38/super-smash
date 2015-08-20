@@ -4,16 +4,26 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.stages.Map;
 
 public class FightScreen extends Screen{
+	private Map map;
 	private Stage stage;
 	private OrthographicCamera camera;
 	private ArrayList<Character> characters;
+	private SpriteBatch batch;
+	private Screen back;
+	private MyGdxGame game;
 
-	public FightScreen(MyGdxGame game) {
+	public FightScreen(MyGdxGame game, SpriteBatch batch, Map map, ArrayList<Character> characters) {
 		super(game);
+		this.map = map;
+		this.batch = batch;
+		this.characters = characters;
+		this.game = game;
 		stage = new Stage();
 		camera = (OrthographicCamera) stage.getCamera();
 	}
@@ -27,13 +37,19 @@ public class FightScreen extends Screen{
 	}
 	
 	public void render() {
+		super.render();
+		update();
 		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		stage.act();
 		stage.draw();
+		batch.begin();
+		batch.draw(map.getBackground(), 0, 0);
+		batch.draw(map.getStage(), map.getPosX(), map.getPosY());
+		batch.end();
 	}
 	
-	public void addScreens() {
-		
+	public void addScreens(Screen back) {
+		this.back = back;
 	}
 	
 	public void clear() {
@@ -43,7 +59,9 @@ public class FightScreen extends Screen{
 	}
 	
 	public void update() {
-		
+		if(Gdx.input.isKeyPressed(31)) {
+			game.changeScreen(back);
+		}
 	}
 	
 	public void show() {
