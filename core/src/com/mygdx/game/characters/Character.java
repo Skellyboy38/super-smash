@@ -1,5 +1,6 @@
 package com.mygdx.game.characters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 
@@ -8,7 +9,9 @@ public class Character {
 	private WalkingState walking;
 	private RunningState running;
 	private JumpingState jumping;
+	private DoubleJumpState doubleJump;
 	private HangingState hanging;
+	private CrouchingState crouching;
 	
 	private NeutralAState neutralA;
 	private SideSmashAState sideSmashA;
@@ -31,10 +34,10 @@ public class Character {
 	private DownBState downB;
 	
 	private GrabState grab;
-	private ThrowForwardState throwForward;
-	private ThrowBackwardState throwbackward;
-	private ThrowUpState throwUp;
-	private ThrowDownState throwDown;
+	private SideForwardThrowState sideForwardThrow;
+	private SideBackwardThrowState sideBackwardThrow;
+	private UpThrowState upThrow;
+	private DownThrowState downThrow;
 	
 	private ShieldState shield;
 	
@@ -42,13 +45,48 @@ public class Character {
 
 	private float posX;		//The current position of the character in screen coordinates
 	private float posY;
+	
+	private boolean canChangeState;
+	private int counter;
 
 	public Character() {
 		standing = new StandingState();
 		walking = new WalkingState();
 		running = new RunningState();
 		jumping = new JumpingState();
+		doubleJump = new DoubleJumpState();
 		hanging = new HangingState();
+		crouching = new CrouchingState();
+		
+		neutralA = new NeutralAState();
+		sideSmashA = new SideSmashAState();
+		upSmashA = new UpSmashAState();
+		downSmashA = new DownSmashAState();
+		sideTiltA = new SideTiltAState();
+		upTiltA = new UpTiltAState();
+		downTiltA = new DownTiltAState();
+		neutralAirA = new NeutralAirAState();
+		sideForwardAirA = new SideForwardAirAState();
+		sideBackwardAirA = new SideBackwardAirAState();
+		upAirA = new UpAirAState();
+		downAirA = new DownAirAState();
+		returnFromHangingA = new ReturnFromHangingAState();
+		
+		neutralB = new NeutralBState();
+		sideB = new SideBState();
+		upB = new UpBState();
+		downB = new DownBState();
+		
+		grab = new GrabState();
+		sideForwardThrow = new SideForwardThrowState();
+		sideBackwardThrow = new SideBackwardThrowState();
+		upThrow = new UpThrowState();
+		downThrow = new DownThrowState();
+		
+		shield = new ShieldState();
+		
+		canChangeState = true;
+		counter = 0;
 		
 		currentState = standing;		//Initially the character is standing.
 	}
@@ -59,11 +97,33 @@ public class Character {
 	}
 	
 	public void update() {
-		
+		counter += Gdx.graphics.getDeltaTime();
+		if(canChangeState){//if the animation of a move is over
+			if(Gdx.input.isKeyPressed(29) || Gdx.input.isKeyPressed(32)){//move left or right
+				changeState(walking);//running is entered by tapping twice
+			}
+			
+			else if(currentState == standing || currentState == running || currentState == crouching && Gdx.input.isKeyPressed(62) ){//jumping
+				changeState(jumping);
+			}
+			else if(currentState == jumping && Gdx.input.isKeyPressed(62)){
+				changeState(doubleJump);
+			}
+			else if(false){//hang on the edge of the stage
+				changeState(hanging);
+			}
+			else if(currentState == standing && Gdx.input.isKeyPressed(47)){//crouching from standing
+				changeState(crouching);
+			}
+			else{//return to standing
+				currentState = standing;
+			}
+		}
 	}
-
 	public void changeState(State toChange) {		//Method to change states depending on user input.
 		currentState = toChange;
+		counter = 0;
+		canChangeState = false;
 	}
 
 	private class State {
@@ -102,11 +162,11 @@ public class Character {
 		}
 	}
 
-	private class WalkingState extends State {
+	private class WalkingState extends State {//also needed to enter running state (double tap)
 		Texture image;
 		Animation animation;
 		public WalkingState() {
-
+			
 		}
 		
 		public void update() {
@@ -144,11 +204,32 @@ public class Character {
 		}
 		
 		public void update() {
-
+			if(counter >= 1000) {
+				canChangeState = true;
+			}
 		}
 
 		public void render() {
+			update();
+		}
 
+	}
+	
+	private class DoubleJumpState extends State {
+		Texture image;
+		Animation animation;
+		public DoubleJumpState() {
+
+		}
+		
+		public void update() {
+			if(counter >= 1000) {
+				canChangeState = true;
+			}
+		}
+
+		public void render() {
+			update();
 		}
 
 	}
@@ -157,6 +238,22 @@ public class Character {
 		Texture image;
 		Animation animation;
 		public HangingState() {
+
+		}
+
+		public void update() {
+
+		}
+
+		public void render() {
+
+		}
+	}
+	
+	private class CrouchingState extends State {
+		Texture image;
+		Animation animation;
+		public CrouchingState() {
 
 		}
 
@@ -473,10 +570,10 @@ public class Character {
 		}
 	}
 	
-	private class ThrowForwardState extends State {
+	private class SideForwardThrowState extends State {
 		Texture image;
 		Animation animation;
-		public ThrowForwardState() {
+		public SideForwardThrowState() {
 
 		}
 
@@ -489,10 +586,10 @@ public class Character {
 		}
 	}
 	
-	private class ThrowBackwardState extends State {
+	private class SideBackwardThrowState extends State {
 		Texture image;
 		Animation animation;
-		public ThrowBackwardState() {
+		public SideBackwardThrowState() {
 
 		}
 
@@ -505,10 +602,10 @@ public class Character {
 		}
 	}
 	
-	private class ThrowUpState extends State {
+	private class UpThrowState extends State {
 		Texture image;
 		Animation animation;
-		public ThrowUpState() {
+		public UpThrowState() {
 
 		}
 
@@ -521,10 +618,10 @@ public class Character {
 		}
 	}
 	
-	private class ThrowDownState extends State {
+	private class DownThrowState extends State {
 		Texture image;
 		Animation animation;
-		public ThrowDownState() {
+		public DownThrowState() {
 
 		}
 
