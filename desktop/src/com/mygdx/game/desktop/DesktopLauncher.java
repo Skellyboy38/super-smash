@@ -18,4 +18,5 @@ public class DesktopLauncher {
 		config.height = (int)height;	//This is the height of the screen
 		config.fullscreen = true;		//Starts the game in full screen mode
 		new LwjglApplication(new MyGdxGame(), config);
-	
+	}	
+}
