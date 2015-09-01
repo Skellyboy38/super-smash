@@ -42,10 +42,7 @@ public class FightScreen extends Screen{
 		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		stage.act();
 		stage.draw();
-		batch.begin();
-		batch.draw(map.getBackground(), 0, 0);
-		batch.draw(map.getStage(), map.getPosX(), map.getPosY());
-		batch.end();
+		map.render();
 	}
 	
 	public void addScreens(Screen back) {

@@ -137,7 +137,7 @@ public class StageSelectScreen extends Screen{
 		
 		buttons[0].addListener(new ClickListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				FinalDestination finalDestination = new FinalDestination();
+				FinalDestination finalDestination = new FinalDestination(batch);
 				Map map = finalDestination;
 				fight = new FightScreen(game, batch, map, characters);
 				fight.addScreens(back);
