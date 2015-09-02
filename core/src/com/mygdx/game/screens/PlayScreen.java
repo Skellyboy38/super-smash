@@ -53,7 +53,7 @@ public class PlayScreen extends Screen{
         stage.addActor(buttonItem);
 	}
 	
-	public void addScreens(Screen onePlayer, Screen twoPlayer, Screen back, Screen options) {
+	public void addScreens(Screen onePlayer, Screen back, Screen options) {
 		this.onePlayer = onePlayer;
 		this.back = back;
 		this.options = options;
@@ -66,8 +66,8 @@ public class PlayScreen extends Screen{
 		buttonAtlas3 = new TextureAtlas("back/goBack.pack");
 		picture = new Texture("playScreen/background.jpg");
 		background = new Image(picture);
-		background.setWidth(game.GAME_WIDTH);
-		background.setHeight(game.GAME_HEIGHT);
+		background.setWidth(MyGdxGame.GAME_WIDTH);
+		background.setHeight(MyGdxGame.GAME_HEIGHT);
 		skin1.addRegions(buttonAtlas1);
 		skin3.addRegions(buttonAtlas3);
         font = new BitmapFont();
@@ -86,16 +86,16 @@ public class PlayScreen extends Screen{
         button3 = new TextButton("", textButtonStyle3);
         button1.setHeight(75);
         button1.setWidth(250);
-        button1.setPosition(90,game.GAME_HEIGHT/2+250);
+        button1.setPosition(90,MyGdxGame.GAME_HEIGHT/2+250);
         button2.setHeight(75);
         button2.setWidth(250);
-        button2.setPosition(90 + (game.GAME_WIDTH-200)/4, game.GAME_HEIGHT/2+250);
+        button2.setPosition(90 + (MyGdxGame.GAME_WIDTH-200)/4, MyGdxGame.GAME_HEIGHT/2+250);
         buttonOptions.setHeight(75);
         buttonOptions.setWidth(250);
-        buttonOptions.setPosition(90 + (game.GAME_WIDTH-200)/2, game.GAME_HEIGHT/2+250);
+        buttonOptions.setPosition(90 + (MyGdxGame.GAME_WIDTH-200)/2, MyGdxGame.GAME_HEIGHT/2+250);
         buttonItem.setHeight(75);
         buttonItem.setWidth(250);
-        buttonItem.setPosition(90 + 3*(game.GAME_WIDTH-200)/4, game.GAME_HEIGHT/2+250);
+        buttonItem.setPosition(90 + 3*(MyGdxGame.GAME_WIDTH-200)/4, MyGdxGame.GAME_HEIGHT/2+250);
         button3.setHeight(100);
         button3.setWidth(100);
         button3.setPosition(50,50);

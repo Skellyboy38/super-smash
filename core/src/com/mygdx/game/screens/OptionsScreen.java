@@ -18,7 +18,6 @@ public class OptionsScreen extends Screen{
 	private Texture picture;
 	private Image background;
 	private MyGdxGame game;
-	private Screen onePlayer;
 	private Screen back;
 	private Random rand;		
 	
@@ -60,8 +59,8 @@ public class OptionsScreen extends Screen{
 		buttonAtlas3 = new TextureAtlas("back/goBack.pack");
 		picture = new Texture("playScreen/background.jpg");
 		background = new Image(picture);
-		background.setWidth(game.GAME_WIDTH);
-		background.setHeight(game.GAME_HEIGHT);
+		background.setWidth(MyGdxGame.GAME_WIDTH);
+		background.setHeight(MyGdxGame.GAME_HEIGHT);
 		skin1.addRegions(buttonAtlas1);
 		skin3.addRegions(buttonAtlas3);
         font = new BitmapFont();
@@ -79,13 +78,13 @@ public class OptionsScreen extends Screen{
         buttonBack = new TextButton("", textButtonStyle3);
         buttonFX.setHeight(75);
         buttonFX.setWidth(250);
-        buttonFX.setPosition(90,game.GAME_HEIGHT/2+250);
+        buttonFX.setPosition(90,MyGdxGame.GAME_HEIGHT/2+250);
         buttonMusic.setHeight(75);
         buttonMusic.setWidth(250);
-        buttonMusic.setPosition(90 + (game.GAME_WIDTH-200)/4, game.GAME_HEIGHT/2+250);
+        buttonMusic.setPosition(90 + (MyGdxGame.GAME_WIDTH-200)/4, MyGdxGame.GAME_HEIGHT/2+250);
         buttonData.setHeight(75);
         buttonData.setWidth(250);
-        buttonData.setPosition(90 + 2*(game.GAME_WIDTH-200)/4, game.GAME_HEIGHT/2+250);
+        buttonData.setPosition(90 + 2*(MyGdxGame.GAME_WIDTH-200)/4, MyGdxGame.GAME_HEIGHT/2+250);
         buttonBack.setHeight(100);
         buttonBack.setWidth(100);
         buttonBack.setPosition(50,50);

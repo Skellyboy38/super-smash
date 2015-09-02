@@ -51,7 +51,6 @@ public class StageSelectScreen extends Screen{
 	private boolean drawZoomed;
 	private float positionX;
 	private float positionY;
-	private boolean canChangeScreen = true;
 
 	public StageSelectScreen(MyGdxGame game, SpriteBatch batch) {
 		super(game);
@@ -60,11 +59,11 @@ public class StageSelectScreen extends Screen{
 		font = new BitmapFont();
 		stage = new Stage();
 		buttons = new TextButton[NUMBER_STAGES];
-		buttonHeight = game.GAME_HEIGHT/5;
-		buttonWidth = game.GAME_WIDTH/8;
+		buttonHeight = MyGdxGame.GAME_HEIGHT/5;
+		buttonWidth = MyGdxGame.GAME_WIDTH/8;
 		drawZoomed = false;
 		positionX = -500;
-		positionY = game.GAME_HEIGHT/3;
+		positionY = MyGdxGame.GAME_HEIGHT/3;
 		create();
 		stage.addActor(background);
 		stage.addActor(backButton);
@@ -78,8 +77,8 @@ public class StageSelectScreen extends Screen{
 		backgroundTexture = new Texture("stageSelect/background.png");
 		background = new Image(backgroundTexture);
 		background.setPosition(0, 0);
-		background.setHeight(game.GAME_HEIGHT);
-		background.setWidth(game.GAME_WIDTH);
+		background.setHeight(MyGdxGame.GAME_HEIGHT);
+		background.setWidth(MyGdxGame.GAME_WIDTH);
 		
 		backStyle = new TextButtonStyle();
 		backAtlas = new TextureAtlas("back/goBack.pack");
@@ -114,8 +113,8 @@ public class StageSelectScreen extends Screen{
         });
 		
 		float divisor = 1.8F;
-		float posX = game.GAME_WIDTH/divisor;
-		float posY = game.GAME_HEIGHT/1.5F;
+		float posX = MyGdxGame.GAME_WIDTH/divisor;
+		float posY = MyGdxGame.GAME_HEIGHT/1.5F;
 		
 		for(int i = 0; i < buttons.length; i++) {
 			buttons[i] = new TextButton("", style);
@@ -123,9 +122,9 @@ public class StageSelectScreen extends Screen{
 			buttons[i].setWidth(buttonWidth);
 			buttons[i].setPosition(posX, posY);
 			posX += buttons[i].getWidth()*1.05F;
-			if(posX + buttons[i].getWidth() > game.GAME_WIDTH) {
+			if(posX + buttons[i].getWidth() > MyGdxGame.GAME_WIDTH) {
 				divisor += 0.2F;
-				posX = game.GAME_WIDTH/divisor;
+				posX = MyGdxGame.GAME_WIDTH/divisor;
 				posY -= buttons[i].getHeight()*1.05F;
 			}
 			buttons[i].addListener(new ClickListener() {
@@ -160,7 +159,7 @@ public class StageSelectScreen extends Screen{
 		if(drawZoomed) {
 			positionX = positionX + 20;
 		}
-		if(positionX >= game.GAME_WIDTH/20) {
+		if(positionX >= MyGdxGame.GAME_WIDTH/20) {
 			drawZoomed = false;
 		}
 	}

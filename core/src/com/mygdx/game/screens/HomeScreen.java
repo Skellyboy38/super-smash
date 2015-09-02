@@ -51,8 +51,8 @@ public class HomeScreen extends Screen{
 	public void create() {
 		picture = new Texture("homeScreen/background.png");
 		background = new Image(picture);
-		background.setHeight(game.GAME_HEIGHT);
-		background.setWidth(game.GAME_WIDTH);
+		background.setHeight(MyGdxGame.GAME_HEIGHT);
+		background.setWidth(MyGdxGame.GAME_WIDTH);
 		
 		skin = new Skin();
 		buttonAtlas = new TextureAtlas("homeScreen/button/button.pack");
@@ -68,7 +68,7 @@ public class HomeScreen extends Screen{
         button = new TextButton("", textButtonStyle);
         button.setHeight(100);
         button.setWidth(500);
-        button.setPosition(game.GAME_WIDTH/2 - (button.getWidth()/2), game.GAME_HEIGHT/4.5F);
+        button.setPosition(MyGdxGame.GAME_WIDTH/2 - (button.getWidth()/2), MyGdxGame.GAME_HEIGHT/4.5F);
         
         //Creates an event listener for the button which makes screen point to the playScreen
         button.addListener(new InputListener() {
@@ -103,7 +103,7 @@ public class HomeScreen extends Screen{
 		stage.act();
 		stage.draw();
 		batch.begin();
-		font.draw(batch, "CLICK TO PLAY", game.GAME_WIDTH/2 - 170, game.GAME_HEIGHT/4.5F + 70);
+		font.draw(batch, "CLICK TO PLAY", MyGdxGame.GAME_WIDTH/2 - 170, MyGdxGame.GAME_HEIGHT/4.5F + 70);
 		batch.end();
 	}
 	

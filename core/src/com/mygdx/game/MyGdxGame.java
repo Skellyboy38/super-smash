@@ -5,13 +5,12 @@ import java.awt.Toolkit;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.screens.OnePlayerCharacterSelect;
+import com.mygdx.game.screens.CharacterSelect;
 import com.mygdx.game.screens.OptionsScreen;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.screens.Screen;
 import com.mygdx.game.screens.HomeScreen;
 import com.mygdx.game.screens.StageSelectScreen;
-import com.mygdx.game.screens.TwoPlayerCharacterSelect;
 
 public class MyGdxGame extends ApplicationAdapter {
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -23,8 +22,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	Screen screen;			//The default screen that will be used to point to the active screen
 	HomeScreen home;		//Create the various screens here. 
 	PlayScreen play;
-	OnePlayerCharacterSelect player1;
-	TwoPlayerCharacterSelect player2;
+	CharacterSelect player1;
 	OptionsScreen options;
 	StageSelectScreen stageSelect;
 	
@@ -32,14 +30,13 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		stageSelect = new StageSelectScreen(this, batch);
-		player1 = new OnePlayerCharacterSelect(this, batch);
-		player2 = new TwoPlayerCharacterSelect(this);
+		player1 = new CharacterSelect(this, batch);
 		options = new OptionsScreen(this);
 		play = new PlayScreen(this);
 		home = new HomeScreen(this, batch);				//Every screen should take in an instance of the game in order to perform the changeScreen() operation.
 		
 		home.addScreens(play);							//Add the screens that the specified screen interacts with (mostly for the purpose of changing the screen).
-		play.addScreens(player1, player2, home, options);
+		play.addScreens(player1, home, options);
 		player1.addScreens(play, stageSelect);
 		options.addScreens(play);
 		stageSelect.addScreens(player1);
