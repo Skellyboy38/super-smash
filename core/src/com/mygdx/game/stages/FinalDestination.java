@@ -3,26 +3,29 @@ package com.mygdx.game.stages;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.MyGdxGame;
 
 public class FinalDestination extends Map{
 
 	public FinalDestination(SpriteBatch batch) {
 		
-		Texture stage = new Texture("stages/final_destination/final_destination.png");
 		Texture background = new Texture("stages/final_destination/final_destination_background.png");
+		Image background_image = new Image(background);
+		background_image.setWidth(MyGdxGame.GAME_WIDTH);
+		background_image.setHeight(MyGdxGame.GAME_HEIGHT);
 		Rectangle[] rectangles = new Rectangle[4];
 		
-		posX = (MyGdxGame.GAME_WIDTH - stage.getWidth())/2;
-		posY = MyGdxGame.GAME_HEIGHT/6;
+		posX = MyGdxGame.GAME_WIDTH/5.81818F;			//Position in x-y coordinates for the rectangle
+		posY = MyGdxGame.GAME_HEIGHT/2.55319F;
 		
 		Rectangle main = new Rectangle();		//Creating the bounding rectangles for collision detection
 		Rectangle under = new Rectangle();
 		Rectangle leftEdge = new Rectangle();
 		Rectangle rightEdge = new Rectangle();
 		
-		main.setHeight(stage.getHeight());		//Setting the parameters of the bounding rectangles
-		main.setWidth(stage.getWidth());
+		main.setHeight(MyGdxGame.GAME_HEIGHT/33.75F);		//Setting the parameters of the bounding rectangles
+		main.setWidth(MyGdxGame.GAME_WIDTH/1.55591F);
 		main.setPosition(posX, posY);
 		
 		under.setHeight(main.getHeight()/10);
@@ -42,7 +45,7 @@ public class FinalDestination extends Map{
 		rectangles[2] = leftEdge;
 		rectangles[3] = rightEdge;
 		
-		create(stage, background, rectangles, batch);
+		create(background_image, rectangles, batch);
 	}
 	
 }

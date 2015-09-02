@@ -22,14 +22,21 @@ import com.mygdx.game.stages.FinalDestination;
 import com.mygdx.game.stages.Map;
 
 public class StageSelectScreen extends Screen{
+	public static final float ZOOMED_WIDTH = MyGdxGame.GAME_WIDTH/3.25424F;
+	public static final float ZOOMED_HEIGHT = MyGdxGame.GAME_HEIGHT/2.76923F;
+	
 	public static final int NUMBER_STAGES = 10;
 	private ArrayList<Fighter> characters;
 	public FightScreen fight;
 	
 	private Texture backgroundTexture;
-	private Texture zoomed;
+	private Texture final_destination_zoomed;
+	private Image final_destination_zoomed_image;
+	private Texture empty_zoomed;
+	private Image empty_zoomed_image;
 	private Image background;
 	private Stage stage;
+	private ArrayList<Actor> addRemoveActors;
 	private TextButton[] buttons;
 	private TextButton backButton;
 	
@@ -37,6 +44,10 @@ public class StageSelectScreen extends Screen{
 	private TextButtonStyle style;
 	private TextureAtlas atlas;
 	private Skin skin;
+	
+	private TextButtonStyle final_destination_style;
+	private TextureAtlas final_destination_atlas;
+	private Skin final_destination_skin;
 	
 	private TextButtonStyle backStyle;
 	private TextureAtlas backAtlas;
@@ -48,7 +59,9 @@ public class StageSelectScreen extends Screen{
 	
 	private float buttonHeight;
 	private float buttonWidth;
+	
 	private boolean drawZoomed;
+	
 	private float positionX;
 	private float positionY;
 
@@ -58,12 +71,16 @@ public class StageSelectScreen extends Screen{
 		this.batch = batch;
 		font = new BitmapFont();
 		stage = new Stage();
+		addRemoveActors = new ArrayList<Actor>();
 		buttons = new TextButton[NUMBER_STAGES];
 		buttonHeight = MyGdxGame.GAME_HEIGHT/5;
 		buttonWidth = MyGdxGame.GAME_WIDTH/8;
-		drawZoomed = false;
+		
+		drawZoomed = false;				//Whether or not to draw the zoomed image
+		
 		positionX = -500;
 		positionY = MyGdxGame.GAME_HEIGHT/3;
+		
 		create();
 		stage.addActor(background);
 		stage.addActor(backButton);
@@ -73,7 +90,18 @@ public class StageSelectScreen extends Screen{
 	}
 	
 	public void create() {
-		zoomed = new Texture("stageSelect/stage_image/Blank1.9.png");
+		empty_zoomed = new Texture("stageSelect/stage_image/blank/Blank1.9.png");
+		empty_zoomed_image = new Image(empty_zoomed);
+		empty_zoomed_image.setWidth(ZOOMED_WIDTH);
+		empty_zoomed_image.setHeight(ZOOMED_HEIGHT);
+		
+		addRemoveActors.add(empty_zoomed_image);
+		
+		final_destination_zoomed = new Texture("stageSelect/stage_image/final_destination/Final_destination.9.png");
+		final_destination_zoomed_image = new Image(final_destination_zoomed);
+		final_destination_zoomed_image.setWidth(ZOOMED_WIDTH);
+		final_destination_zoomed_image.setHeight(ZOOMED_HEIGHT);
+		
 		backgroundTexture = new Texture("stageSelect/background.png");
 		background = new Image(backgroundTexture);
 		background.setPosition(0, 0);
@@ -88,13 +116,20 @@ public class StageSelectScreen extends Screen{
 		backStyle.up = backSkin.getDrawable("backButton");
 		
 		style = new TextButtonStyle();
-		atlas = new TextureAtlas("stageSelect/stage_image/blank.pack");
+		atlas = new TextureAtlas("stageSelect/stage_image/blank/blank.pack");
 		skin = new Skin();
 		skin.addRegions(atlas);
 		style.font = font;
 		style.up = skin.getDrawable("Blank1");
 		style.over = skin.getDrawable("Blank2");
 		style.checkedOver = skin.getDrawable("Blank2");
+		
+		final_destination_style = new TextButtonStyle();
+		final_destination_atlas = new TextureAtlas("stageSelect/stage_image/final_destination/final_destination.pack");
+		final_destination_skin = new Skin();
+		final_destination_skin.addRegions(final_destination_atlas);
+		final_destination_style.font = font;
+		final_destination_style.up = final_destination_skin.getDrawable("Final_destination");
 		createButtons();
 	}
 	
@@ -115,8 +150,31 @@ public class StageSelectScreen extends Screen{
 		float divisor = 1.8F;
 		float posX = MyGdxGame.GAME_WIDTH/divisor;
 		float posY = MyGdxGame.GAME_HEIGHT/1.5F;
+		//=======================================================================================
+		buttons[0] = new TextButton("", final_destination_style);		//Creating the button for final destination
+		buttons[0].setHeight(buttonHeight);
+		buttons[0].setWidth(buttonWidth);
+		buttons[0].setPosition(posX, posY);
+		posX += buttons[0].getWidth()*1.05F;
 		
-		for(int i = 0; i < buttons.length; i++) {
+		buttons[0].addListener(new ClickListener() {
+			public void enter (InputEvent event, float x, float y, int pointer, Actor fromButton) {
+				addRemoveActors.get(0).remove();
+				addRemoveActors.remove(0);
+				stage.addActor(final_destination_zoomed_image);
+				addRemoveActors.add(final_destination_zoomed_image);
+				drawZoomed = true;
+				positionX = -500;
+			}
+		});
+		
+		if(posX + buttons[0].getWidth() > MyGdxGame.GAME_WIDTH) {
+			divisor += 0.2F;
+			posX = MyGdxGame.GAME_WIDTH/divisor;
+			posY -= buttons[0].getHeight()*1.05F;
+		}
+		//=======================================================================================
+		for(int i = 1; i < buttons.length; i++) {
 			buttons[i] = new TextButton("", style);
 			buttons[i].setHeight(buttonHeight);
 			buttons[i].setWidth(buttonWidth);
@@ -129,6 +187,10 @@ public class StageSelectScreen extends Screen{
 			}
 			buttons[i].addListener(new ClickListener() {
 				public void enter (InputEvent event, float x, float y, int pointer, Actor fromButton) {
+					addRemoveActors.get(0).remove();
+					addRemoveActors.remove(0);
+					stage.addActor(empty_zoomed_image);
+					addRemoveActors.add(empty_zoomed_image);
 					drawZoomed = true;
 					positionX = -500;
 				}
@@ -162,6 +224,8 @@ public class StageSelectScreen extends Screen{
 		if(positionX >= MyGdxGame.GAME_WIDTH/20) {
 			drawZoomed = false;
 		}
+		empty_zoomed_image.setPosition(positionX, positionY);
+		final_destination_zoomed_image.setPosition(positionX, positionY);
 	}
 	
 	public void show() {
@@ -170,19 +234,15 @@ public class StageSelectScreen extends Screen{
 	
 	public void render() {
 		super.render();
-		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		update();
+		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		stage.act();
 		stage.draw();
-		batch.begin();
-		batch.draw(zoomed, positionX, positionY, 500, 400);
-		batch.end();
 	}
 	
 	public void clear() {
 		positionX = -500;
 		characters = null;
-		
 	}
 
 	

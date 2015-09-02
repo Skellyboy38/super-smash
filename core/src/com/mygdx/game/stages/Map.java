@@ -1,17 +1,17 @@
 package com.mygdx.game.stages;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Map {
-	private Texture stage;
-	private Texture background;
+	private Stage stage;
+	private Image background;
 	private Rectangle[] rectangles;
-	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
 	
 	protected float posX;
@@ -21,16 +21,16 @@ public class Map {
 	boolean keyHolding;
 	
 	public Map() {
+		stage = new Stage();
 		showBoxes = false;
 		keyHolding = false;
 		shapeRenderer = new ShapeRenderer();
 	}
 	
-	public void create(Texture stage, Texture background, Rectangle[] rectangles, SpriteBatch batch) {
-		this.stage = stage;
+	public void create(Image background, Rectangle[] rectangles, SpriteBatch batch) {
 		this.background = background;
 		this.rectangles = rectangles;
-		this.batch = batch;
+		stage.addActor(background);
 		shapeRenderer.setColor(1,1,0,1);
 	}
 	
@@ -42,19 +42,15 @@ public class Map {
 		return posY;
 	}
 	
-	public Texture getBackground() {
+	public Image getBackground() {
 		return background;
-	}
-	
-	public Texture getStage() {
-		return stage;
 	}
 	
 	public void render() {
 		update();
-		batch.begin();
-		batch.draw(background, 0, 0);
-		batch.draw(stage, posX, posY);
+		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		stage.act();
+		stage.draw();
 		if(showBoxes) {			//Draw all the collision boxes
 			shapeRenderer.begin(ShapeType.Line);
 			for(int i = 0; i < rectangles.length; i++) {
@@ -62,7 +58,6 @@ public class Map {
 			}
 			shapeRenderer.end();
 		}
-		batch.end();
 	}
 	
 	public Rectangle[] getCollisionBoxes() {

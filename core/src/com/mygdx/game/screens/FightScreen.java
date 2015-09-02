@@ -40,7 +40,6 @@ public class FightScreen extends Screen{
 	
 	public void render() {
 		super.render();
-		update();
 		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		stage.act();
 		stage.draw();
@@ -48,6 +47,7 @@ public class FightScreen extends Screen{
 		for(int i = 0; i < characters.size(); i++) {
 			characters.get(i).render();
 		}
+		update();
 	}
 	
 	public void addScreens(Screen back) {
@@ -55,20 +55,20 @@ public class FightScreen extends Screen{
 	}
 	
 	public void clear() {
-		for(int i = 0; i < characters.size(); i++) {
-			characters.remove(i);
-		}
+		characters = null;
+		map = null;
 	}
 	
 	public void update() {
-		if(Gdx.input.isKeyPressed(31)) {
-			game.changeScreen(back);
-		}
 		if(Intersector.overlaps(map.getCollisionBoxes()[0], characters.get(0).getCollisionBox())) {
 			characters.get(0).capVerticalPosition();
 		}
 		else {
 			characters.get(0).uncapVerticalPosition();
+		}
+		if(Gdx.input.isKeyPressed(31)) {
+			clear();
+			game.changeScreen(back);
 		}
 	}
 	
