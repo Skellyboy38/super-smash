@@ -18,23 +18,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.characters.Fighter;
+import com.mygdx.game.characters.Lonrk;
 
 public class OnePlayerCharacterSelect extends Screen{
 	public static final int NUM_CHARACTERS = 68;		//The number of characters to choose from.
 	
 	private Texture picture;
 	private Image background;
-	private Texture chalkManIcon;
-	private Image chalkMan;
+	private Texture lonrkIcon;
+	private Image lonrk;
 	private Image[] icons;
 	private MyGdxGame game;
 	private BitmapFont font;
 	private Screen back;			//The play screen.
-	private Screen next;
+	private StageSelectScreen next;
 	private TextButton[] buttons;	//All the character choices are represented with their own button.
 	private SpriteBatch batch;
 	private Array<Actor> addRemoveActors;
-	private ArrayList<Character> characters;
+	private ArrayList<Fighter> characters;
+	private String[] names;
 	private Stage stage;
 	
 	private Group first;
@@ -68,7 +71,7 @@ public class OnePlayerCharacterSelect extends Screen{
 	private TextButtonStyle textButtonStyleBack;
 	private TextButtonStyle addStyle;
 	private TextButtonStyle removeStyle;
-	private TextButtonStyle chalkManStyle;
+	private TextButtonStyle lonrkStyle;
 	
 	private Skin tokenSkin;
 	private Skin skin;
@@ -81,7 +84,7 @@ public class OnePlayerCharacterSelect extends Screen{
 	private TextureAtlas buttonAtlasBack;		//Anything with "back" at the end pertains to the back button.
 	private TextureAtlas addAtlas;
 	private TextureAtlas removeAtlas;
-	private TextureAtlas chalkManAtlas;
+	private TextureAtlas lonrkAtlas;
 	
 	private float buttonHeight;
 	private float buttonWidth;
@@ -95,7 +98,8 @@ public class OnePlayerCharacterSelect extends Screen{
 		first = new Group();
 		second = new Group();
 		third = new Group();
-		characters = new ArrayList<Character>();
+		characters = new ArrayList<Fighter>();
+		names = new String[4];
 		
 		tokenMovable = new boolean[] {false, false, false, false};
 		characterExists = new boolean[] {false, false, false, false};
@@ -103,14 +107,14 @@ public class OnePlayerCharacterSelect extends Screen{
 		font = new BitmapFont();
 		font.setScale(2);
 		font.setColor(255,255,255,1);
-		chalkManIcon = new Texture("CharacterSelectScreen/character_images/chalk_man.png");
-		chalkMan = new Image(chalkManIcon);
-		chalkMan.setPosition(game.GAME_WIDTH/9.80392F, game.GAME_HEIGHT/15.07692F);
-		chalkMan.setHeight(game.GAME_HEIGHT/2.5789F);
-		chalkMan.setWidth(game.GAME_WIDTH/4.46428F);
-		chalkMan.setZIndex(1);
+		lonrkIcon = new Texture("CharacterSelectScreen/character_images/lonrk.png");
+		lonrk = new Image(lonrkIcon);
+		lonrk.setPosition(game.GAME_WIDTH/9.80392F, game.GAME_HEIGHT/15.07692F);
+		lonrk.setHeight(game.GAME_HEIGHT/2.5789F);
+		lonrk.setWidth(game.GAME_WIDTH/4.46428F);
+		lonrk.setZIndex(1);
 		icons = new Image[NUM_CHARACTERS];
-		icons[0] = chalkMan;
+		icons[0] = lonrk;
 		
 		create();
 		addRemoveActors.add(add1);
@@ -138,7 +142,7 @@ public class OnePlayerCharacterSelect extends Screen{
 		
 	}
 
-	public void addScreens(Screen back, Screen next) {
+	public void addScreens(Screen back, StageSelectScreen next) {
 		this.back = back;
 		this.next = next;
 	}
@@ -146,17 +150,17 @@ public class OnePlayerCharacterSelect extends Screen{
 	public void create() {
 		skin = new Skin();
 		buttonAtlas = new TextureAtlas("CharacterSelectScreen/pictures/locked.pack");
-		chalkManAtlas = new TextureAtlas("CharacterSelectScreen/chalk_man_icon/chalk_man.pack");
+		lonrkAtlas = new TextureAtlas("CharacterSelectScreen/lonrk_icon/lonrk.pack");
 		skin.addRegions(buttonAtlas);
-		skin.addRegions(chalkManAtlas);
+		skin.addRegions(lonrkAtlas);
 		textButtonStyle = new TextButtonStyle();
-		chalkManStyle = new TextButtonStyle();
-		chalkManStyle.font = font;
+		lonrkStyle = new TextButtonStyle();
+		lonrkStyle.font = font;
 		textButtonStyle.font = font;
 		textButtonStyle.up = skin.getDrawable("Locked");
 		textButtonStyle.over = skin.getDrawable("Locked_hover");
 		textButtonStyle.checkedOver = skin.getDrawable("Locked_hover");
-		chalkManStyle.up = skin.getDrawable("Chalk_man");
+		lonrkStyle.up = skin.getDrawable("lonrk");
 		
 		addStyle = new TextButtonStyle();
 		addSkin = new Skin();
@@ -191,7 +195,7 @@ public class OnePlayerCharacterSelect extends Screen{
 		float initialPositionX = game.GAME_WIDTH/51.724F;
 		float initialPositionY = game.GAME_HEIGHT/1.291F;
 		buttons = new TextButton[NUM_CHARACTERS];
-		buttons[0] = new TextButton("", chalkManStyle);
+		buttons[0] = new TextButton("", lonrkStyle);
 		buttons[0].setHeight(buttonHeight);
 		buttons[0].setWidth(buttonWidth);
 		buttons[0].setPosition(initialPositionX, initialPositionY);
@@ -458,9 +462,13 @@ public class OnePlayerCharacterSelect extends Screen{
 		if(((token1.getX() + token1.getWidth()/2) >= buttons[0].getX() && (token1.getX() + token1.getWidth()/2) <= buttons[0].getX()+buttons[0].getWidth()) && 
 				((token1.getY() + token1.getHeight()/2) >= buttons[0].getY() && (token1.getY() + token1.getHeight()/2) <= buttons[0].getY()+buttons[0].getHeight())) {
 			second.addActor(icons[0]);
+			names[0] = "lonrk";		//Set the first character to be "lonrk"
 		}
-		else
+		else {
 			icons[0].remove();
+			names[0] = null;
+		}
+			
 		
 		if(characterExists[0] || characterExists[1] || characterExists[2] || characterExists[3]) {
 			canStart = true;
@@ -470,6 +478,10 @@ public class OnePlayerCharacterSelect extends Screen{
 		if(canStart) {
 			font.draw(batch, START_MESSAGE , game.GAME_WIDTH/5.747F, game.GAME_HEIGHT/1.05F);
 			if(Gdx.input.isKeyPressed(66)) {
+				if(names[0].equals("lonrk")) {		//If the first character chosen is lonrk
+					characters.add(new Lonrk(batch, game.GAME_WIDTH/2, game.GAME_HEIGHT/2));	
+				}
+				next.passCharacters(characters);
 				game.changeScreen(next);
 			}
 		}

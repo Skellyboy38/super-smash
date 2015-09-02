@@ -5,7 +5,6 @@ import java.awt.Toolkit;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.screens.FightScreen;
 import com.mygdx.game.screens.OnePlayerCharacterSelect;
 import com.mygdx.game.screens.OptionsScreen;
 import com.mygdx.game.screens.PlayScreen;

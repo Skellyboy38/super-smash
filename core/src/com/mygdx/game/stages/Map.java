@@ -65,7 +65,7 @@ public class Map {
 		batch.end();
 	}
 	
-	public Rectangle[] getRectangles() {
+	public Rectangle[] getCollisionBoxes() {
 		return rectangles;
 	}
 	

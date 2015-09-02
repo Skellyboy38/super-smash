@@ -17,12 +17,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.characters.Fighter;
 import com.mygdx.game.stages.FinalDestination;
 import com.mygdx.game.stages.Map;
 
 public class StageSelectScreen extends Screen{
 	public static final int NUMBER_STAGES = 10;
-	private ArrayList<Character> characters;
+	private ArrayList<Fighter> characters;
 	public FightScreen fight;
 	
 	private Texture backgroundTexture;
@@ -151,7 +152,7 @@ public class StageSelectScreen extends Screen{
 		this.back = back;
 	}
 	
-	public void passCharacters(ArrayList<Character> characters) {
+	public void passCharacters(ArrayList<Fighter> characters) {
 		this.characters = characters;
 	}
 	
@@ -181,6 +182,7 @@ public class StageSelectScreen extends Screen{
 	
 	public void clear() {
 		positionX = -500;
+		characters = null;
 		
 	}
 
