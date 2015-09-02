@@ -28,6 +28,9 @@ public class CharacterSelect extends Screen{
 	private Image background;
 	private MyGdxGame game;
 	
+	private Texture player1, player2, player3, player4;
+	private Image player1_image, player2_image, player3_image, player4_image;
+	
 	private Texture lonrkIcon;
 	private Image lonrk;
 	private TextureAtlas lonrkAtlas;
@@ -48,6 +51,7 @@ public class CharacterSelect extends Screen{
 	private Group first;
 	private Group second;
 	private Group third;
+	private Group fourth;
 	
 	private TextButton add1;		//Buttons to add a character
 	private TextButton add2;
@@ -98,10 +102,35 @@ public class CharacterSelect extends Screen{
 		this.batch = batch;
 		canStart = false;
 		
+		player1 = new Texture("CharacterSelectScreen/player_backgrounds/player1.png");
+		player1_image = new Image(player1);
+		player1_image.setHeight(MyGdxGame.GAME_HEIGHT/2.5789F);
+		player1_image.setWidth(MyGdxGame.GAME_WIDTH/4.46428F);
+		player1_image.setPosition(MyGdxGame.GAME_WIDTH/9.80392F, MyGdxGame.GAME_HEIGHT/15.07692F);
+		
+		player2 = new Texture("CharacterSelectScreen/player_backgrounds/player2.png");
+		player2_image = new Image(player2);
+		player2_image.setHeight(MyGdxGame.GAME_HEIGHT/2.5789F);
+		player2_image.setWidth(MyGdxGame.GAME_WIDTH/4.46428F);
+		player2_image.setPosition(MyGdxGame.GAME_WIDTH/3.37078F, MyGdxGame.GAME_HEIGHT/15.07692F);
+		
+		player3 = new Texture("CharacterSelectScreen/player_backgrounds/player3.png");
+		player3_image = new Image(player3);
+		player3_image.setHeight(MyGdxGame.GAME_HEIGHT/2.5789F);
+		player3_image.setWidth(MyGdxGame.GAME_WIDTH/4.46428F);
+		player3_image.setPosition(MyGdxGame.GAME_WIDTH/2.03252F, MyGdxGame.GAME_HEIGHT/15.07692F);
+		
+		player4 = new Texture("CharacterSelectScreen/player_backgrounds/player4.png");
+		player4_image = new Image(player4);
+		player4_image.setHeight(MyGdxGame.GAME_HEIGHT/2.5789F);
+		player4_image.setWidth(MyGdxGame.GAME_WIDTH/4.46428F);
+		player4_image.setPosition(MyGdxGame.GAME_WIDTH/1.45631F, MyGdxGame.GAME_HEIGHT/15.07692F);
+		
 		stage = new Stage();
 		first = new Group();
 		second = new Group();
 		third = new Group();
+		fourth = new Group();
 		characters = new ArrayList<Fighter>();
 		names = new String[4];
 		
@@ -140,10 +169,9 @@ public class CharacterSelect extends Screen{
 		third.addActor(add4);
 		
 		stage.addActor(first);
+		stage.addActor(fourth);
 		stage.addActor(second);
 		stage.addActor(third);
-		
-		
 	}
 
 	public void addScreens(Screen back, StageSelectScreen next) {
@@ -220,6 +248,7 @@ public class CharacterSelect extends Screen{
 		add1.setZIndex(100);
 		add1.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				fourth.addActor(player1_image);
 				addRemoveActors.get(0).remove();
 				third.addActor(remove1);
 				third.addActor(token1);
@@ -235,6 +264,7 @@ public class CharacterSelect extends Screen{
 		add2.setZIndex(100);
 		add2.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				fourth.addActor(player2_image);
 				addRemoveActors.get(1).remove();
 				third.addActor(remove2);
 				third.addActor(token2);
@@ -250,6 +280,7 @@ public class CharacterSelect extends Screen{
 		add3.setZIndex(100);
 		add3.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				fourth.addActor(player3_image);
 				addRemoveActors.get(2).remove();
 				third.addActor(remove3);
 				third.addActor(token3);
@@ -265,6 +296,7 @@ public class CharacterSelect extends Screen{
 		add4.setZIndex(100);
 		add4.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				fourth.addActor(player4_image);
 				addRemoveActors.get(3).remove();
 				third.addActor(remove4);
 				third.addActor(token4);
@@ -280,11 +312,12 @@ public class CharacterSelect extends Screen{
 		remove1.setZIndex(100);
 		remove1.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				fourth.removeActor(player1_image);
 				addRemoveActors.get(4).remove();
 				third.addActor(add1);
 				token1.remove();
 				characterExists[0] = false;
-				token1.setPosition(MyGdxGame.GAME_WIDTH/3.926F, MyGdxGame.GAME_HEIGHT/3.091F);
+				token1.setPosition(MyGdxGame.GAME_WIDTH/3.6855F, MyGdxGame.GAME_HEIGHT/2.78409F);
 				return true;
 			}
 		});
@@ -296,11 +329,12 @@ public class CharacterSelect extends Screen{
 		remove2.setZIndex(100);
 		remove2.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				fourth.removeActor(player2_image);
 				addRemoveActors.get(5).remove();
 				third.addActor(add2);
 				token2.remove();
 				characterExists[1] = false;
-				token2.setPosition(MyGdxGame.GAME_WIDTH/2.228F, MyGdxGame.GAME_HEIGHT/3.091F);
+				token2.setPosition(MyGdxGame.GAME_WIDTH/2.14286F, MyGdxGame.GAME_HEIGHT/2.78409F);
 				return true;
 			}
 		});
@@ -312,11 +346,12 @@ public class CharacterSelect extends Screen{
 		remove3.setZIndex(100);
 		remove3.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				fourth.removeActor(player3_image);
 				addRemoveActors.get(6).remove();
 				third.addActor(add3);
 				token3.remove();
 				characterExists[2] = false;
-				token3.setPosition(MyGdxGame.GAME_WIDTH/1.554F, MyGdxGame.GAME_HEIGHT/3.091F);
+				token3.setPosition(MyGdxGame.GAME_WIDTH/1.51057F, MyGdxGame.GAME_HEIGHT/2.78409F);
 				return true;
 			}
 		});
@@ -328,11 +363,12 @@ public class CharacterSelect extends Screen{
 		remove4.setZIndex(100);
 		remove4.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				fourth.removeActor(player4_image);
 				addRemoveActors.get(7).remove();
 				third.addActor(add4);
 				token4.remove();
 				characterExists[3] = false;
-				token4.setPosition(MyGdxGame.GAME_WIDTH/1.191F, MyGdxGame.GAME_HEIGHT/3.091F);
+				token4.setPosition(MyGdxGame.GAME_WIDTH/1.1664F, MyGdxGame.GAME_HEIGHT/2.78409F);
 				return true;
 			}
 		});
@@ -345,7 +381,7 @@ public class CharacterSelect extends Screen{
 		tokenStyle.up = tokenSkin.getDrawable("Token");
 		
 		token1 = new TextButton("", tokenStyle);
-		token1.setPosition(MyGdxGame.GAME_WIDTH/3.926F, MyGdxGame.GAME_HEIGHT/3.091F);
+		token1.setPosition(MyGdxGame.GAME_WIDTH/3.6855F, MyGdxGame.GAME_HEIGHT/2.78409F);
 		token1.setHeight(50);
 		token1.setWidth(50);
 		token1.addListener(new InputListener() {
@@ -355,7 +391,7 @@ public class CharacterSelect extends Screen{
 			}
 		});
 		token2 = new TextButton("", tokenStyle);
-		token2.setPosition(MyGdxGame.GAME_WIDTH/2.228F, MyGdxGame.GAME_HEIGHT/3.091F);
+		token2.setPosition(MyGdxGame.GAME_WIDTH/2.14286F, MyGdxGame.GAME_HEIGHT/2.78409F);
 		token2.setHeight(50);
 		token2.setWidth(50);
 		token2.addListener(new InputListener() {
@@ -365,7 +401,7 @@ public class CharacterSelect extends Screen{
 			}
 		});
 		token3 = new TextButton("", tokenStyle);
-		token3.setPosition(MyGdxGame.GAME_WIDTH/1.554F, MyGdxGame.GAME_HEIGHT/3.091F);
+		token3.setPosition(MyGdxGame.GAME_WIDTH/1.51057F, MyGdxGame.GAME_HEIGHT/2.78409F);
 		token3.setHeight(50);
 		token3.setWidth(50);
 		token3.addListener(new InputListener() {
@@ -375,7 +411,7 @@ public class CharacterSelect extends Screen{
 			}
 		});
 		token4 = new TextButton("", tokenStyle);
-		token4.setPosition(MyGdxGame.GAME_WIDTH/1.191F, MyGdxGame.GAME_HEIGHT/3.091F);
+		token4.setPosition(MyGdxGame.GAME_WIDTH/1.1664F, MyGdxGame.GAME_HEIGHT/2.78409F);
 		token4.setHeight(50);
 		token4.setWidth(50);
 		token4.addListener(new InputListener() {
