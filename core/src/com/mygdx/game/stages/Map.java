@@ -1,6 +1,7 @@
 package com.mygdx.game.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -13,6 +14,7 @@ public class Map {
 	private Image background;
 	private Rectangle[] rectangles;
 	private ShapeRenderer shapeRenderer;
+	private OrthographicCamera camera;
 	
 	protected float posX;
 	protected float posY;
@@ -22,6 +24,7 @@ public class Map {
 	
 	public Map() {
 		stage = new Stage();
+		camera = (OrthographicCamera)stage.getCamera();
 		showBoxes = false;
 		keyHolding = false;
 		shapeRenderer = new ShapeRenderer();
@@ -32,6 +35,10 @@ public class Map {
 		this.rectangles = rectangles;
 		stage.addActor(background);
 		shapeRenderer.setColor(1,1,0,1);
+	}
+	
+	public Stage getStage() {
+		return stage;
 	}
 	
 	public float getPosX() {
@@ -46,9 +53,13 @@ public class Map {
 		return background;
 	}
 	
+	public void updateCamera(int width, int height) {
+		stage.getViewport().update(width, height);
+	}
+	
 	public void render() {
 		update();
-		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		//stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		stage.act();
 		stage.draw();
 		if(showBoxes) {			//Draw all the collision boxes

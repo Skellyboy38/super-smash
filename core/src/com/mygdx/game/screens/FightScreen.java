@@ -20,14 +20,14 @@ public class FightScreen extends Screen{
 	private Screen back;
 	private MyGdxGame game;
 
-	public FightScreen(MyGdxGame game, SpriteBatch batch, Map map, ArrayList<Fighter> characters) {
+	public FightScreen(MyGdxGame game, SpriteBatch batch, Map map, ArrayList<Fighter> characters, Stage stage) {
 		super(game);
 		this.map = map;
 		this.batch = batch;
 		this.characters = characters;
 		this.game = game;
-		stage = new Stage();
-		camera = (OrthographicCamera) stage.getCamera();
+		this.stage = stage;
+		camera = (OrthographicCamera)stage.getCamera();
 	}
 	
 	public void create() {
@@ -40,7 +40,6 @@ public class FightScreen extends Screen{
 	
 	public void render() {
 		super.render();
-		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		stage.act();
 		stage.draw();
 		map.render();
@@ -61,7 +60,15 @@ public class FightScreen extends Screen{
 		map = null;
 	}
 	
+	public void updateCamera() {
+		camera.setToOrtho(true, characters.get(0).getWidth()*2, characters.get(0).getHeight()*2);
+		camera.position.set(characters.get(0).getPosition(), 0);
+		camera.update();
+		stage.getViewport().update((int)characters.get(0).getWidth()*2, (int)characters.get(0).getHeight()*2);
+	}
+	
 	public void update() {
+		//updateCamera();
 		if(Intersector.overlaps(map.getCollisionBoxes()[0], characters.get(0).getCollisionBox())) {
 			characters.get(0).capVerticalPosition();
 		}

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public class Fighter {
 	SpriteBatch batch;
@@ -137,6 +138,18 @@ public class Fighter {
 	
 	public State getState() {
 		return currentState;
+	}
+	
+	public Vector2 getPosition() {
+		return new Vector2(posX, posY);
+	}
+	
+	public float getWidth() {
+		return standingLeftAnimation.getKeyFrame(0, false).getRegionWidth();
+	}
+	
+	public float getHeight() {
+		return standingLeftAnimation.getKeyFrame(0, false).getRegionHeight();
 	}
 	
 	public void addAnimations(Animation[] animations) {
