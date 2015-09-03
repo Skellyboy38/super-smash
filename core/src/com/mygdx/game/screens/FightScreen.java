@@ -55,7 +55,9 @@ public class FightScreen extends Screen{
 	}
 	
 	public void clear() {
-		characters = null;
+		for(int i = 0; i < characters.size(); i++) {
+			characters.remove(i);
+		}
 		map = null;
 	}
 	
