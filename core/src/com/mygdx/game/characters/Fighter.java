@@ -488,7 +488,7 @@ public class Fighter {
 			positionY += delta;
 			if(capVerticalPosition && delta < 0) {
 				delta = 0;
-				changeState(standingLeft);
+				changeState(standingRight);
 			}
 			currentFrame = jumpingRightAnimation.getKeyFrame(counter, false);
 		}
