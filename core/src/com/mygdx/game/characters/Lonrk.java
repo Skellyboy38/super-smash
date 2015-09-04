@@ -65,8 +65,8 @@ public class Lonrk extends Fighter{
 		}
 		jumpRightAnimation = new Animation(0.05f, jumpRightFrames);
 		
-		collisionBox.setHeight(temp1[0][0].getRegionHeight()*0.75f);
-		collisionBox.setWidth(temp1[0][0].getRegionWidth()*0.75f);
+		collisionBox.setHeight(ANIMATION_HEIGHT*0.75f);
+		collisionBox.setWidth(ANIMATION_WIDTH*0.5f);
 		
 		animations[0] = standLeftAnimation;
 		animations[1] = standRightAnimation;

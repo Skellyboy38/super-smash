@@ -9,10 +9,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.MyGdxGame;
 
 public class Fighter {
+	public static final int ANIMATION_WIDTH = (int)(MyGdxGame.GAME_WIDTH/12.5);
+	public static final int ANIMATION_HEIGHT = (int)(MyGdxGame.GAME_HEIGHT/8.4375f);
+	
 	SpriteBatch batch;
-	private Animation[] animations;
 	private float positionX, positionY;
 	private Rectangle collisionBox;
 	private ShapeRenderer shapeRenderer;
@@ -133,7 +136,7 @@ public class Fighter {
 		canChangeState = true;
 		counter = 0;
 		
-		currentState = jumpingRight;		//Initially the character is standing.
+		currentState = fallingRight;		//Initially the character is standing.
 	}
 	
 	public State getState() {
@@ -144,16 +147,7 @@ public class Fighter {
 		return new Vector2(posX, posY);
 	}
 	
-	public float getWidth() {
-		return standingLeftAnimation.getKeyFrame(0, false).getRegionWidth();
-	}
-	
-	public float getHeight() {
-		return standingLeftAnimation.getKeyFrame(0, false).getRegionHeight();
-	}
-	
 	public void addAnimations(Animation[] animations) {
-		this.animations = animations;
 		
 		standingLeftAnimation = animations[0];
 		standingRightAnimation = animations[1];
@@ -183,7 +177,7 @@ public class Fighter {
 	
 	public void update() {
 		counter += Gdx.graphics.getDeltaTime();
-		collisionBox.setPosition(positionX + walkingLeftAnimation.getKeyFrame(0, false).getRegionWidth()*0.125f, positionY + walkingLeftAnimation.getKeyFrame(0).getRegionHeight()*0.125f);
+		collisionBox.setPosition(positionX + ANIMATION_WIDTH*0.25f, positionY + ANIMATION_HEIGHT*0.125f);
 		
 		if(canChangeState){//if the animation of a move is over
 			if((currentState == standingLeft || currentState == walkingLeft || currentState == fallingLeft) && Gdx.input.isKeyPressed(62)){//jumping
@@ -243,12 +237,12 @@ public class Fighter {
 	public void uncapVerticalPosition() {
 		capVerticalPosition = false;
 	}
-
+	//=====================================================================
 	private class State {
 		public void render() {
 		}
 	}
-
+	//=====================================================================
 	private class StandingLeftState extends State {
 		TextureRegion currentFrame;
 		public StandingLeftState() {
@@ -262,7 +256,7 @@ public class Fighter {
 		public void render() {
 			update();
 			batch.begin();
-			batch.draw(currentFrame, positionX, positionY);
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
 			batch.end();
 		}
 	}
@@ -280,7 +274,7 @@ public class Fighter {
 		public void render() {
 			update();
 			batch.begin();
-			batch.draw(currentFrame, positionX, positionY);
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
 			batch.end();
 		}
 	}
@@ -307,7 +301,7 @@ public class Fighter {
 		public void render() {
 			update();
 			batch.begin();
-			batch.draw(currentFrame, positionX, positionY);
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
 			batch.end();
 		}
 
@@ -335,7 +329,7 @@ public class Fighter {
 		public void render() {
 			update();
 			batch.begin();
-			batch.draw(currentFrame, positionX, positionY);
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
 			batch.end();
 		}
 
@@ -387,7 +381,7 @@ public class Fighter {
 		public void render() {
 			update();
 			batch.begin();
-			batch.draw(currentFrame, positionX, positionY);
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
 			batch.end();
 		}
 	}
@@ -420,7 +414,7 @@ public class Fighter {
 		public void render() {
 			update();
 			batch.begin();
-			batch.draw(currentFrame, positionX, positionY);
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
 			batch.end();
 		}
 	}
@@ -458,7 +452,7 @@ public class Fighter {
 		public void render() {
 			update();
 			batch.begin();
-			batch.draw(currentFrame, positionX, positionY);
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
 			batch.end();
 		}
 
@@ -496,7 +490,7 @@ public class Fighter {
 		public void render() {
 			update();
 			batch.begin();
-			batch.draw(currentFrame, positionX, positionY);
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
 			batch.end();
 		}
 

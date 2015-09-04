@@ -60,11 +60,11 @@ public class FightScreen extends Screen{
 		map = null;
 	}
 	
-	public void updateCamera() {
+	public void updateCamera() {/*
 		camera.setToOrtho(true, characters.get(0).getWidth()*2, characters.get(0).getHeight()*2);
 		camera.position.set(characters.get(0).getPosition(), 0);
 		camera.update();
-		stage.getViewport().update((int)characters.get(0).getWidth()*2, (int)characters.get(0).getHeight()*2);
+		stage.getViewport().update((int)characters.get(0).getWidth()*2, (int)characters.get(0).getHeight()*2);*/
 	}
 	
 	public void update() {
