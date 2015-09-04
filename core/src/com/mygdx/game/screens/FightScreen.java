@@ -19,6 +19,11 @@ public class FightScreen extends Screen{
 	private SpriteBatch batch;
 	private Screen back;
 	private MyGdxGame game;
+	
+	private float cameraWidth;
+	private float cameraHeight;
+	private float cameraPositionX;
+	private float cameraPositionY;
 
 	public FightScreen(MyGdxGame game, SpriteBatch batch, Map map, ArrayList<Fighter> characters, Stage stage) {
 		super(game);
@@ -28,10 +33,11 @@ public class FightScreen extends Screen{
 		this.game = game;
 		this.stage = stage;
 		camera = (OrthographicCamera)stage.getCamera();
-	}
-	
-	public void create() {
 		
+		cameraWidth = MyGdxGame.GAME_WIDTH;
+		cameraHeight = MyGdxGame.GAME_HEIGHT;
+		cameraPositionX = 0;
+		cameraPositionY = 0;
 	}
 	
 	public void addCharacters(ArrayList<Fighter> characters) {
@@ -60,14 +66,17 @@ public class FightScreen extends Screen{
 		map = null;
 	}
 	
-	public void updateCamera() {/*
-		camera.setToOrtho(true, characters.get(0).getWidth()*2, characters.get(0).getHeight()*2);
-		camera.position.set(characters.get(0).getPosition(), 0);
-		camera.update();
-		stage.getViewport().update((int)characters.get(0).getWidth()*2, (int)characters.get(0).getHeight()*2);*/
+	public void updateCamera() {
+		camera.viewportHeight = cameraHeight;
+		camera.viewportWidth = cameraWidth;
+		camera.translate(1,1);
 	}
 	
 	public void update() {
+		if(cameraHeight > 50 || cameraWidth > 50) {
+			cameraHeight -= 0.05f;
+			cameraWidth -= 0.05f;
+		}
 		//updateCamera();
 		if(Intersector.overlaps(map.getCollisionBoxes()[0], characters.get(0).getCollisionBox())) {
 			characters.get(0).capVerticalPosition();
