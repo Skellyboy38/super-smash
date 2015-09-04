@@ -29,6 +29,8 @@ public class CharacterSelect extends Screen{
 	public static final int NUM_CHARACTERS = 20;		//The number of characters to choose from.
 	public static final float ICON_WIDTH = MyGdxGame.GAME_WIDTH/12.5F;
 	public static final float ICON_HEIGHT = MyGdxGame.GAME_HEIGHT/9F;
+	public static final float CHARACTER_WIDTH = MyGdxGame.GAME_WIDTH/4.46428F;
+	public static final float CHARACTER_HEIGHT = MyGdxGame.GAME_HEIGHT/2.5789F;
 	
 	private Texture picture;
 	private Image background;
@@ -180,9 +182,13 @@ public class CharacterSelect extends Screen{
 		
 		characterTextures[0] = new Texture("CharacterSelectScreen/character_images/lonrk.png");
 		characterImages[0] = new Image(characterTextures[0]);
+		characterImages[0].setHeight(CHARACTER_HEIGHT);
+		characterImages[0].setWidth(CHARACTER_WIDTH);
 		for(int i = 1; i < NUM_CHARACTERS; i++) {
 			characterTextures[i] = new Texture("CharacterSelectScreen/character_images/not_available.png");
 			characterImages[i] = new Image(characterTextures[i]);
+			characterImages[i].setHeight(CHARACTER_HEIGHT);
+			characterImages[i].setWidth(CHARACTER_WIDTH);
 		}
 		
 		for(int i = 7; i < NUM_CHARACTERS; i++) {
@@ -200,26 +206,26 @@ public class CharacterSelect extends Screen{
 		
 		player1 = new Texture("CharacterSelectScreen/player_backgrounds/player1.png");
 		player1_image = new Image(player1);
-		player1_image.setHeight(MyGdxGame.GAME_HEIGHT/2.5789F);
-		player1_image.setWidth(MyGdxGame.GAME_WIDTH/4.46428F);
+		player1_image.setHeight(CHARACTER_HEIGHT);
+		player1_image.setWidth(CHARACTER_WIDTH);
 		player1_image.setPosition(MyGdxGame.GAME_WIDTH/9.80392F, MyGdxGame.GAME_HEIGHT/15.07692F);
 		
 		player2 = new Texture("CharacterSelectScreen/player_backgrounds/player2.png");
 		player2_image = new Image(player2);
-		player2_image.setHeight(MyGdxGame.GAME_HEIGHT/2.5789F);
-		player2_image.setWidth(MyGdxGame.GAME_WIDTH/4.46428F);
+		player2_image.setHeight(CHARACTER_HEIGHT);
+		player2_image.setWidth(CHARACTER_WIDTH);
 		player2_image.setPosition(MyGdxGame.GAME_WIDTH/3.37078F, MyGdxGame.GAME_HEIGHT/15.07692F);
 		
 		player3 = new Texture("CharacterSelectScreen/player_backgrounds/player3.png");
 		player3_image = new Image(player3);
-		player3_image.setHeight(MyGdxGame.GAME_HEIGHT/2.5789F);
-		player3_image.setWidth(MyGdxGame.GAME_WIDTH/4.46428F);
+		player3_image.setHeight(CHARACTER_HEIGHT);
+		player3_image.setWidth(CHARACTER_WIDTH);
 		player3_image.setPosition(MyGdxGame.GAME_WIDTH/2.03252F, MyGdxGame.GAME_HEIGHT/15.07692F);
 		
 		player4 = new Texture("CharacterSelectScreen/player_backgrounds/player4.png");
 		player4_image = new Image(player4);
-		player4_image.setHeight(MyGdxGame.GAME_HEIGHT/2.5789F);
-		player4_image.setWidth(MyGdxGame.GAME_WIDTH/4.46428F);
+		player4_image.setHeight(CHARACTER_HEIGHT);
+		player4_image.setWidth(CHARACTER_WIDTH);
 		player4_image.setPosition(MyGdxGame.GAME_WIDTH/1.45631F, MyGdxGame.GAME_HEIGHT/15.07692F);
 		
 		stage = new Stage();
@@ -230,9 +236,17 @@ public class CharacterSelect extends Screen{
 		
 		for(int i = 0; i < NUM_CHARACTERS; i++) {
 			playerOneChoices[i] = new Image(characterTextures[i]);
+			playerOneChoices[i].setHeight(CHARACTER_HEIGHT);
+			playerOneChoices[i].setWidth(CHARACTER_WIDTH);
 			playerTwoChoices[i] = new Image(characterTextures[i]);
+			playerTwoChoices[i].setHeight(CHARACTER_HEIGHT);
+			playerTwoChoices[i].setWidth(CHARACTER_WIDTH);
 			playerThreeChoices[i] = new Image(characterTextures[i]);
+			playerThreeChoices[i].setHeight(CHARACTER_HEIGHT);
+			playerThreeChoices[i].setWidth(CHARACTER_WIDTH);
 			playerFourChoices[i] = new Image(characterTextures[i]);
+			playerFourChoices[i].setHeight(CHARACTER_HEIGHT);
+			playerFourChoices[i].setWidth(CHARACTER_WIDTH);
 		}
 		
 		characters = new ArrayList<Fighter>();
