@@ -22,14 +22,16 @@ public class Fighter {
 
 	private boolean keyHoldingT;
 	private boolean keyHoldingSpace;
-	
+	private boolean keyHoldingLeft;
+	private boolean keyHoldingRight;
+
 	private boolean showBoxes;
 	private boolean capVerticalPosition;
 
 	public static final int LEFT_KEY = 29;
 	public static final int RIGHT_KEY = 32;
 	public static final int SPACE_KEY = 62;
-	
+
 	private double fallingSpeed;
 
 	private Animation standingLeftAnimation, standingRightAnimation, walkingLeftAnimation, walkingRightAnimation, jumpingLeftAnimation, jumpingRightAnimation, 
@@ -93,9 +95,11 @@ public class Fighter {
 		this.batch = batch;
 		positionX = posX;
 		positionY = posY;
-		
+
 		keyHoldingT = false;
 		keyHoldingSpace = false;
+		keyHoldingLeft = false;
+		keyHoldingRight = false;
 		
 		showBoxes = false;
 		shapeRenderer = new ShapeRenderer();
@@ -160,25 +164,15 @@ public class Fighter {
 	public State getState() {
 		return currentState;
 	}
-	
+
 	private void resetFallingSpeed()
 	{
 		fallingSpeed = 0;
 	}
-	
-	private void resetCounter(State toChange)
+
+	private void resetCounter()
 	{
-		if((currentState == jumpingLeft && toChange == jumpingRight) || (currentState == jumpingRight && toChange == jumpingLeft))
-		{
-			
-		}
-		else if((currentState == doubleJumpingLeft && toChange == doubleJumpingRight) || (currentState == doubleJumpingRight && toChange == doubleJumpingLeft))
-		{
-			
-		}
-		else {
-			counter = 0;
-		}
+		counter = 0;
 	}
 
 	public Vector2 getPosition() {
@@ -223,6 +217,7 @@ public class Fighter {
 		{
 			if(currentState == standingLeft)
 			{
+				checkRunningLeft();
 				if(Gdx.input.isKeyPressed(LEFT_KEY))
 				{
 					changeState(walkingLeft);
@@ -233,12 +228,14 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(SPACE_KEY))
 				{
+					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingLeft);
 				}
 			}
 			else if(currentState == standingRight)
 			{
+				checkRunningRight();
 				if(Gdx.input.isKeyPressed(LEFT_KEY))
 				{
 					changeState(walkingLeft);
@@ -249,11 +246,48 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(SPACE_KEY))
 				{
+					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingRight);
 				}
 			}
 			else if(currentState == walkingLeft)
+			{
+				checkRunningLeft();
+				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
+					//Continue walking to the left
+				}
+				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				{
+					changeState(walkingRight);
+				}
+				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				{
+					resetCounter();
+					resetFallingSpeed();
+					changeState(jumpingLeft);
+				}
+			}
+			else if(currentState == walkingRight)
+			{
+				checkRunningRight();
+				if(Gdx.input.isKeyPressed(RIGHT_KEY))
+				{
+					//Continue walking to the right
+				}
+				else if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
+					changeState(walkingLeft);
+				}
+				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				{
+					resetCounter();
+					resetFallingSpeed();
+					changeState(jumpingRight);
+				}
+			}
+			else if(currentState == runningLeft)
 			{
 				if(Gdx.input.isKeyPressed(LEFT_KEY))
 				{
@@ -265,11 +299,12 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(SPACE_KEY))
 				{
+					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingLeft);
 				}
 			}
-			else if(currentState == walkingRight)
+			else if(currentState == runningRight)
 			{
 				if(Gdx.input.isKeyPressed(RIGHT_KEY))
 				{
@@ -281,6 +316,7 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(SPACE_KEY))
 				{
+					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingRight);
 				}
@@ -297,6 +333,7 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(SPACE_KEY) && !keyHoldingSpace)
 				{
+					resetCounter();
 					resetFallingSpeed();
 					changeState(doubleJumpingLeft);
 				}
@@ -313,6 +350,7 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(SPACE_KEY)  && !keyHoldingSpace)
 				{
+					resetCounter();
 					resetFallingSpeed();
 					changeState(doubleJumpingRight);
 				}
@@ -351,6 +389,7 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(SPACE_KEY))
 				{
+					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingLeft);
 				}
@@ -367,6 +406,7 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(SPACE_KEY))
 				{
+					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingRight);
 				}
@@ -375,6 +415,106 @@ public class Fighter {
 		checkKeyHoldings();
 	}
 	
+	//Values to calculate if the running state should be entered
+	int numberLeftClicks = 0;
+	float initialLeftTime = 0;
+	float initialRightTime = 0;
+	float finalLeftTime = 0;
+	float finalRightTime = 0;
+	boolean leftConditionMet = false;
+	int numberRightClicks = 0;
+	boolean rightConditionMet = false;
+
+	public void checkRunningLeft()
+	{
+		if(!keyHoldingLeft && Gdx.input.isKeyPressed(LEFT_KEY) && numberLeftClicks == 0) {
+			numberLeftClicks++;
+			initialLeftTime = counter;
+			keyHoldingLeft = true;
+		}
+		else if(!keyHoldingLeft && Gdx.input.isKeyPressed(LEFT_KEY) && numberLeftClicks == 1)
+		{
+			finalLeftTime = counter;
+			if(finalLeftTime - initialLeftTime < 0.2f)
+			{
+				leftConditionMet = true;
+			}
+			else 
+			{
+				initialLeftTime = 0;
+				finalLeftTime = 0;
+				numberLeftClicks = 0;
+			}
+		}
+		else if(!Gdx.input.isKeyPressed(LEFT_KEY)) {
+			keyHoldingLeft = false;
+		}
+
+		if(leftConditionMet && Gdx.input.isKeyPressed(LEFT_KEY))
+		{
+			if(currentState == walkingLeft)
+			{
+				resetRunningStats();
+				changeState(runningLeft);
+			}
+		}
+		else
+		{
+			leftConditionMet = false;
+		}
+	}
+
+	public void checkRunningRight()
+	{
+		if(!keyHoldingRight && Gdx.input.isKeyPressed(RIGHT_KEY) && numberRightClicks == 0) {
+			numberRightClicks++;
+			initialRightTime = counter;
+			keyHoldingRight = true;
+		}
+		else if(!keyHoldingRight && Gdx.input.isKeyPressed(RIGHT_KEY) && numberRightClicks == 1)
+		{
+			finalRightTime = counter;
+			if(finalRightTime - initialRightTime < 0.2f)
+			{
+				rightConditionMet = true;
+			}
+			else 
+			{
+				initialRightTime = 0;
+				finalRightTime = 0;
+				numberRightClicks = 0;
+			}
+		}
+		else if(!Gdx.input.isKeyPressed(RIGHT_KEY)) {
+			keyHoldingRight = false;
+		}
+
+		if(rightConditionMet && Gdx.input.isKeyPressed(RIGHT_KEY))
+		{
+			if(currentState == walkingRight)
+			{
+				resetRunningStats();
+				changeState(runningRight);
+			}
+		}
+		else
+		{
+			rightConditionMet = false;
+		}
+	}
+	
+	public void resetRunningStats()
+	{
+		numberLeftClicks = 0;
+		numberRightClicks = 0;
+		initialLeftTime = 0;
+		initialRightTime = 0;
+		finalLeftTime = 0;
+		finalRightTime = 0;
+		leftConditionMet = false;
+		rightConditionMet = false;
+	}
+
 	public void checkKeyHoldings()
 	{
 		if(Gdx.input.isKeyPressed(48) && !keyHoldingT) {		//If "T" is pressed, testing mode is entered.
@@ -384,7 +524,7 @@ public class Fighter {
 		else if(!Gdx.input.isKeyPressed(48)) {
 			keyHoldingT = false;
 		}
-		
+
 		if(!keyHoldingSpace && Gdx.input.isKeyPressed(SPACE_KEY)) {
 			keyHoldingSpace = true;
 		}
@@ -392,9 +532,8 @@ public class Fighter {
 			keyHoldingSpace = false;
 		}
 	}
-	
+
 	public void changeState(State toChange) {		//Method to change states depending on user input.
-		resetCounter(toChange);
 		currentState = toChange;
 		canChangeState = false;
 	}
@@ -469,6 +608,7 @@ public class Fighter {
 			canChangeState = true;
 			currentFrame = walkingLeftAnimation.getKeyFrame(counter, true);
 			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
+
 				if(capVerticalPosition) {
 					positionX -= walkingSpeed;
 				}
@@ -571,7 +711,7 @@ public class Fighter {
 			currentFrame = runningRightAnimation.getKeyFrame(counter, true);
 			if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
 				if(capVerticalPosition) {
-					positionX -= runningSpeed;
+					positionX += runningSpeed;
 				}
 				else {
 					resetFallingSpeed();
@@ -655,7 +795,7 @@ public class Fighter {
 		int movementSpeedSideways = 4;
 		int jumpVelocity = 100;
 		int acceleration = -500;
-		
+
 		public JumpingLeftState() {
 		}
 
@@ -670,7 +810,7 @@ public class Fighter {
 			if(fallingSpeed > -10)
 				fallingSpeed = jumpVelocity*counter + 0.5*acceleration*Math.pow(counter,2);
 			positionY += fallingSpeed;
-			
+
 			if(capVerticalPosition && fallingSpeed < 0) {
 				resetFallingSpeed();
 				changeState(standingLeft);
@@ -695,7 +835,7 @@ public class Fighter {
 
 		public JumpingRightState() {
 		}
-		
+
 		public void update() {
 			if(!capVerticalPosition)
 			{
@@ -728,7 +868,7 @@ public class Fighter {
 		int movementSpeedSideways = 4;
 		int jumpVelocity = 100;
 		int acceleration = -500;
-		
+
 		public DoubleJumpingLeftState() {
 		}
 
@@ -767,7 +907,7 @@ public class Fighter {
 
 		public DoubleJumpingRightState() {
 		}
-		
+
 		public void update() {
 			if(!capVerticalPosition)
 			{
