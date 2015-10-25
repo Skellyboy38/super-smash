@@ -72,9 +72,6 @@ public class Fighter {
 	private ShieldState shield;
 	
 	private State currentState;		//The current state points to whatever state the character is in.
-
-	private float posX;		//The current position of the character in screen coordinates
-	private float posY;
 	
 	private boolean canChangeState;
 	private float counter;
@@ -144,7 +141,7 @@ public class Fighter {
 	}
 	
 	public Vector2 getPosition() {
-		return new Vector2(posX, posY);
+		return new Vector2(positionX, positionY);
 	}
 	
 	public void addAnimations(Animation[] animations) {
@@ -177,7 +174,7 @@ public class Fighter {
 	
 	public void update() {
 		counter += Gdx.graphics.getDeltaTime();
-		collisionBox.setPosition(positionX + ANIMATION_WIDTH*0.25f, positionY + ANIMATION_HEIGHT*0.125f);
+		collisionBox.setPosition(positionX + ANIMATION_WIDTH*0.25f + collisionBox.getWidth(), positionY);
 		
 		if(canChangeState){//if the animation of a move is over
 			if((currentState == standingLeft || currentState == walkingLeft || currentState == fallingLeft) && Gdx.input.isKeyPressed(62)){//jumping

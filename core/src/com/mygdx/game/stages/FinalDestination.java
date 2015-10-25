@@ -16,16 +16,16 @@ public class FinalDestination extends Map{
 		background_image.setHeight(MyGdxGame.GAME_HEIGHT);
 		Rectangle[] rectangles = new Rectangle[4];
 		
-		posX = MyGdxGame.GAME_WIDTH/5.81818F;			//Position in x-y coordinates for the rectangle
-		posY = MyGdxGame.GAME_HEIGHT/2.55319F;
+		posX = MyGdxGame.GAME_WIDTH/5.59766F;			//Position in x-y coordinates for the rectangle
+		posY = MyGdxGame.GAME_HEIGHT/2.65356F;
 		
 		Rectangle main = new Rectangle();		//Creating the bounding rectangles for collision detection
 		Rectangle under = new Rectangle();
 		Rectangle leftEdge = new Rectangle();
 		Rectangle rightEdge = new Rectangle();
 		
-		main.setHeight(MyGdxGame.GAME_HEIGHT/33.75F);		//Setting the parameters of the bounding rectangles
-		main.setWidth(MyGdxGame.GAME_WIDTH/1.55591F);
+		main.setHeight(MyGdxGame.GAME_HEIGHT/20F);		//Setting the parameters of the bounding rectangles
+		main.setWidth(MyGdxGame.GAME_WIDTH/1.60267F);
 		main.setPosition(posX, posY);
 		
 		under.setHeight(main.getHeight()/10);

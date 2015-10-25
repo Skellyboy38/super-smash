@@ -22,20 +22,20 @@ public class Lonrk extends Fighter{
 		collisionBox = new Rectangle();
 		
 		walkLeftSheet = new Texture("characters/lonrk/walking_left/lonrk_walking_left_animation.png");
-		TextureRegion[][] temp1 = TextureRegion.split(walkLeftSheet, walkLeftSheet.getWidth()/6, walkLeftSheet.getHeight());
-		walkLeftFrames = new TextureRegion[6];
-		for(int i = 0; i < 6; i++) {
+		TextureRegion[][] temp1 = TextureRegion.split(walkLeftSheet, walkLeftSheet.getWidth()/8, walkLeftSheet.getHeight());
+		walkLeftFrames = new TextureRegion[8];
+		for(int i = 0; i < 8; i++) {
 			walkLeftFrames[i] = temp1[0][i];
 		}
-		walkLeftAnimation = new Animation(0.05f, walkLeftFrames);
+		walkLeftAnimation = new Animation(0.075f, walkLeftFrames);
 		//==================================================================================================================================
 		walkRightSheet = new Texture("characters/lonrk/walking_right/lonrk_walking_left_animation.png");
-		TextureRegion[][] temp2 = TextureRegion.split(walkRightSheet, walkRightSheet.getWidth()/6, walkRightSheet.getHeight());
-		walkRightFrames = new TextureRegion[6];
-		for(int i = 0; i < 6; i++) {
+		TextureRegion[][] temp2 = TextureRegion.split(walkRightSheet, walkRightSheet.getWidth()/8, walkRightSheet.getHeight());
+		walkRightFrames = new TextureRegion[8];
+		for(int i = 0; i < 8; i++) {
 			walkRightFrames[i] = temp2[0][i];
 		}
-		walkRightAnimation = new Animation(0.05f, walkRightFrames);
+		walkRightAnimation = new Animation(0.075f, walkRightFrames);
 		//==================================================================================================================================
 		standLeftSheet = new Texture("characters/lonrk/standing_left/lonrk_standing.png");
 		TextureRegion[][] temp3 = TextureRegion.split(standLeftSheet, standLeftSheet.getWidth(), standLeftSheet.getHeight());
@@ -50,23 +50,23 @@ public class Lonrk extends Fighter{
 		standRightAnimation = new Animation(1f, standRightFrames);
 		//==================================================================================================================================
 		jumpLeftSheet = new Texture("characters/lonrk/jumping_left/lonrk_jumping_animation.png");
-		TextureRegion[][] temp5 = TextureRegion.split(jumpLeftSheet, jumpLeftSheet.getWidth()/2, jumpLeftSheet.getHeight());
-		jumpLeftFrames = new TextureRegion[2];
-		for(int i = 0; i < 2; i++) {
+		TextureRegion[][] temp5 = TextureRegion.split(jumpLeftSheet, jumpLeftSheet.getWidth(), jumpLeftSheet.getHeight());
+		jumpLeftFrames = new TextureRegion[1];
+		for(int i = 0; i < 1; i++) {
 			jumpLeftFrames[i] = temp5[0][i];
 		}
 		jumpLeftAnimation = new Animation(0.05f, jumpLeftFrames);
 		//==================================================================================================================================
 		jumpRightSheet = new Texture("characters/lonrk/jumping_right/lonrk_jumping_animation.png");
-		TextureRegion[][] temp6 = TextureRegion.split(jumpRightSheet, jumpRightSheet.getWidth()/2, jumpRightSheet.getHeight());
-		jumpRightFrames = new TextureRegion[2];
-		for(int i = 0; i < 2; i++) {
+		TextureRegion[][] temp6 = TextureRegion.split(jumpRightSheet, jumpRightSheet.getWidth(), jumpRightSheet.getHeight());
+		jumpRightFrames = new TextureRegion[1];
+		for(int i = 0; i < 1; i++) {
 			jumpRightFrames[i] = temp6[0][i];
 		}
 		jumpRightAnimation = new Animation(0.05f, jumpRightFrames);
 		
-		collisionBox.setHeight(ANIMATION_HEIGHT*0.75f);
-		collisionBox.setWidth(ANIMATION_WIDTH*0.5f);
+		collisionBox.setHeight(ANIMATION_HEIGHT);
+		collisionBox.setWidth(ANIMATION_WIDTH*0.16667f);
 		
 		animations[0] = standLeftAnimation;
 		animations[1] = standRightAnimation;

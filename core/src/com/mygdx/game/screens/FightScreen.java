@@ -73,10 +73,6 @@ public class FightScreen extends Screen{
 	}
 	
 	public void update() {
-		if(cameraHeight > 50 || cameraWidth > 50) {
-			cameraHeight -= 0.05f;
-			cameraWidth -= 0.05f;
-		}
 		//updateCamera();
 		if(Intersector.overlaps(map.getCollisionBoxes()[0], characters.get(0).getCollisionBox())) {
 			characters.get(0).capVerticalPosition();

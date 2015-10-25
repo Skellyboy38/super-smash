@@ -125,7 +125,7 @@ public class StageSelectScreen extends Screen{
 		style.checkedOver = skin.getDrawable("Blank2");
 		
 		final_destination_style = new TextButtonStyle();
-		final_destination_atlas = new TextureAtlas("stageSelect/stage_image/final_destination/final_destination.pack");
+		final_destination_atlas = new TextureAtlas("stageSelect/stage_image/final_destination/final_destination_pack.pack");
 		final_destination_skin = new Skin();
 		final_destination_skin.addRegions(final_destination_atlas);
 		final_destination_style.font = font;
