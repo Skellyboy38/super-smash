@@ -14,35 +14,48 @@ import com.mygdx.game.MyGdxGame;
 public class Fighter {
 	public static final int ANIMATION_WIDTH = (int)(MyGdxGame.GAME_WIDTH/12.5);
 	public static final int ANIMATION_HEIGHT = (int)(MyGdxGame.GAME_HEIGHT/8.4375f);
-	
+
 	SpriteBatch batch;
 	private float positionX, positionY;
 	private Rectangle collisionBox;
 	private ShapeRenderer shapeRenderer;
+
+	private boolean keyHoldingT;
+	private boolean keyHoldingSpace;
 	
-	private boolean keyHolding;
 	private boolean showBoxes;
 	private boolean capVerticalPosition;
+
+	public static final int LEFT_KEY = 29;
+	public static final int RIGHT_KEY = 32;
+	public static final int SPACE_KEY = 62;
 	
-	Animation standingLeftAnimation, standingRightAnimation, walkingLeftAnimation, walkingRightAnimation, jumpingLeftAnimation, jumpingRightAnimation;
-	
+	private double fallingSpeed;
+
+	private Animation standingLeftAnimation, standingRightAnimation, walkingLeftAnimation, walkingRightAnimation, jumpingLeftAnimation, jumpingRightAnimation, 
+	runningLeftAnimation, runningRightAnimation;
+
 	private StandingLeftState standingLeft;		//The various states that alternate in a game. Each state will be in charge of its own animation and movement pattern.
 	private StandingRightState standingRight;
-	
+
 	private WalkingLeftState walkingLeft;
 	private WalkingRightState walkingRight;
-	
+
 	private FallingLeftState fallingLeft;
 	private FallingRightState fallingRight;
-	
+
 	private JumpingLeftState jumpingLeft;
 	private JumpingRightState jumpingRight;
-	
-	private RunningState running;
-	private DoubleJumpState doubleJump;
+
+	private RunningLeftState runningLeft;
+	private RunningRightState runningRight;
+
+	private DoubleJumpingLeftState doubleJumpingLeft;
+	private DoubleJumpingRightState doubleJumpingRight;
+
 	private HangingState hanging;
 	private CrouchingState crouching;
-	
+
 	private NeutralAState neutralA;
 	private SideSmashAState sideSmashA;
 	private UpSmashAState upSmashA;
@@ -57,22 +70,22 @@ public class Fighter {
 	private UpAirAState upAirA;
 	private DownAirAState downAirA;
 	private ReturnFromHangingAState returnFromHangingA;
-	
+
 	private NeutralBState neutralB;
 	private SideBState sideB;
 	private UpBState upB;
 	private DownBState downB;
-	
+
 	private GrabState grab;
 	private SideForwardThrowState sideForwardThrow;
 	private SideBackwardThrowState sideBackwardThrow;
 	private UpThrowState upThrow;
 	private DownThrowState downThrow;
-	
+
 	private ShieldState shield;
-	
+
 	private State currentState;		//The current state points to whatever state the character is in.
-	
+
 	private boolean canChangeState;
 	private float counter;
 
@@ -80,29 +93,36 @@ public class Fighter {
 		this.batch = batch;
 		positionX = posX;
 		positionY = posY;
-		keyHolding = false;
+		
+		keyHoldingT = false;
+		keyHoldingSpace = false;
+		
 		showBoxes = false;
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setColor(1,1,0,1);
 		capVerticalPosition = false;
-		
+
 		standingLeft = new StandingLeftState();
 		standingRight = new StandingRightState();
-		
+
 		walkingLeft = new WalkingLeftState();
 		walkingRight = new WalkingRightState();
-		
+
 		fallingLeft = new FallingLeftState();
 		fallingRight = new FallingRightState();
-		
+
 		jumpingLeft = new JumpingLeftState();
 		jumpingRight = new JumpingRightState();
-		
-		running = new RunningState();
-		doubleJump = new DoubleJumpState();
+
+		runningLeft = new RunningLeftState();
+		runningRight = new RunningRightState();
+
+		doubleJumpingLeft = new DoubleJumpingLeftState();
+		doubleJumpingRight = new DoubleJumpingRightState();
+
 		hanging = new HangingState();
 		crouching = new CrouchingState();
-		
+
 		neutralA = new NeutralAState();
 		sideSmashA = new SideSmashAState();
 		upSmashA = new UpSmashAState();
@@ -116,48 +136,71 @@ public class Fighter {
 		upAirA = new UpAirAState();
 		downAirA = new DownAirAState();
 		returnFromHangingA = new ReturnFromHangingAState();
-		
+
 		neutralB = new NeutralBState();
 		sideB = new SideBState();
 		upB = new UpBState();
 		downB = new DownBState();
-		
+
 		grab = new GrabState();
 		sideForwardThrow = new SideForwardThrowState();
 		sideBackwardThrow = new SideBackwardThrowState();
 		upThrow = new UpThrowState();
 		downThrow = new DownThrowState();
-		
+
 		shield = new ShieldState();
-		
+
 		canChangeState = true;
 		counter = 0;
-		
+
 		currentState = fallingRight;		//Initially the character is standing.
+		fallingSpeed = 0;
 	}
-	
+
 	public State getState() {
 		return currentState;
 	}
 	
+	private void resetFallingSpeed()
+	{
+		fallingSpeed = 0;
+	}
+	
+	private void resetCounter(State toChange)
+	{
+		if((currentState == jumpingLeft && toChange == jumpingRight) || (currentState == jumpingRight && toChange == jumpingLeft))
+		{
+			
+		}
+		else if((currentState == doubleJumpingLeft && toChange == doubleJumpingRight) || (currentState == doubleJumpingRight && toChange == doubleJumpingLeft))
+		{
+			
+		}
+		else {
+			counter = 0;
+		}
+	}
+
 	public Vector2 getPosition() {
 		return new Vector2(positionX, positionY);
 	}
-	
+
 	public void addAnimations(Animation[] animations) {
-		
+
 		standingLeftAnimation = animations[0];
 		standingRightAnimation = animations[1];
 		walkingLeftAnimation = animations[2];
 		walkingRightAnimation = animations[3];
 		jumpingLeftAnimation = animations[4];
 		jumpingRightAnimation = animations[5];
+		runningLeftAnimation = animations[6];
+		runningRightAnimation = animations[7];
 	}
-	
+
 	public void addCollisionBoxes(Rectangle rect) {
 		this.collisionBox = rect;
 	}
-	
+
 	public Rectangle getCollisionBox() {
 		return collisionBox;
 	}
@@ -171,54 +214,191 @@ public class Fighter {
 			shapeRenderer.end();
 		}
 	}
-	
+
 	public void update() {
 		counter += Gdx.graphics.getDeltaTime();
 		collisionBox.setPosition(positionX + ANIMATION_WIDTH*0.25f + collisionBox.getWidth(), positionY);
-		
-		if(canChangeState){//if the animation of a move is over
-			if((currentState == standingLeft || currentState == walkingLeft || currentState == fallingLeft) && Gdx.input.isKeyPressed(62)){//jumping
-				changeState(jumpingLeft);
-			}
-			else if((currentState == standingRight || currentState == walkingRight || currentState == fallingRight) && Gdx.input.isKeyPressed(62)){//jumping
-				changeState(jumpingRight);
-			}
-			else if(currentState != jumpingLeft && currentState != jumpingRight && currentState != fallingLeft && currentState != fallingRight && Gdx.input.isKeyPressed(29)){//move left or right
-				if(currentState == walkingLeft) {
-					//Do nothing because you are already walking to the left
-				}
-				else
+
+		if(canChangeState)
+		{
+			if(currentState == standingLeft)
+			{
+				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
 					changeState(walkingLeft);
-			}
-			else if(currentState != jumpingLeft && currentState != jumpingRight && currentState != fallingLeft && currentState != fallingRight && Gdx.input.isKeyPressed(32)) {
-				if(currentState == walkingRight) {
-					//Do nothing because you already are walking to the right
 				}
-				else
+				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				{
 					changeState(walkingRight);
+				}
+				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				{
+					resetFallingSpeed();
+					changeState(jumpingLeft);
+				}
 			}
-			else if(currentState == walkingLeft) {
-				changeState(standingLeft);
+			else if(currentState == standingRight)
+			{
+				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
+					changeState(walkingLeft);
+				}
+				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				{
+					changeState(walkingRight);
+				}
+				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				{
+					resetFallingSpeed();
+					changeState(jumpingRight);
+				}
 			}
-			else if(currentState == walkingRight) {
-				changeState(standingRight);
+			else if(currentState == walkingLeft)
+			{
+				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
+					//Continue walking to the left
+				}
+				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				{
+					changeState(walkingRight);
+				}
+				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				{
+					resetFallingSpeed();
+					changeState(jumpingLeft);
+				}
 			}
-			
-			
-			if(Gdx.input.isKeyPressed(48) && !keyHolding) {		//If "T" is pressed, testing mode is entered.
-				showBoxes = !showBoxes;
-				keyHolding = true;
+			else if(currentState == walkingRight)
+			{
+				if(Gdx.input.isKeyPressed(RIGHT_KEY))
+				{
+					//Continue walking to the right
+				}
+				else if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
+					changeState(walkingLeft);
+				}
+				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				{
+					resetFallingSpeed();
+					changeState(jumpingRight);
+				}
 			}
-			else if(!Gdx.input.isKeyPressed(48))
-				keyHolding = false;
+			else if(currentState == jumpingLeft)
+			{
+				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
+					//Continue jumping to the left
+				}
+				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				{
+					changeState(jumpingRight);
+				}
+				if(Gdx.input.isKeyPressed(SPACE_KEY) && !keyHoldingSpace)
+				{
+					resetFallingSpeed();
+					changeState(doubleJumpingLeft);
+				}
+			}
+			else if(currentState == jumpingRight)
+			{
+				if(Gdx.input.isKeyPressed(RIGHT_KEY))
+				{
+					//Continue jumping to the right
+				}
+				else if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
+					changeState(jumpingLeft);
+				}
+				if(Gdx.input.isKeyPressed(SPACE_KEY)  && !keyHoldingSpace)
+				{
+					resetFallingSpeed();
+					changeState(doubleJumpingRight);
+				}
+			}
+			else if(currentState == doubleJumpingLeft)
+			{
+				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
+					//Continue double jumping to the left
+				}
+				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				{
+					changeState(doubleJumpingRight);
+				}
+			}
+			else if(currentState == doubleJumpingRight)
+			{
+				if(Gdx.input.isKeyPressed(RIGHT_KEY))
+				{
+					//Continue double jumping to the right
+				}
+				else if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
+					changeState(doubleJumpingLeft);
+				}
+			}
+			else if(currentState == fallingLeft)
+			{
+				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
+					//Continue falling to the left
+				}
+				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				{
+					changeState(fallingRight);
+				}
+				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				{
+					resetFallingSpeed();
+					changeState(jumpingLeft);
+				}
+			}
+			else if(currentState == fallingRight)
+			{
+				if(Gdx.input.isKeyPressed(RIGHT_KEY))
+				{
+					//Continue falling to the right
+				}
+				else if(Gdx.input.isKeyPressed(LEFT_KEY))
+				{
+					changeState(fallingLeft);
+				}
+				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				{
+					resetFallingSpeed();
+					changeState(jumpingRight);
+				}
+			}	
 		}
-	}
-	public void changeState(State toChange) {		//Method to change states depending on user input.
-		currentState = toChange;
-		counter = 0;
-		//canChangeState = false;
+		checkKeyHoldings();
 	}
 	
+	public void checkKeyHoldings()
+	{
+		if(Gdx.input.isKeyPressed(48) && !keyHoldingT) {		//If "T" is pressed, testing mode is entered.
+			showBoxes = !showBoxes;
+			keyHoldingT = true;
+		}
+		else if(!Gdx.input.isKeyPressed(48)) {
+			keyHoldingT = false;
+		}
+		
+		if(!keyHoldingSpace && Gdx.input.isKeyPressed(SPACE_KEY)) {
+			keyHoldingSpace = true;
+		}
+		else if(!Gdx.input.isKeyPressed(SPACE_KEY)) {
+			keyHoldingSpace = false;
+		}
+	}
+	
+	public void changeState(State toChange) {		//Method to change states depending on user input.
+		resetCounter(toChange);
+		currentState = toChange;
+		canChangeState = false;
+	}
+
 	public boolean getDirection() {
 		if(currentState == standingLeft || currentState == walkingLeft || currentState == jumpingLeft) {
 			return true;
@@ -226,11 +406,11 @@ public class Fighter {
 		else
 			return false;
 	}
-	
+
 	public void capVerticalPosition() {
 		capVerticalPosition = true;
 	}
-	
+
 	public void uncapVerticalPosition() {
 		capVerticalPosition = false;
 	}
@@ -243,10 +423,11 @@ public class Fighter {
 	private class StandingLeftState extends State {
 		TextureRegion currentFrame;
 		public StandingLeftState() {
-			
+
 		}
-		
+
 		public void update() {
+			canChangeState = true;
 			currentFrame = standingLeftAnimation.getKeyFrame(counter, false);
 		}
 
@@ -257,14 +438,15 @@ public class Fighter {
 			batch.end();
 		}
 	}
-	
+
 	private class StandingRightState extends State {
 		TextureRegion currentFrame;
 		public StandingRightState() {
-			
+
 		}
-		
+
 		public void update() {
+			canChangeState = true;
 			currentFrame = standingRightAnimation.getKeyFrame(counter, false);
 		}
 
@@ -280,18 +462,24 @@ public class Fighter {
 		TextureRegion currentFrame;
 		int walkingSpeed = 4;
 		public WalkingLeftState() {
-			
+
 		}
-		
+
 		public void update() {
+			canChangeState = true;
 			currentFrame = walkingLeftAnimation.getKeyFrame(counter, true);
-			if(Gdx.input.isKeyPressed(29)) {
+			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
 				if(capVerticalPosition) {
 					positionX -= walkingSpeed;
 				}
 				else {
+					resetFallingSpeed();
 					changeState(fallingLeft);
 				}
+			}
+			else
+			{
+				changeState(standingLeft);
 			}
 		}
 
@@ -303,23 +491,29 @@ public class Fighter {
 		}
 
 	}
-	
+
 	private class WalkingRightState extends State {//also needed to enter running state (double tap)
 		TextureRegion currentFrame;
 		int walkingSpeed = 4;
 		public WalkingRightState() {
-			
+
 		}
-		
+
 		public void update() {
+			canChangeState = true;
 			currentFrame = walkingRightAnimation.getKeyFrame(counter, true);
-			if(Gdx.input.isKeyPressed(32)) {
+			if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
 				if(capVerticalPosition) {
 					positionX += walkingSpeed;
 				}
 				else {
+					resetFallingSpeed();
 					changeState(fallingRight);
 				}
+			}
+			else 
+			{
+				changeState(standingRight);
 			}
 		}
 
@@ -332,49 +526,93 @@ public class Fighter {
 
 	}
 
-	private class RunningState extends State {
-		Texture image;
-		Animation animation;
-		public RunningState() {
+	private class RunningLeftState extends State {
+		TextureRegion currentFrame;
+		int runningSpeed = 8;
+		public RunningLeftState() {
 
 		}
-		
-		public void update() {
 
+		public void update() {
+			canChangeState = true;
+			currentFrame = runningLeftAnimation.getKeyFrame(counter, true);
+			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
+				if(capVerticalPosition) {
+					positionX -= runningSpeed;
+				}
+				else {
+					resetFallingSpeed();
+					changeState(fallingLeft);
+				}
+			}
+			else {
+				changeState(standingLeft);
+			}
 		}
 
 		public void render() {
+			update();
+			batch.begin();
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
+			batch.end();
+		}
+
+	}
+
+	private class RunningRightState extends State {
+		TextureRegion currentFrame;
+		int runningSpeed = 8;
+		public RunningRightState() {
 
 		}
 
+		public void update() {
+			canChangeState = true;
+			currentFrame = runningRightAnimation.getKeyFrame(counter, true);
+			if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
+				if(capVerticalPosition) {
+					positionX -= runningSpeed;
+				}
+				else {
+					resetFallingSpeed();
+					changeState(fallingLeft);
+				}
+			}
+			else {
+				changeState(standingRight);
+			}
+		}
+
+		public void render() {
+			update();
+			batch.begin();
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
+			batch.end();
+		}
 	}
 	//======================================================================================================
 	private class FallingLeftState extends State {
 		TextureRegion currentFrame;
-		double delta;
-		float fallingSpeed = 0.5f;
-		
+		float fallingAcceleration = 0.5f;
+
 		public FallingLeftState() {
-			delta = 0;
 		}
-		
+
 		public void update() {
+			canChangeState = true;
 			currentFrame = jumpingLeftAnimation.getKeyFrame(counter, false);
-			if(delta > -5) {
-				delta -= fallingSpeed;
+			if(fallingSpeed > -5) {
+				fallingSpeed -= fallingAcceleration;
 			}
-			if(Gdx.input.isKeyPressed(29)) {
+			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
 				positionX -= 2;
 			}
-			else if(Gdx.input.isKeyPressed(32)) {
-				positionX += 2;
-			}
-			positionY += delta;
+			positionY += fallingSpeed;
 			if(capVerticalPosition) {
 				changeState(standingLeft);
 			}
 		}
-		
+
 		public void render() {
 			update();
 			batch.begin();
@@ -385,29 +623,25 @@ public class Fighter {
 	//======================================================================================================
 	private class FallingRightState extends State {
 		TextureRegion currentFrame;
-		double delta;
-		float fallingSpeed = 0.5f;
+		float fallingAcceleration = 0.5f;
 		public FallingRightState() {
-			delta = 0;
 		}
-		
+
 		public void update() {
+			canChangeState = true;
 			currentFrame = jumpingRightAnimation.getKeyFrame(counter, false);
-			if(delta > -5) {
-				delta -= fallingSpeed;
+			if(fallingSpeed > -5) {
+				fallingSpeed -= fallingAcceleration;
 			}
-			if(Gdx.input.isKeyPressed(29)) {
-				positionX -= 2;
-			}
-			else if(Gdx.input.isKeyPressed(32)) {
+			else if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
 				positionX += 2;
 			}
-			positionY += delta;
+			positionY += fallingSpeed;
 			if(capVerticalPosition) {
 				changeState(standingLeft);
 			}
 		}
-		
+
 		public void render() {
 			update();
 			batch.begin();
@@ -421,26 +655,24 @@ public class Fighter {
 		int movementSpeedSideways = 4;
 		int jumpVelocity = 100;
 		int acceleration = -500;
-		double delta;
-		public JumpingLeftState() {
-			delta = 0;
-		}
 		
+		public JumpingLeftState() {
+		}
+
 		public void update() {
-			if(counter >= 1000) {
+			if(!capVerticalPosition)
+			{
 				canChangeState = true;
 			}
-			if(Gdx.input.isKeyPressed(29)) {
+			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
 				positionX -= movementSpeedSideways;
 			}
-			else if(Gdx.input.isKeyPressed(32)) {
-				positionX += movementSpeedSideways;
-			}
-			if(delta > -10)
-				delta = jumpVelocity*counter + 0.5*acceleration*Math.pow(counter,2);
-			positionY += delta;
-			if(capVerticalPosition && delta < 0) {
-				delta = 0;
+			if(fallingSpeed > -10)
+				fallingSpeed = jumpVelocity*counter + 0.5*acceleration*Math.pow(counter,2);
+			positionY += fallingSpeed;
+			
+			if(capVerticalPosition && fallingSpeed < 0) {
+				resetFallingSpeed();
 				changeState(standingLeft);
 			}
 			currentFrame = jumpingLeftAnimation.getKeyFrame(counter, false);
@@ -454,31 +686,29 @@ public class Fighter {
 		}
 
 	}
-	
+
 	private class JumpingRightState extends State {
 		TextureRegion currentFrame;
 		int movementSpeedSideways = 4;
 		int jumpVelocity = 100;
 		int acceleration = -500;
-		double delta;
-		public JumpingRightState() {
 
+		public JumpingRightState() {
 		}
+		
 		public void update() {
-			if(counter >= 1000) {
+			if(!capVerticalPosition)
+			{
 				canChangeState = true;
 			}
-			if(Gdx.input.isKeyPressed(29)) {
-				positionX -= movementSpeedSideways;
-			}
-			else if(Gdx.input.isKeyPressed(32)) {
+			if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
 				positionX += movementSpeedSideways;
 			}
-			if(delta > -10)
-				delta = jumpVelocity*counter + 0.5*acceleration*Math.pow(counter,2);
-			positionY += delta;
-			if(capVerticalPosition && delta < 0) {
-				delta = 0;
+			if(fallingSpeed > -10)
+				fallingSpeed = jumpVelocity*counter + 0.5*acceleration*Math.pow(counter,2);
+			positionY += fallingSpeed;
+			if(capVerticalPosition && fallingSpeed < 0) {
+				resetFallingSpeed();
 				changeState(standingRight);
 			}
 			currentFrame = jumpingRightAnimation.getKeyFrame(counter, false);
@@ -492,26 +722,79 @@ public class Fighter {
 		}
 
 	}
-	
-	private class DoubleJumpState extends State {
-		Texture image;
-		Animation animation;
-		public DoubleJumpState() {
 
-		}
+	private class DoubleJumpingLeftState extends State {
+		TextureRegion currentFrame;
+		int movementSpeedSideways = 4;
+		int jumpVelocity = 100;
+		int acceleration = -500;
 		
+		public DoubleJumpingLeftState() {
+		}
+
 		public void update() {
-			if(counter >= 1000) {
+			if(!capVerticalPosition)
+			{
 				canChangeState = true;
 			}
+			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
+				positionX -= movementSpeedSideways;
+			}
+			if(fallingSpeed > -10)
+				fallingSpeed = jumpVelocity*counter + 0.5*acceleration*Math.pow(counter,2);
+			positionY += fallingSpeed;
+			if(capVerticalPosition) {
+				resetFallingSpeed();
+				changeState(standingLeft);
+			}
+			currentFrame = jumpingLeftAnimation.getKeyFrame(counter, false);
 		}
 
 		public void render() {
 			update();
+			batch.begin();
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
+			batch.end();
 		}
 
 	}
-	
+
+	private class DoubleJumpingRightState extends State {
+		TextureRegion currentFrame;
+		int movementSpeedSideways = 4;
+		int jumpVelocity = 100;
+		int acceleration = -500;
+
+		public DoubleJumpingRightState() {
+		}
+		
+		public void update() {
+			if(!capVerticalPosition)
+			{
+				canChangeState = true;
+			}
+			if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
+				positionX += movementSpeedSideways;
+			}
+			if(fallingSpeed > -10)
+				fallingSpeed = jumpVelocity*counter + 0.5*acceleration*Math.pow(counter,2);
+			positionY += fallingSpeed;
+			if(capVerticalPosition) {
+				resetFallingSpeed();
+				changeState(standingRight);
+			}
+			currentFrame = jumpingRightAnimation.getKeyFrame(counter, false);
+		}
+
+		public void render() {
+			update();
+			batch.begin();
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
+			batch.end();
+		}
+
+	}
+	//====================================================================================================
 	private class HangingState extends State {
 		Texture image;
 		Animation animation;
@@ -527,7 +810,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class CrouchingState extends State {
 		Texture image;
 		Animation animation;
@@ -543,7 +826,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class NeutralAState extends State {
 		Texture image;
 		Animation animation;
@@ -559,7 +842,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class SideSmashAState extends State {
 		Texture image;
 		Animation animation;
@@ -575,7 +858,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class UpSmashAState extends State {
 		Texture image;
 		Animation animation;
@@ -591,7 +874,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class DownSmashAState extends State {
 		Texture image;
 		Animation animation;
@@ -607,7 +890,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class SideTiltAState extends State {
 		Texture image;
 		Animation animation;
@@ -623,7 +906,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class UpTiltAState extends State {
 		Texture image;
 		Animation animation;
@@ -639,7 +922,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class DownTiltAState extends State {
 		Texture image;
 		Animation animation;
@@ -655,7 +938,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class DashAState extends State {
 		Texture image;
 		Animation animation;
@@ -671,7 +954,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class NeutralAirAState extends State {
 		Texture image;
 		Animation animation;
@@ -687,7 +970,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class SideForwardAirAState extends State {
 		Texture image;
 		Animation animation;
@@ -703,7 +986,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class SideBackwardAirAState extends State {
 		Texture image;
 		Animation animation;
@@ -719,7 +1002,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class UpAirAState extends State {
 		Texture image;
 		Animation animation;
@@ -735,7 +1018,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class DownAirAState extends State {
 		Texture image;
 		Animation animation;
@@ -751,7 +1034,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class ReturnFromHangingAState extends State {
 		Texture image;
 		Animation animation;
@@ -767,7 +1050,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class NeutralBState extends State {
 		Texture image;
 		Animation animation;
@@ -783,7 +1066,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class SideBState extends State {
 		Texture image;
 		Animation animation;
@@ -799,7 +1082,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class UpBState extends State {
 		Texture image;
 		Animation animation;
@@ -815,7 +1098,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class DownBState extends State {
 		Texture image;
 		Animation animation;
@@ -831,7 +1114,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class GrabState extends State {
 		Texture image;
 		Animation animation;
@@ -847,7 +1130,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class SideForwardThrowState extends State {
 		Texture image;
 		Animation animation;
@@ -863,7 +1146,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class SideBackwardThrowState extends State {
 		Texture image;
 		Animation animation;
@@ -879,7 +1162,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class UpThrowState extends State {
 		Texture image;
 		Animation animation;
@@ -895,7 +1178,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class DownThrowState extends State {
 		Texture image;
 		Animation animation;
@@ -911,7 +1194,7 @@ public class Fighter {
 
 		}
 	}
-	
+
 	private class ShieldState extends State {
 		Texture image;
 		Animation animation;
