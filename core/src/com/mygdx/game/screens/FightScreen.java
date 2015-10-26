@@ -74,12 +74,27 @@ public class FightScreen extends Screen{
 	
 	public void update() {
 		//updateCamera();
-		if(Intersector.overlaps(map.getCollisionBoxes()[0], characters.get(0).getCollisionBox())) {
+		if(Intersector.overlaps(map.getCollisionBoxes()[0], characters.get(0).getCollisionBoxes()[0])) 
+		{
 			characters.get(0).capVerticalPosition();
 		}
 		else {
 			characters.get(0).uncapVerticalPosition();
 		}
+		
+		if(Intersector.overlaps(map.getCollisionBoxes()[2], characters.get(0).getCollisionBoxes()[2]))
+		{
+			characters.get(0).setPosition(map.getCollisionBoxes()[0].getX() - characters.get(0).getWidth()*0.75f,
+					map.getCollisionBoxes()[0].getY() + map.getCollisionBoxes()[0].getHeight() - characters.get(0).getHeight()*0.9f);
+			characters.get(0).hangLeft();
+		}
+		if(Intersector.overlaps(map.getCollisionBoxes()[3], characters.get(0).getCollisionBoxes()[1]))
+		{
+			characters.get(0).setPosition(map.getCollisionBoxes()[0].getX() + map.getCollisionBoxes()[0].getWidth() - characters.get(0).getWidth()*0.245f,
+					map.getCollisionBoxes()[0].getY() + map.getCollisionBoxes()[0].getHeight() - characters.get(0).getHeight()*0.9f);
+			characters.get(0).hangRight();
+		}
+		
 		if(Gdx.input.isKeyPressed(31)) {
 			clear();
 			game.changeScreen(back);

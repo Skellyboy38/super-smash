@@ -8,21 +8,28 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Lonrk extends Fighter{
 	
-	public static final int NUMBER_ANIMATIONS = 8;
+	public static final int NUMBER_ANIMATIONS = 10;
+	public static final int NUMBER_COLLISION_BOXES = 3;
 	
 	private Animation[] animations;
 	private Animation walkLeftAnimation, walkRightAnimation, runningLeftAnimation, runningRightAnimation, 
-		standLeftAnimation, standRightAnimation, jumpLeftAnimation, jumpRightAnimation;
+		standLeftAnimation, standRightAnimation, jumpLeftAnimation, jumpRightAnimation, hangingLeftAnimation,
+		hangingRightAnimation;
 	private Texture walkLeftSheet, walkRightSheet, runningLeftSheet, runningRightSheet, standLeftSheet, 
-		standRightSheet, jumpLeftSheet, jumpRightSheet;
+		standRightSheet, jumpLeftSheet, jumpRightSheet, hangingLeftSheet, hangingRightSheet;
 	private TextureRegion[] walkLeftFrames, walkRightFrames, runningLeftFrames, runningRightFrames, 
-		standLeftFrames, standRightFrames, jumpLeftFrames, jumpRightFrames;
-	private Rectangle collisionBox;
+		standLeftFrames, standRightFrames, jumpLeftFrames, jumpRightFrames, hangingLeftFrames,
+		hangingRightFrames;
+	private Rectangle body, hangingLeft, hangingRight;
+	private Rectangle[] rectangles;
 	
 	public Lonrk(SpriteBatch batch, float posX, float posY) {
 		super(batch, posX, posY);
 		animations = new Animation[NUMBER_ANIMATIONS];
-		collisionBox = new Rectangle();
+		body = new Rectangle();
+		hangingLeft = new Rectangle();
+		hangingRight = new Rectangle();
+		rectangles = new Rectangle[NUMBER_COLLISION_BOXES];
 		
 		walkLeftSheet = new Texture("characters/lonrk/walking_left/lonrk_walking_left_animation.png");
 		TextureRegion[][] temp1 = TextureRegion.split(walkLeftSheet, walkLeftSheet.getWidth()/8, walkLeftSheet.getHeight());
@@ -84,8 +91,32 @@ public class Lonrk extends Fighter{
 		}
 		runningRightAnimation = new Animation(0.0385f, runningRightFrames);
 		//=============================================================
-		collisionBox.setHeight(ANIMATION_HEIGHT);
-		collisionBox.setWidth(ANIMATION_WIDTH*0.16667f);
+		hangingLeftSheet = new Texture("characters/lonrk/hanging_left/hanging_left.png");
+		TextureRegion[][] temp9 = TextureRegion.split(hangingLeftSheet, hangingLeftSheet.getWidth(), hangingLeftSheet.getHeight());
+		hangingLeftFrames = new TextureRegion[1];
+		for(int i = 0; i < 1; i++) {
+			hangingLeftFrames[i] = temp9[0][i];
+		}
+		hangingLeftAnimation = new Animation(1f, hangingLeftFrames);
+		//=============================================================
+		hangingRightSheet = new Texture("characters/lonrk/hanging_right/hanging_right.png");
+		TextureRegion[][] temp10 = TextureRegion.split(hangingRightSheet, hangingRightSheet.getWidth(), hangingRightSheet.getHeight());
+		hangingRightFrames = new TextureRegion[1];
+		for(int i = 0; i < 1; i++) {
+			hangingRightFrames[i] = temp10[0][i];
+		}
+		hangingRightAnimation = new Animation(1f, hangingRightFrames);
+		//=============================================================
+		body.setHeight(ANIMATION_HEIGHT);
+		body.setWidth(ANIMATION_WIDTH*0.2f);
+		hangingLeft.setHeight(ANIMATION_HEIGHT/2);
+		hangingLeft.setWidth(ANIMATION_WIDTH/10);
+		hangingRight.setHeight(ANIMATION_HEIGHT/2);
+		hangingRight.setWidth(ANIMATION_WIDTH/10);
+		
+		rectangles[0] = body;
+		rectangles[1] = hangingLeft;
+		rectangles[2] = hangingRight;
 		
 		animations[0] = standLeftAnimation;
 		animations[1] = standRightAnimation;
@@ -95,8 +126,10 @@ public class Lonrk extends Fighter{
 		animations[5] = jumpRightAnimation;
 		animations[6] = runningLeftAnimation;
 		animations[7] = runningRightAnimation;
+		animations[8] = hangingLeftAnimation;
+		animations[9] = hangingRightAnimation;
 		
 		addAnimations(animations);
-		addCollisionBoxes(collisionBox);
+		addCollisionBoxes(rectangles);
 	}
 }

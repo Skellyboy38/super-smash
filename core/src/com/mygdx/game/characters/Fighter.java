@@ -17,7 +17,7 @@ public class Fighter {
 
 	SpriteBatch batch;
 	private float positionX, positionY;
-	private Rectangle collisionBox;
+	private Rectangle[] collisionBoxes;
 	private ShapeRenderer shapeRenderer;
 
 	private boolean keyHoldingT;
@@ -35,7 +35,7 @@ public class Fighter {
 	private double fallingSpeed;
 
 	private Animation standingLeftAnimation, standingRightAnimation, walkingLeftAnimation, walkingRightAnimation, jumpingLeftAnimation, jumpingRightAnimation, 
-	runningLeftAnimation, runningRightAnimation;
+	runningLeftAnimation, runningRightAnimation, hangingLeftAnimation, hangingRightAnimation;
 
 	private StandingLeftState standingLeft;		//The various states that alternate in a game. Each state will be in charge of its own animation and movement pattern.
 	private StandingRightState standingRight;
@@ -55,7 +55,9 @@ public class Fighter {
 	private DoubleJumpingLeftState doubleJumpingLeft;
 	private DoubleJumpingRightState doubleJumpingRight;
 
-	private HangingState hanging;
+	private HangingLeftState hangingLeft;
+	private HangingRightState hangingRight;
+	
 	private CrouchingState crouching;
 
 	private NeutralAState neutralA;
@@ -124,7 +126,9 @@ public class Fighter {
 		doubleJumpingLeft = new DoubleJumpingLeftState();
 		doubleJumpingRight = new DoubleJumpingRightState();
 
-		hanging = new HangingState();
+		hangingLeft = new HangingLeftState();
+		hangingRight = new HangingRightState();
+		
 		crouching = new CrouchingState();
 
 		neutralA = new NeutralAState();
@@ -160,6 +164,16 @@ public class Fighter {
 		currentState = fallingRight;		//Initially the character is standing.
 		fallingSpeed = 0;
 	}
+	
+	public float getHeight()
+	{
+		return ANIMATION_HEIGHT;
+	}
+	
+	public float getWidth()
+	{
+		return ANIMATION_WIDTH;
+	}
 
 	public State getState() {
 		return currentState;
@@ -189,14 +203,16 @@ public class Fighter {
 		jumpingRightAnimation = animations[5];
 		runningLeftAnimation = animations[6];
 		runningRightAnimation = animations[7];
+		hangingLeftAnimation = animations[8];
+		hangingRightAnimation = animations[9];
 	}
 
-	public void addCollisionBoxes(Rectangle rect) {
-		this.collisionBox = rect;
+	public void addCollisionBoxes(Rectangle[] boxes) {
+		this.collisionBoxes = boxes;
 	}
 
-	public Rectangle getCollisionBox() {
-		return collisionBox;
+	public Rectangle[] getCollisionBoxes() {
+		return collisionBoxes;
 	}
 
 	public void render() {		//render calls the render method of whatever state the character is currently in.
@@ -204,14 +220,59 @@ public class Fighter {
 		update();
 		if(showBoxes) {			//Draw all the collision boxes
 			shapeRenderer.begin(ShapeType.Line);
-			shapeRenderer.rect(collisionBox.getX(), collisionBox.getY(), collisionBox.getWidth(), collisionBox.getHeight());
+			for(Rectangle r : collisionBoxes)
+			{
+				shapeRenderer.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+			}
 			shapeRenderer.end();
 		}
+	}
+	
+	boolean isUp = true;
+	
+	public void updateCollisionBoxes()
+	{
+		collisionBoxes[0].setPosition(positionX + ANIMATION_WIDTH*0.25f + collisionBoxes[0].getWidth(), positionY);
+		if(isHanging())
+		{
+			collisionBoxes[1].setPosition(positionX + ANIMATION_WIDTH*0.15f + collisionBoxes[0].getWidth(), positionY + ANIMATION_HEIGHT*2);
+			collisionBoxes[2].setPosition(positionX + ANIMATION_WIDTH*0.65f, positionY + ANIMATION_HEIGHT*2);
+		}
+		else if(!isHanging() && isUp)
+		{
+			collisionBoxes[1].setPosition(positionX + ANIMATION_WIDTH*0.15f + collisionBoxes[0].getWidth(), positionY + ANIMATION_HEIGHT*0.5f);
+			collisionBoxes[2].setPosition(positionX + ANIMATION_WIDTH*0.65f, positionY + ANIMATION_HEIGHT*0.5f);
+		}
+	}
+	
+	public boolean isHanging()
+	{
+		return (currentState == hangingLeft || currentState == hangingRight);
+	}
+	
+	public void hangLeft()
+	{
+		isUp = false;
+		resetCounter();
+		changeState(hangingLeft);
+	}
+	
+	public void hangRight()
+	{
+		isUp = false;
+		resetCounter();
+		changeState(hangingRight);
+	}
+	
+	public void setPosition(float x, float y)
+	{
+		positionX = x;
+		positionY = y;
 	}
 
 	public void update() {
 		counter += Gdx.graphics.getDeltaTime();
-		collisionBox.setPosition(positionX + ANIMATION_WIDTH*0.25f + collisionBox.getWidth(), positionY);
+		updateCollisionBoxes();
 
 		if(canChangeState)
 		{
@@ -410,7 +471,25 @@ public class Fighter {
 					resetFallingSpeed();
 					changeState(jumpingRight);
 				}
-			}	
+			}
+			else if(currentState == hangingLeft)
+			{
+				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				{
+					resetCounter();
+					resetFallingSpeed();
+					changeState(jumpingRight);
+				}
+			}
+			else if(currentState == hangingRight)
+			{
+				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				{
+					resetCounter();
+					resetFallingSpeed();
+					changeState(jumpingLeft);
+				}
+			}
 		}
 		checkKeyHoldings();
 	}
@@ -800,8 +879,9 @@ public class Fighter {
 		}
 
 		public void update() {
-			if(!capVerticalPosition)
+			if(!capVerticalPosition && counter > 0.2)
 			{
+				isUp = true;
 				canChangeState = true;
 			}
 			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
@@ -837,8 +917,9 @@ public class Fighter {
 		}
 
 		public void update() {
-			if(!capVerticalPosition)
+			if(!capVerticalPosition && counter > 0.2)
 			{
+				isUp = true;
 				canChangeState = true;
 			}
 			if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
@@ -935,19 +1016,47 @@ public class Fighter {
 
 	}
 	//====================================================================================================
-	private class HangingState extends State {
-		Texture image;
-		Animation animation;
-		public HangingState() {
+	private class HangingLeftState extends State {
+		TextureRegion currentFrame;
+		public HangingLeftState() {
 
 		}
 
 		public void update() {
-
+			if(counter > 0.2)
+			{
+				canChangeState = true;
+			}
+			currentFrame = hangingLeftAnimation.getKeyFrame(counter, false);
 		}
 
 		public void render() {
+			update();
+			batch.begin();
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
+			batch.end();
+		}
+	}
+	
+	private class HangingRightState extends State {
+		TextureRegion currentFrame;
+		public HangingRightState() {
 
+		}
+
+		public void update() {
+			if(counter > 0.2)
+			{
+				canChangeState = true;
+			}
+			currentFrame = hangingRightAnimation.getKeyFrame(counter, false);
+		}
+
+		public void render() {
+			update();
+			batch.begin();
+			batch.draw(currentFrame, positionX, positionY, ANIMATION_WIDTH, ANIMATION_HEIGHT);
+			batch.end();
 		}
 	}
 
