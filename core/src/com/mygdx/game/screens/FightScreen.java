@@ -49,8 +49,8 @@ public class FightScreen extends Screen{
 		stage.act();
 		stage.draw();
 		map.render();
-		for(int i = 0; i < characters.size(); i++) {
-			characters.get(i).render();
+		for(Fighter f : characters) {
+			f.render();
 		}
 		update();
 	}
@@ -60,9 +60,6 @@ public class FightScreen extends Screen{
 	}
 	
 	public void clear() {
-		for(int i = 0; i < characters.size(); i++) {
-			characters.remove(i);
-		}
 		map = null;
 	}
 	
@@ -73,31 +70,34 @@ public class FightScreen extends Screen{
 	}
 	
 	public void update() {
-		//updateCamera();
-		if(Intersector.overlaps(map.getCollisionBoxes()[0], characters.get(0).getCollisionBoxes()[0])) 
+		for(Fighter f : characters)
 		{
-			characters.get(0).capVerticalPosition();
-		}
-		else {
-			characters.get(0).uncapVerticalPosition();
+			if(Intersector.overlaps(map.getCollisionBoxes()[0], f.getCollisionBoxes()[0])) 
+			{
+				f.capVerticalPosition();
+			}
+			else {
+				f.uncapVerticalPosition();
+			}
+			
+			if(Intersector.overlaps(map.getCollisionBoxes()[2], f.getCollisionBoxes()[2]))
+			{
+				f.setPosition(map.getCollisionBoxes()[0].getX() - f.getWidth()*0.75f,
+						map.getCollisionBoxes()[0].getY() + map.getCollisionBoxes()[0].getHeight() - f.getHeight()*0.9f);
+				f.hangLeft();
+			}
+			if(Intersector.overlaps(map.getCollisionBoxes()[3], f.getCollisionBoxes()[1]))
+			{
+				f.setPosition(map.getCollisionBoxes()[0].getX() + map.getCollisionBoxes()[0].getWidth() - f.getWidth()*0.245f,
+						map.getCollisionBoxes()[0].getY() + map.getCollisionBoxes()[0].getHeight() - f.getHeight()*0.9f);
+				f.hangRight();
+			}
 		}
 		
-		if(Intersector.overlaps(map.getCollisionBoxes()[2], characters.get(0).getCollisionBoxes()[2]))
-		{
-			characters.get(0).setPosition(map.getCollisionBoxes()[0].getX() - characters.get(0).getWidth()*0.75f,
-					map.getCollisionBoxes()[0].getY() + map.getCollisionBoxes()[0].getHeight() - characters.get(0).getHeight()*0.9f);
-			characters.get(0).hangLeft();
-		}
-		if(Intersector.overlaps(map.getCollisionBoxes()[3], characters.get(0).getCollisionBoxes()[1]))
-		{
-			characters.get(0).setPosition(map.getCollisionBoxes()[0].getX() + map.getCollisionBoxes()[0].getWidth() - characters.get(0).getWidth()*0.245f,
-					map.getCollisionBoxes()[0].getY() + map.getCollisionBoxes()[0].getHeight() - characters.get(0).getHeight()*0.9f);
-			characters.get(0).hangRight();
-		}
 		
-		if(Gdx.input.isKeyPressed(31)) {
-			clear();
+		if(Gdx.input.isKeyPressed(31)) {	
 			game.changeScreen(back);
+			((CharacterSelect)(back)).lightReset();
 		}
 	}
 	

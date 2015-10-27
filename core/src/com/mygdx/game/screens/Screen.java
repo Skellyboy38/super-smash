@@ -5,7 +5,7 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.MyGdxGame;
 
-public class Screen {
+public abstract class Screen {
 	public Screen(MyGdxGame game){
 		
 	}
@@ -16,20 +16,11 @@ public class Screen {
 			escPressed();
 		}
 	}
-	public void show() {
-		
-	}
+	public abstract void show();
 	
-	public void clear() {
-		
-	}
-	
-	public void addScreens() {
-		
-	}
-	public void update(){
-		
-	}
+	public abstract void clear();
+
+	public abstract void update();
 	
 	public void escPressed() {
 		if(Gdx.graphics.isFullscreen()) {		//If the game is in full screen, minimize it with the following dimensions (false means it is not full screen).

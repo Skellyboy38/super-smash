@@ -23,8 +23,8 @@ public class Lonrk extends Fighter{
 	private Rectangle body, hangingLeft, hangingRight;
 	private Rectangle[] rectangles;
 	
-	public Lonrk(SpriteBatch batch, float posX, float posY) {
-		super(batch, posX, posY);
+	public Lonrk(SpriteBatch batch, float posX, float posY, int[] controls) {
+		super(batch, posX, posY, controls);
 		animations = new Animation[NUMBER_ANIMATIONS];
 		body = new Rectangle();
 		hangingLeft = new Rectangle();

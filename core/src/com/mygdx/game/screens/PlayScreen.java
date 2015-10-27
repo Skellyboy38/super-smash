@@ -153,13 +153,8 @@ public class PlayScreen extends Screen{
 	public void update() {
 			
 	}
-	
-	public void dispose() {
-		stage.dispose();
-		skin1.dispose();
-		buttonAtlas1.dispose();
-		font.dispose();
-		picture.dispose();
+
+	@Override
+	public void clear() {
 	}
-	
 }

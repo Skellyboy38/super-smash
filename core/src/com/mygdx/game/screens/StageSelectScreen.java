@@ -141,6 +141,7 @@ public class StageSelectScreen extends Screen{
 		
 		backButton.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            	((CharacterSelect)(back)).lightReset();
             	game.changeScreen(back);
             	clear();
             	return true;

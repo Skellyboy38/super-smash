@@ -21,16 +21,18 @@ public class Fighter {
 	private ShapeRenderer shapeRenderer;
 
 	private boolean keyHoldingT;
-	private boolean keyHoldingSpace;
+	private boolean keyHoldingspace;
 	private boolean keyHoldingLeft;
 	private boolean keyHoldingRight;
 
 	private boolean showBoxes;
 	private boolean capVerticalPosition;
 
-	public static final int LEFT_KEY = 29;
-	public static final int RIGHT_KEY = 32;
-	public static final int SPACE_KEY = 62;
+	public int left;
+	public int right;
+	public int up;
+	public int down;
+	public int space;
 
 	private double fallingSpeed;
 
@@ -93,13 +95,13 @@ public class Fighter {
 	private boolean canChangeState;
 	private float counter;
 
-	public Fighter(SpriteBatch batch, float posX, float posY) {
+	public Fighter(SpriteBatch batch, float posX, float posY, int[] controls) {
 		this.batch = batch;
 		positionX = posX;
 		positionY = posY;
 
 		keyHoldingT = false;
-		keyHoldingSpace = false;
+		keyHoldingspace = false;
 		keyHoldingLeft = false;
 		keyHoldingRight = false;
 		
@@ -163,6 +165,17 @@ public class Fighter {
 
 		currentState = fallingRight;		//Initially the character is standing.
 		fallingSpeed = 0;
+		
+		setControls(controls);
+	}
+	
+	public void setControls(int[] controls)
+	{
+		left = controls[0];
+		right = controls[1];
+		up = controls[2];
+		down = controls[3];
+		space = controls[4];
 	}
 	
 	public float getHeight()
@@ -279,15 +292,15 @@ public class Fighter {
 			if(currentState == standingLeft)
 			{
 				checkRunningLeft();
-				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				if(Gdx.input.isKeyPressed(left))
 				{
 					changeState(walkingLeft);
 				}
-				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				else if(Gdx.input.isKeyPressed(right)) 
 				{
 					changeState(walkingRight);
 				}
-				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				if(Gdx.input.isKeyPressed(space))
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -297,15 +310,15 @@ public class Fighter {
 			else if(currentState == standingRight)
 			{
 				checkRunningRight();
-				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				if(Gdx.input.isKeyPressed(left))
 				{
 					changeState(walkingLeft);
 				}
-				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				else if(Gdx.input.isKeyPressed(right)) 
 				{
 					changeState(walkingRight);
 				}
-				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				if(Gdx.input.isKeyPressed(space))
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -315,15 +328,15 @@ public class Fighter {
 			else if(currentState == walkingLeft)
 			{
 				checkRunningLeft();
-				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				if(Gdx.input.isKeyPressed(left))
 				{
 					//Continue walking to the left
 				}
-				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				else if(Gdx.input.isKeyPressed(right)) 
 				{
 					changeState(walkingRight);
 				}
-				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				if(Gdx.input.isKeyPressed(space))
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -333,15 +346,15 @@ public class Fighter {
 			else if(currentState == walkingRight)
 			{
 				checkRunningRight();
-				if(Gdx.input.isKeyPressed(RIGHT_KEY))
+				if(Gdx.input.isKeyPressed(right))
 				{
 					//Continue walking to the right
 				}
-				else if(Gdx.input.isKeyPressed(LEFT_KEY))
+				else if(Gdx.input.isKeyPressed(left))
 				{
 					changeState(walkingLeft);
 				}
-				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				if(Gdx.input.isKeyPressed(space))
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -350,15 +363,15 @@ public class Fighter {
 			}
 			else if(currentState == runningLeft)
 			{
-				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				if(Gdx.input.isKeyPressed(left))
 				{
 					//Continue walking to the left
 				}
-				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				else if(Gdx.input.isKeyPressed(right)) 
 				{
 					changeState(walkingRight);
 				}
-				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				if(Gdx.input.isKeyPressed(space))
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -367,15 +380,15 @@ public class Fighter {
 			}
 			else if(currentState == runningRight)
 			{
-				if(Gdx.input.isKeyPressed(RIGHT_KEY))
+				if(Gdx.input.isKeyPressed(right))
 				{
 					//Continue walking to the right
 				}
-				else if(Gdx.input.isKeyPressed(LEFT_KEY))
+				else if(Gdx.input.isKeyPressed(left))
 				{
 					changeState(walkingLeft);
 				}
-				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				if(Gdx.input.isKeyPressed(space))
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -384,15 +397,15 @@ public class Fighter {
 			}
 			else if(currentState == jumpingLeft)
 			{
-				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				if(Gdx.input.isKeyPressed(left))
 				{
 					//Continue jumping to the left
 				}
-				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				else if(Gdx.input.isKeyPressed(right)) 
 				{
 					changeState(jumpingRight);
 				}
-				if(Gdx.input.isKeyPressed(SPACE_KEY) && !keyHoldingSpace)
+				if(Gdx.input.isKeyPressed(space) && !keyHoldingspace)
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -401,15 +414,15 @@ public class Fighter {
 			}
 			else if(currentState == jumpingRight)
 			{
-				if(Gdx.input.isKeyPressed(RIGHT_KEY))
+				if(Gdx.input.isKeyPressed(right))
 				{
 					//Continue jumping to the right
 				}
-				else if(Gdx.input.isKeyPressed(LEFT_KEY))
+				else if(Gdx.input.isKeyPressed(left))
 				{
 					changeState(jumpingLeft);
 				}
-				if(Gdx.input.isKeyPressed(SPACE_KEY)  && !keyHoldingSpace)
+				if(Gdx.input.isKeyPressed(space)  && !keyHoldingspace)
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -418,37 +431,37 @@ public class Fighter {
 			}
 			else if(currentState == doubleJumpingLeft)
 			{
-				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				if(Gdx.input.isKeyPressed(left))
 				{
 					//Continue double jumping to the left
 				}
-				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				else if(Gdx.input.isKeyPressed(right)) 
 				{
 					changeState(doubleJumpingRight);
 				}
 			}
 			else if(currentState == doubleJumpingRight)
 			{
-				if(Gdx.input.isKeyPressed(RIGHT_KEY))
+				if(Gdx.input.isKeyPressed(right))
 				{
 					//Continue double jumping to the right
 				}
-				else if(Gdx.input.isKeyPressed(LEFT_KEY))
+				else if(Gdx.input.isKeyPressed(left))
 				{
 					changeState(doubleJumpingLeft);
 				}
 			}
 			else if(currentState == fallingLeft)
 			{
-				if(Gdx.input.isKeyPressed(LEFT_KEY))
+				if(Gdx.input.isKeyPressed(left))
 				{
 					//Continue falling to the left
 				}
-				else if(Gdx.input.isKeyPressed(RIGHT_KEY)) 
+				else if(Gdx.input.isKeyPressed(right)) 
 				{
 					changeState(fallingRight);
 				}
-				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				if(Gdx.input.isKeyPressed(space))
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -457,15 +470,15 @@ public class Fighter {
 			}
 			else if(currentState == fallingRight)
 			{
-				if(Gdx.input.isKeyPressed(RIGHT_KEY))
+				if(Gdx.input.isKeyPressed(right))
 				{
 					//Continue falling to the right
 				}
-				else if(Gdx.input.isKeyPressed(LEFT_KEY))
+				else if(Gdx.input.isKeyPressed(left))
 				{
 					changeState(fallingLeft);
 				}
-				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				if(Gdx.input.isKeyPressed(space))
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -474,7 +487,7 @@ public class Fighter {
 			}
 			else if(currentState == hangingLeft)
 			{
-				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				if(Gdx.input.isKeyPressed(space))
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -483,7 +496,7 @@ public class Fighter {
 			}
 			else if(currentState == hangingRight)
 			{
-				if(Gdx.input.isKeyPressed(SPACE_KEY))
+				if(Gdx.input.isKeyPressed(space))
 				{
 					resetCounter();
 					resetFallingSpeed();
@@ -506,12 +519,12 @@ public class Fighter {
 
 	public void checkRunningLeft()
 	{
-		if(!keyHoldingLeft && Gdx.input.isKeyPressed(LEFT_KEY) && numberLeftClicks == 0) {
+		if(!keyHoldingLeft && Gdx.input.isKeyPressed(left) && numberLeftClicks == 0) {
 			numberLeftClicks++;
 			initialLeftTime = counter;
 			keyHoldingLeft = true;
 		}
-		else if(!keyHoldingLeft && Gdx.input.isKeyPressed(LEFT_KEY) && numberLeftClicks == 1)
+		else if(!keyHoldingLeft && Gdx.input.isKeyPressed(left) && numberLeftClicks == 1)
 		{
 			finalLeftTime = counter;
 			if(finalLeftTime - initialLeftTime < 0.2f)
@@ -525,11 +538,11 @@ public class Fighter {
 				numberLeftClicks = 0;
 			}
 		}
-		else if(!Gdx.input.isKeyPressed(LEFT_KEY)) {
+		else if(!Gdx.input.isKeyPressed(left)) {
 			keyHoldingLeft = false;
 		}
 
-		if(leftConditionMet && Gdx.input.isKeyPressed(LEFT_KEY))
+		if(leftConditionMet && Gdx.input.isKeyPressed(left))
 		{
 			if(currentState == walkingLeft)
 			{
@@ -545,12 +558,12 @@ public class Fighter {
 
 	public void checkRunningRight()
 	{
-		if(!keyHoldingRight && Gdx.input.isKeyPressed(RIGHT_KEY) && numberRightClicks == 0) {
+		if(!keyHoldingRight && Gdx.input.isKeyPressed(right) && numberRightClicks == 0) {
 			numberRightClicks++;
 			initialRightTime = counter;
 			keyHoldingRight = true;
 		}
-		else if(!keyHoldingRight && Gdx.input.isKeyPressed(RIGHT_KEY) && numberRightClicks == 1)
+		else if(!keyHoldingRight && Gdx.input.isKeyPressed(right) && numberRightClicks == 1)
 		{
 			finalRightTime = counter;
 			if(finalRightTime - initialRightTime < 0.2f)
@@ -564,11 +577,11 @@ public class Fighter {
 				numberRightClicks = 0;
 			}
 		}
-		else if(!Gdx.input.isKeyPressed(RIGHT_KEY)) {
+		else if(!Gdx.input.isKeyPressed(right)) {
 			keyHoldingRight = false;
 		}
 
-		if(rightConditionMet && Gdx.input.isKeyPressed(RIGHT_KEY))
+		if(rightConditionMet && Gdx.input.isKeyPressed(right))
 		{
 			if(currentState == walkingRight)
 			{
@@ -604,11 +617,11 @@ public class Fighter {
 			keyHoldingT = false;
 		}
 
-		if(!keyHoldingSpace && Gdx.input.isKeyPressed(SPACE_KEY)) {
-			keyHoldingSpace = true;
+		if(!keyHoldingspace && Gdx.input.isKeyPressed(space)) {
+			keyHoldingspace = true;
 		}
-		else if(!Gdx.input.isKeyPressed(SPACE_KEY)) {
-			keyHoldingSpace = false;
+		else if(!Gdx.input.isKeyPressed(space)) {
+			keyHoldingspace = false;
 		}
 	}
 
@@ -686,7 +699,7 @@ public class Fighter {
 		public void update() {
 			canChangeState = true;
 			currentFrame = walkingLeftAnimation.getKeyFrame(counter, true);
-			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
+			if(Gdx.input.isKeyPressed(left)) {
 
 				if(capVerticalPosition) {
 					positionX -= walkingSpeed;
@@ -721,7 +734,7 @@ public class Fighter {
 		public void update() {
 			canChangeState = true;
 			currentFrame = walkingRightAnimation.getKeyFrame(counter, true);
-			if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
+			if(Gdx.input.isKeyPressed(right)) {
 				if(capVerticalPosition) {
 					positionX += walkingSpeed;
 				}
@@ -755,7 +768,7 @@ public class Fighter {
 		public void update() {
 			canChangeState = true;
 			currentFrame = runningLeftAnimation.getKeyFrame(counter, true);
-			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
+			if(Gdx.input.isKeyPressed(left)) {
 				if(capVerticalPosition) {
 					positionX -= runningSpeed;
 				}
@@ -788,7 +801,7 @@ public class Fighter {
 		public void update() {
 			canChangeState = true;
 			currentFrame = runningRightAnimation.getKeyFrame(counter, true);
-			if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
+			if(Gdx.input.isKeyPressed(right)) {
 				if(capVerticalPosition) {
 					positionX += runningSpeed;
 				}
@@ -823,7 +836,7 @@ public class Fighter {
 			if(fallingSpeed > -5) {
 				fallingSpeed -= fallingAcceleration;
 			}
-			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
+			if(Gdx.input.isKeyPressed(left)) {
 				positionX -= 2;
 			}
 			positionY += fallingSpeed;
@@ -852,7 +865,7 @@ public class Fighter {
 			if(fallingSpeed > -5) {
 				fallingSpeed -= fallingAcceleration;
 			}
-			else if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
+			else if(Gdx.input.isKeyPressed(right)) {
 				positionX += 2;
 			}
 			positionY += fallingSpeed;
@@ -884,7 +897,7 @@ public class Fighter {
 				isUp = true;
 				canChangeState = true;
 			}
-			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
+			if(Gdx.input.isKeyPressed(left)) {
 				positionX -= movementSpeedSideways;
 			}
 			if(fallingSpeed > -10)
@@ -922,7 +935,7 @@ public class Fighter {
 				isUp = true;
 				canChangeState = true;
 			}
-			if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
+			if(Gdx.input.isKeyPressed(right)) {
 				positionX += movementSpeedSideways;
 			}
 			if(fallingSpeed > -10)
@@ -958,7 +971,7 @@ public class Fighter {
 			{
 				canChangeState = true;
 			}
-			if(Gdx.input.isKeyPressed(LEFT_KEY)) {
+			if(Gdx.input.isKeyPressed(left)) {
 				positionX -= movementSpeedSideways;
 			}
 			if(fallingSpeed > -10)
@@ -994,7 +1007,7 @@ public class Fighter {
 			{
 				canChangeState = true;
 			}
-			if(Gdx.input.isKeyPressed(RIGHT_KEY)) {
+			if(Gdx.input.isKeyPressed(right)) {
 				positionX += movementSpeedSideways;
 			}
 			if(fallingSpeed > -10)

@@ -22,11 +22,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.characters.CharacterControls;
 import com.mygdx.game.characters.Fighter;
 import com.mygdx.game.characters.Lonrk;
 
 public class CharacterSelect extends Screen{
 	public static final int NUM_CHARACTERS = 20;		//The number of characters to choose from.
+	public static final int NUM_PLAYABLE_CHARACTERS = 1;
 	public static final float ICON_WIDTH = MyGdxGame.GAME_WIDTH/12.5F;
 	public static final float ICON_HEIGHT = MyGdxGame.GAME_HEIGHT/9F;
 	public static final float CHARACTER_WIDTH = MyGdxGame.GAME_WIDTH/4.46428F;
@@ -576,6 +578,22 @@ public class CharacterSelect extends Screen{
 		Gdx.input.setInputProcessor(stage);
 	}
 	
+	public void lightReset()
+	{
+		canStart = false;
+		characterExists[0] = false;
+		characterExists[1] = false;
+		characterExists[2] = false;
+		characterExists[3] = false;
+		
+		characterChoices[0] = -1;
+		characterChoices[1] = -1;
+		characterChoices[2] = -1;
+		characterChoices[3] = -1;
+		
+		characters.clear();
+	}
+	
 	public void clear() {
 		remove1.remove();
 		remove2.remove();
@@ -587,16 +605,42 @@ public class CharacterSelect extends Screen{
 		second.addActor(add3);
 		second.addActor(add4);
 		
+		addRemoveActors.get(4).remove();
+		addRemoveActors.get(5).remove();
+		addRemoveActors.get(6).remove();
+		addRemoveActors.get(7).remove();
+		
+		token1.remove();
+		token2.remove();
+		token3.remove();
+		token4.remove();
+		
+		player1_image.remove();
+		player2_image.remove();
+		player3_image.remove();
+		player4_image.remove();
+		
+		p1Chosen = 0;
+		p2Chosen = 0;
+		p3Chosen = 0;
+		p4Chosen = 0;
+		
 		token1.setPosition(MyGdxGame.GAME_WIDTH/3.926F, MyGdxGame.GAME_HEIGHT/3.091F);
 		token2.setPosition(MyGdxGame.GAME_WIDTH/2.228F, MyGdxGame.GAME_HEIGHT/3.091F);
 		token3.setPosition(MyGdxGame.GAME_WIDTH/1.554F, MyGdxGame.GAME_HEIGHT/3.091F);
 		token4.setPosition(MyGdxGame.GAME_WIDTH/1.191F, MyGdxGame.GAME_HEIGHT/3.091F);
-		canStart = false;
-		characterExists[0] = false;
-		characterExists[1] = false;
-		characterExists[2] = false;
-		characterExists[3] = false;
 		
+		coinCollisionBoxes[0].setPosition(token1.getX()+token1.getWidth()*0.2f, token1.getY()+token1.getHeight()*0.2f);
+		coinCollisionBoxes[1].setPosition(token2.getX()+token2.getWidth()*0.2f, token2.getY()+token2.getHeight()*0.2f);
+		coinCollisionBoxes[2].setPosition(token3.getX()+token3.getWidth()*0.2f, token3.getY()+token3.getHeight()*0.2f);
+		coinCollisionBoxes[3].setPosition(token4.getX()+token4.getWidth()*0.2f, token4.getY()+token4.getHeight()*0.2f);
+		
+		tokenMovable[0] = false;
+		tokenMovable[1] = false;
+		tokenMovable[2] = false;
+		tokenMovable[3] = false;
+		
+		lightReset();
 	}
 
 	public void render() {
@@ -645,7 +689,7 @@ public class CharacterSelect extends Screen{
 		p3Chosen = 0;
 		p4Chosen = 0;
 		
-		for(int i = 0; i < NUM_CHARACTERS; i++) {
+		for(int i = 0; i < NUM_PLAYABLE_CHARACTERS; i++) {
 			
 			if(Intersector.overlaps(coinCollisionBoxes[0], iconCollisionBoxes[i])) {
 				playerOneChoices[i].setPosition(player1_image.getX(), player1_image.getY());
@@ -700,7 +744,7 @@ public class CharacterSelect extends Screen{
 			}
 		}
 		
-		if((numberCharacters >= 2) && !tokenMovable[0] && !tokenMovable[1] && !tokenMovable[2] && !tokenMovable[3]) {
+		if((numberCharacters >= 1) && !tokenMovable[0] && !tokenMovable[1] && !tokenMovable[2] && !tokenMovable[3]) {
 			canStart = true;
 		}
 		else {
@@ -717,7 +761,14 @@ public class CharacterSelect extends Screen{
 		if(canStart) {
 			stage.addActor(startMessageImage);
 			if(Gdx.input.isKeyPressed(66)) {
-				characters.add(new Lonrk(batch, MyGdxGame.GAME_WIDTH/2, MyGdxGame.GAME_HEIGHT/2));	
+				for(int i = 0; i < characterChoices.length; i++)
+				{
+					if(characterChoices[i] > -1)
+					{
+						characters.add(getCharacter(characterChoices[i], i));
+					}
+				}	
+				System.out.println(characters.size());
 				next.passCharacters(characters);
 				game.changeScreen(next);
 			}
@@ -725,5 +776,14 @@ public class CharacterSelect extends Screen{
 		else {
 			startMessageImage.remove();
 		}
+	}
+	
+	public Fighter getCharacter(int i, int player)
+	{
+		if(i == 0)
+		{
+			return new Lonrk(batch, MyGdxGame.GAME_WIDTH/2, MyGdxGame.GAME_HEIGHT/2, CharacterControls.CONTROLS[player]);	
+		}
+		return null;
 	}
 }

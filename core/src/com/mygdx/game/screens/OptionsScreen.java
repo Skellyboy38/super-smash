@@ -147,4 +147,8 @@ public class OptionsScreen extends Screen{
 		picture.dispose();
 	}
 
+	@Override
+	public void clear() {
+	}
+
 }

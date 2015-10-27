@@ -113,4 +113,8 @@ public class HomeScreen extends Screen{
 		buttonAtlas.dispose();
 		font.dispose();
 	}
+
+	@Override
+	public void clear() {
+	}
 }
