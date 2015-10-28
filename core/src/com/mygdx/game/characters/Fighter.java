@@ -95,10 +95,8 @@ public class Fighter {
 	private boolean canChangeState;
 	private float counter;
 
-	public Fighter(SpriteBatch batch, float posX, float posY, int[] controls) {
+	public Fighter(SpriteBatch batch, int[] controls) {
 		this.batch = batch;
-		positionX = posX;
-		positionY = posY;
 
 		keyHoldingT = false;
 		keyHoldingspace = false;
@@ -167,6 +165,12 @@ public class Fighter {
 		fallingSpeed = 0;
 		
 		setControls(controls);
+	}
+	
+	public void setSpawnPoint(Vector2 spawn)
+	{
+		positionX = spawn.x;
+		positionY = spawn.y;
 	}
 	
 	public void setControls(int[] controls)

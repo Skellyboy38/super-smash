@@ -768,7 +768,6 @@ public class CharacterSelect extends Screen{
 						characters.add(getCharacter(characterChoices[i], i));
 					}
 				}	
-				System.out.println(characters.size());
 				next.passCharacters(characters);
 				game.changeScreen(next);
 			}
@@ -782,7 +781,7 @@ public class CharacterSelect extends Screen{
 	{
 		if(i == 0)
 		{
-			return new Lonrk(batch, MyGdxGame.GAME_WIDTH/2, MyGdxGame.GAME_HEIGHT/2, CharacterControls.CONTROLS[player]);	
+			return new Lonrk(batch, CharacterControls.CONTROLS[player]);	
 		}
 		return null;
 	}

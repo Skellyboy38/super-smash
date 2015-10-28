@@ -38,6 +38,13 @@ public class FightScreen extends Screen{
 		cameraHeight = MyGdxGame.GAME_HEIGHT;
 		cameraPositionX = 0;
 		cameraPositionY = 0;
+		
+		int counter = 0;
+		for(int i = 0; i < characters.size(); i++)
+		{
+			characters.get(i).setSpawnPoint(map.getSpawnPoints()[counter]);
+			counter++;
+		}
 	}
 	
 	public void addCharacters(ArrayList<Fighter> characters) {

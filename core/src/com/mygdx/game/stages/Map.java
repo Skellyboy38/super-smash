@@ -1,11 +1,11 @@
 package com.mygdx.game.stages;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -14,17 +14,15 @@ public class Map {
 	private Image background;
 	private Rectangle[] rectangles;
 	private ShapeRenderer shapeRenderer;
-	private OrthographicCamera camera;
 	
-	protected float posX;
-	protected float posY;
+	protected Vector2[] platforms;
+	protected Vector2[] spawnPoints;
 	
 	boolean showBoxes;
 	boolean keyHolding;
 	
 	public Map() {
 		stage = new Stage();
-		camera = (OrthographicCamera)stage.getCamera();
 		showBoxes = false;
 		keyHolding = false;
 		shapeRenderer = new ShapeRenderer();
@@ -41,12 +39,14 @@ public class Map {
 		return stage;
 	}
 	
-	public float getPosX() {
-		return posX;
+	public Vector2[] getPlatforms()
+	{
+		return platforms;
 	}
 	
-	public float getPosY() {
-		return posY;
+	public Vector2[] getSpawnPoints()
+	{
+		return spawnPoints;
 	}
 	
 	public Image getBackground() {
