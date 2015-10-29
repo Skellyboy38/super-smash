@@ -246,10 +246,28 @@ public class Fighter {
 	}
 	
 	boolean isUp = true;
+	boolean elevateBox = false;
+	
+	public void elevateCollisionBox()
+	{
+		elevateBox = true;
+	}
+	public void dropCollisionBox()
+	{
+		elevateBox = false;
+	}
 	
 	public void updateCollisionBoxes()
 	{
-		collisionBoxes[0].setPosition(positionX + ANIMATION_WIDTH*0.25f + collisionBoxes[0].getWidth(), positionY);
+		if(!elevateBox)
+		{
+			collisionBoxes[0].setPosition(positionX + ANIMATION_WIDTH*0.25f + collisionBoxes[0].getWidth(), positionY);
+		}
+		else
+		{
+			collisionBoxes[0].setPosition(positionX + ANIMATION_WIDTH*0.25f + collisionBoxes[0].getWidth(), positionY + ANIMATION_HEIGHT*0.1f);
+		}
+		
 		if(isHanging())
 		{
 			collisionBoxes[1].setPosition(positionX + ANIMATION_WIDTH*0.15f + collisionBoxes[0].getWidth(), positionY + ANIMATION_HEIGHT*2);
@@ -286,6 +304,35 @@ public class Fighter {
 		positionX = x;
 		positionY = y;
 	}
+	
+	public void setPosition(Vector2 position)
+	{
+		positionX = position.x;
+		positionY = position.y;
+	}
+	
+	public void setPositionX(float x)
+	{
+		positionX = x;
+	}
+	
+	boolean canSetPositionY = true;
+	public void setPositionY(float y)
+	{
+		if(canSetPositionY)
+		{
+			positionY = y;
+			if(getDirection())
+			{
+				changeState(standingLeft);
+			}
+			else
+			{
+				changeState(standingRight);
+			}
+		}
+		canSetPositionY = false;
+	}
 
 	public void update() {
 		counter += Gdx.graphics.getDeltaTime();
@@ -306,6 +353,8 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
+					canSetPositionY = true;
+					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingLeft);
@@ -324,6 +373,8 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
+					canSetPositionY = true;
+					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingRight);
@@ -342,6 +393,8 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
+					canSetPositionY = true;
+					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingLeft);
@@ -360,6 +413,8 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
+					canSetPositionY = true;
+					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingRight);
@@ -377,6 +432,8 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
+					canSetPositionY = true;
+					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingLeft);
@@ -394,6 +451,8 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
+					canSetPositionY = true;
+					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingRight);
@@ -467,6 +526,7 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
+					canSetPositionY = true;
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingLeft);
@@ -484,6 +544,7 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
+					canSetPositionY = true;
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingRight);
@@ -493,6 +554,7 @@ public class Fighter {
 			{
 				if(Gdx.input.isKeyPressed(space))
 				{
+					canSetPositionY = true;
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingRight);
@@ -502,6 +564,7 @@ public class Fighter {
 			{
 				if(Gdx.input.isKeyPressed(space))
 				{
+					canSetPositionY = true;
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingLeft);
@@ -635,7 +698,7 @@ public class Fighter {
 	}
 
 	public boolean getDirection() {
-		if(currentState == standingLeft || currentState == walkingLeft || currentState == jumpingLeft) {
+		if(currentState == standingLeft || currentState == walkingLeft || currentState == jumpingLeft || currentState == runningLeft || currentState == doubleJumpingLeft) {
 			return true;
 		}
 		else
@@ -662,6 +725,7 @@ public class Fighter {
 		}
 
 		public void update() {
+			System.out.println("standing\n");
 			canChangeState = true;
 			currentFrame = standingLeftAnimation.getKeyFrame(counter, false);
 		}
@@ -681,6 +745,7 @@ public class Fighter {
 		}
 
 		public void update() {
+			System.out.println("standing\n");
 			canChangeState = true;
 			currentFrame = standingRightAnimation.getKeyFrame(counter, false);
 		}
@@ -701,6 +766,7 @@ public class Fighter {
 		}
 
 		public void update() {
+			System.out.println("walking\n");
 			canChangeState = true;
 			currentFrame = walkingLeftAnimation.getKeyFrame(counter, true);
 			if(Gdx.input.isKeyPressed(left)) {
@@ -736,6 +802,7 @@ public class Fighter {
 		}
 
 		public void update() {
+			System.out.println("walking\n");
 			canChangeState = true;
 			currentFrame = walkingRightAnimation.getKeyFrame(counter, true);
 			if(Gdx.input.isKeyPressed(right)) {
@@ -770,6 +837,7 @@ public class Fighter {
 		}
 
 		public void update() {
+			System.out.println("running\n");
 			canChangeState = true;
 			currentFrame = runningLeftAnimation.getKeyFrame(counter, true);
 			if(Gdx.input.isKeyPressed(left)) {
@@ -803,6 +871,7 @@ public class Fighter {
 		}
 
 		public void update() {
+			System.out.println("running\n");
 			canChangeState = true;
 			currentFrame = runningRightAnimation.getKeyFrame(counter, true);
 			if(Gdx.input.isKeyPressed(right)) {
@@ -835,6 +904,7 @@ public class Fighter {
 		}
 
 		public void update() {
+			System.out.println("falling\n");
 			canChangeState = true;
 			currentFrame = jumpingLeftAnimation.getKeyFrame(counter, false);
 			if(fallingSpeed > -5) {
@@ -864,6 +934,7 @@ public class Fighter {
 		}
 
 		public void update() {
+			System.out.println("falling\n");
 			canChangeState = true;
 			currentFrame = jumpingRightAnimation.getKeyFrame(counter, false);
 			if(fallingSpeed > -5) {
@@ -896,10 +967,15 @@ public class Fighter {
 		}
 
 		public void update() {
-			if(!capVerticalPosition && counter > 0.2)
+			System.out.println("jumping\n");
+			if(counter > 0.2)
 			{
-				isUp = true;
-				canChangeState = true;
+				if(!capVerticalPosition)
+				{
+					isUp = true;
+					canChangeState = true;
+				}
+				dropCollisionBox();
 			}
 			if(Gdx.input.isKeyPressed(left)) {
 				positionX -= movementSpeedSideways;
@@ -934,11 +1010,17 @@ public class Fighter {
 		}
 
 		public void update() {
-			if(!capVerticalPosition && counter > 0.2)
+			System.out.println("jumping\n");
+			if(counter > 0.2)
 			{
-				isUp = true;
-				canChangeState = true;
+				if(!capVerticalPosition)
+				{
+					isUp = true;
+					canChangeState = true;
+				}
+				dropCollisionBox();
 			}
+			
 			if(Gdx.input.isKeyPressed(right)) {
 				positionX += movementSpeedSideways;
 			}

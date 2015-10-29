@@ -1,11 +1,15 @@
 package com.mygdx.game.screens;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.characters.Fighter;
@@ -19,11 +23,21 @@ public class FightScreen extends Screen{
 	private SpriteBatch batch;
 	private Screen back;
 	private MyGdxGame game;
-	
+
+	Set<Rectangle> topSurfaceCollisionSet;
+	Set<Rectangle> bottomSurfaceCollisionSet;
+	Set<Rectangle> leftEdgeCollisionSet;
+	Set<Rectangle> rightEdgeCollisionSet;
+
+	HashMap<Rectangle, Float> topSurfaces;
+	HashMap<Rectangle, Float> bottomSurfaces;
+	HashMap<Rectangle, Vector2> leftEdges;
+	HashMap<Rectangle, Vector2> rightEdges;
+
+	HashMap<Fighter, HashMap<Rectangle, Float>> fighterToMapCollisionBoxes;
+
 	private float cameraWidth;
 	private float cameraHeight;
-	private float cameraPositionX;
-	private float cameraPositionY;
 
 	public FightScreen(MyGdxGame game, SpriteBatch batch, Map map, ArrayList<Fighter> characters, Stage stage) {
 		super(game);
@@ -33,12 +47,20 @@ public class FightScreen extends Screen{
 		this.game = game;
 		this.stage = stage;
 		camera = (OrthographicCamera)stage.getCamera();
-		
-		cameraWidth = MyGdxGame.GAME_WIDTH;
+
 		cameraHeight = MyGdxGame.GAME_HEIGHT;
-		cameraPositionX = 0;
-		cameraPositionY = 0;
+		cameraWidth = MyGdxGame.GAME_WIDTH;
+
+		topSurfaces = map.getTopSurfacesMap();
+		bottomSurfaces = map.getBottomSurfacesMap();
+		leftEdges = map.getLeftEdgesMap();
+		rightEdges = map.getRightEdgesMap();
 		
+		topSurfaceCollisionSet = topSurfaces.keySet();
+		bottomSurfaceCollisionSet = bottomSurfaces.keySet();
+		leftEdgeCollisionSet = leftEdges.keySet();
+		rightEdgeCollisionSet = rightEdges.keySet();
+
 		int counter = 0;
 		for(int i = 0; i < characters.size(); i++)
 		{
@@ -46,11 +68,11 @@ public class FightScreen extends Screen{
 			counter++;
 		}
 	}
-	
+
 	public void addCharacters(ArrayList<Fighter> characters) {
 		this.characters = characters;
 	}
-	
+
 	public void render() {
 		super.render();
 		stage.act();
@@ -61,32 +83,76 @@ public class FightScreen extends Screen{
 		}
 		update();
 	}
-	
+
 	public void addScreens(Screen back) {
 		this.back = back;
 	}
-	
+
 	public void clear() {
 		map = null;
 	}
-	
+
 	public void updateCamera() {
 		camera.viewportHeight = cameraHeight;
 		camera.viewportWidth = cameraWidth;
 		camera.translate(1,1);
 	}
-	
+
 	public void update() {
 		for(Fighter f : characters)
 		{
-			if(Intersector.overlaps(map.getCollisionBoxes()[0], f.getCollisionBoxes()[0])) 
+			for(Rectangle r : topSurfaceCollisionSet)
+			{
+				if(Intersector.overlaps(r, f.getCollisionBoxes()[0]))
+				{
+					f.setPositionY(topSurfaces.get(r));
+					f.capVerticalPosition();
+				}
+				else
+				{
+					f.uncapVerticalPosition();
+				}
+			}
+
+			for(Rectangle r : bottomSurfaceCollisionSet)
+			{
+				if(Intersector.overlaps(r, f.getCollisionBoxes()[0]))
+				{
+					f.setPositionY(bottomSurfaces.get(r) - f.getHeight());
+					f.capVerticalPosition();
+				}
+				else
+				{
+					f.uncapVerticalPosition();
+				}
+			}
+			
+			for(Rectangle r : leftEdgeCollisionSet)
+			{
+				if(Intersector.overlaps(r, f.getCollisionBoxes()[2]))
+				{
+					f.setPosition(new Vector2(leftEdges.get(r).x - f.getWidth()*0.75f, leftEdges.get(r).y + r.getHeight() - f.getHeight()*0.9f));
+					f.hangLeft();
+				}
+			}
+			
+			for(Rectangle r : rightEdgeCollisionSet)
+			{
+				if(Intersector.overlaps(r, f.getCollisionBoxes()[1]))
+				{
+					f.setPosition(new Vector2(rightEdges.get(r).x + r.getWidth() - f.getWidth()*0.245f, rightEdges.get(r).y + r.getHeight() - f.getHeight()*0.9f));
+					f.hangRight();
+				}
+			}
+			/**
+			if(Intersector.overlaps(map.getSurfaces()[0], f.getCollisionBoxes()[0])) 
 			{
 				f.capVerticalPosition();
 			}
 			else {
 				f.uncapVerticalPosition();
 			}
-			
+
 			if(Intersector.overlaps(map.getCollisionBoxes()[2], f.getCollisionBoxes()[2]))
 			{
 				f.setPosition(map.getCollisionBoxes()[0].getX() - f.getWidth()*0.75f,
@@ -98,20 +164,20 @@ public class FightScreen extends Screen{
 				f.setPosition(map.getCollisionBoxes()[0].getX() + map.getCollisionBoxes()[0].getWidth() - f.getWidth()*0.245f,
 						map.getCollisionBoxes()[0].getY() + map.getCollisionBoxes()[0].getHeight() - f.getHeight()*0.9f);
 				f.hangRight();
-			}
+			}*/
 		}
-		
-		
+
+
 		if(Gdx.input.isKeyPressed(31)) {	
 			game.changeScreen(back);
 			((CharacterSelect)(back)).lightReset();
 		}
 	}
-	
+
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
 	}
-	
-	
-	
+
+
+
 }
