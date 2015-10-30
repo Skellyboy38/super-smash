@@ -98,40 +98,50 @@ public class FightScreen extends Screen{
 		camera.translate(1,1);
 	}
 
+	boolean contactTopSurface, contactBottomSurface, contactLeftSurface, contactRightSurface;
+	
 	public void update() {
+		
+		contactTopSurface = false;
+		contactRightSurface = false;
+		contactLeftSurface = false;
+		contactBottomSurface = false;
+		
 		for(Fighter f : characters)
 		{
 			for(Rectangle r : topSurfaceCollisionSet)
 			{
 				if(Intersector.overlaps(r, f.getCollisionBoxes()[0]))
 				{
-					f.setPositionY(topSurfaces.get(r));
-					f.capVerticalPosition();
+					f.capFromBottom(topSurfaces.get(r));
+					contactTopSurface = true;
 				}
-				else
-				{
-					f.uncapVerticalPosition();
-				}
+			}
+			
+			if(!contactTopSurface)
+			{
+				f.enableCapFromBottom();
 			}
 
 			for(Rectangle r : bottomSurfaceCollisionSet)
 			{
 				if(Intersector.overlaps(r, f.getCollisionBoxes()[0]))
 				{
-					f.setPositionY(bottomSurfaces.get(r) - f.getHeight());
-					f.capVerticalPosition();
+					f.capFromTop(bottomSurfaces.get(r));
+					contactBottomSurface = true;
 				}
-				else
-				{
-					f.uncapVerticalPosition();
-				}
+			}
+			
+			if(!contactBottomSurface)
+			{
+				f.enableCapFromTop();
 			}
 			
 			for(Rectangle r : leftEdgeCollisionSet)
 			{
 				if(Intersector.overlaps(r, f.getCollisionBoxes()[2]))
 				{
-					f.setPosition(new Vector2(leftEdges.get(r).x - f.getWidth()*0.75f, leftEdges.get(r).y + r.getHeight() - f.getHeight()*0.9f));
+					f.setPosition(leftEdges.get(r).x - f.getWidth()*0.75f, leftEdges.get(r).y - f.getHeight()*0.9f);
 					f.hangLeft();
 				}
 			}
@@ -140,31 +150,10 @@ public class FightScreen extends Screen{
 			{
 				if(Intersector.overlaps(r, f.getCollisionBoxes()[1]))
 				{
-					f.setPosition(new Vector2(rightEdges.get(r).x + r.getWidth() - f.getWidth()*0.245f, rightEdges.get(r).y + r.getHeight() - f.getHeight()*0.9f));
+					f.setPosition(rightEdges.get(r).x + r.getWidth() - f.getWidth()*0.245f, rightEdges.get(r).y - f.getHeight()*0.9f);
 					f.hangRight();
 				}
 			}
-			/**
-			if(Intersector.overlaps(map.getSurfaces()[0], f.getCollisionBoxes()[0])) 
-			{
-				f.capVerticalPosition();
-			}
-			else {
-				f.uncapVerticalPosition();
-			}
-
-			if(Intersector.overlaps(map.getCollisionBoxes()[2], f.getCollisionBoxes()[2]))
-			{
-				f.setPosition(map.getCollisionBoxes()[0].getX() - f.getWidth()*0.75f,
-						map.getCollisionBoxes()[0].getY() + map.getCollisionBoxes()[0].getHeight() - f.getHeight()*0.9f);
-				f.hangLeft();
-			}
-			if(Intersector.overlaps(map.getCollisionBoxes()[3], f.getCollisionBoxes()[1]))
-			{
-				f.setPosition(map.getCollisionBoxes()[0].getX() + map.getCollisionBoxes()[0].getWidth() - f.getWidth()*0.245f,
-						map.getCollisionBoxes()[0].getY() + map.getCollisionBoxes()[0].getHeight() - f.getHeight()*0.9f);
-				f.hangRight();
-			}*/
 		}
 
 

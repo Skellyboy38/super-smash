@@ -11,7 +11,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.MyGdxGame;
 
-public class Fighter {
+public class Fighter implements FighterInterface 
+{
 	public static final int ANIMATION_WIDTH = (int)(MyGdxGame.GAME_WIDTH/12.5);
 	public static final int ANIMATION_HEIGHT = (int)(MyGdxGame.GAME_HEIGHT/8.4375f);
 
@@ -192,16 +193,17 @@ public class Fighter {
 		return ANIMATION_WIDTH;
 	}
 
-	public State getState() {
+	public State getState() 
+	{
 		return currentState;
 	}
 
-	private void resetFallingSpeed()
+	public void resetFallingSpeed()
 	{
 		fallingSpeed = 0;
 	}
 
-	private void resetCounter()
+	public void resetCounter()
 	{
 		counter = 0;
 	}
@@ -256,7 +258,7 @@ public class Fighter {
 	{
 		elevateBox = false;
 	}
-	
+
 	public void updateCollisionBoxes()
 	{
 		if(!elevateBox)
@@ -316,12 +318,12 @@ public class Fighter {
 		positionX = x;
 	}
 	
-	boolean canSetPositionY = true;
-	public void setPositionY(float y)
+	boolean canCapFromBottom = true;
+	public void capFromBottom(float height)
 	{
-		if(canSetPositionY)
+		if(canCapFromBottom)
 		{
-			positionY = y;
+			positionY = height;
 			if(getDirection())
 			{
 				changeState(standingLeft);
@@ -331,7 +333,66 @@ public class Fighter {
 				changeState(standingRight);
 			}
 		}
-		canSetPositionY = false;
+		canCapFromBottom = false;
+	}
+	
+	public void enableCapFromBottom()
+	{
+		canCapFromBottom = true;
+	}
+	
+	boolean canCapFromTop = true;
+	public void capFromTop(float height)
+	{
+		if(canCapFromTop)
+		{
+			positionY = height - ANIMATION_HEIGHT;
+			if(getDirection())
+			{
+				changeState(fallingLeft);
+			}
+			else
+			{
+				changeState(fallingRight);
+			}
+		}
+		canCapFromTop = false;
+	}
+	
+	public void enableCapFromTop()
+	{
+		canCapFromTop = true;
+	}
+	
+	public void capFromLeft(float length)
+	{
+		
+	}
+	
+	public void capFromRight(float length)
+	{
+		
+	}
+	
+	public void changeState(State toChange) {		//Method to change states depending on user input.
+		currentState = toChange;
+		canChangeState = false;
+	}
+
+	public boolean getDirection() {
+		if(currentState == standingLeft || currentState == walkingLeft || currentState == jumpingLeft || currentState == runningLeft || currentState == doubleJumpingLeft || currentState == fallingLeft) {
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public void capVerticalPosition() {
+		capVerticalPosition = true;
+	}
+
+	public void uncapVerticalPosition() {
+		capVerticalPosition = false;
 	}
 
 	public void update() {
@@ -353,7 +414,6 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
-					canSetPositionY = true;
 					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
@@ -373,7 +433,6 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
-					canSetPositionY = true;
 					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
@@ -393,7 +452,6 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
-					canSetPositionY = true;
 					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
@@ -413,7 +471,6 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
-					canSetPositionY = true;
 					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
@@ -432,7 +489,6 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
-					canSetPositionY = true;
 					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
@@ -451,7 +507,6 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
-					canSetPositionY = true;
 					elevateCollisionBox();
 					resetCounter();
 					resetFallingSpeed();
@@ -526,7 +581,6 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
-					canSetPositionY = true;
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingLeft);
@@ -544,7 +598,6 @@ public class Fighter {
 				}
 				if(Gdx.input.isKeyPressed(space))
 				{
-					canSetPositionY = true;
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingRight);
@@ -554,7 +607,6 @@ public class Fighter {
 			{
 				if(Gdx.input.isKeyPressed(space))
 				{
-					canSetPositionY = true;
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingRight);
@@ -564,7 +616,6 @@ public class Fighter {
 			{
 				if(Gdx.input.isKeyPressed(space))
 				{
-					canSetPositionY = true;
 					resetCounter();
 					resetFallingSpeed();
 					changeState(jumpingLeft);
@@ -691,29 +742,8 @@ public class Fighter {
 			keyHoldingspace = false;
 		}
 	}
-
-	public void changeState(State toChange) {		//Method to change states depending on user input.
-		currentState = toChange;
-		canChangeState = false;
-	}
-
-	public boolean getDirection() {
-		if(currentState == standingLeft || currentState == walkingLeft || currentState == jumpingLeft || currentState == runningLeft || currentState == doubleJumpingLeft) {
-			return true;
-		}
-		else
-			return false;
-	}
-
-	public void capVerticalPosition() {
-		capVerticalPosition = true;
-	}
-
-	public void uncapVerticalPosition() {
-		capVerticalPosition = false;
-	}
 	//=====================================================================
-	private class State {
+	public class State {
 		public void render() {
 		}
 	}
@@ -771,7 +801,7 @@ public class Fighter {
 			currentFrame = walkingLeftAnimation.getKeyFrame(counter, true);
 			if(Gdx.input.isKeyPressed(left)) {
 
-				if(capVerticalPosition) {
+				if(!canCapFromBottom) {
 					positionX -= walkingSpeed;
 				}
 				else {
@@ -806,7 +836,7 @@ public class Fighter {
 			canChangeState = true;
 			currentFrame = walkingRightAnimation.getKeyFrame(counter, true);
 			if(Gdx.input.isKeyPressed(right)) {
-				if(capVerticalPosition) {
+				if(!canCapFromBottom) {
 					positionX += walkingSpeed;
 				}
 				else {
@@ -841,7 +871,7 @@ public class Fighter {
 			canChangeState = true;
 			currentFrame = runningLeftAnimation.getKeyFrame(counter, true);
 			if(Gdx.input.isKeyPressed(left)) {
-				if(capVerticalPosition) {
+				if(!canCapFromBottom) {
 					positionX -= runningSpeed;
 				}
 				else {
@@ -875,7 +905,7 @@ public class Fighter {
 			canChangeState = true;
 			currentFrame = runningRightAnimation.getKeyFrame(counter, true);
 			if(Gdx.input.isKeyPressed(right)) {
-				if(capVerticalPosition) {
+				if(!canCapFromBottom) {
 					positionX += runningSpeed;
 				}
 				else {
