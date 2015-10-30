@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.characters.Fighter;
 import com.mygdx.game.stages.FinalDestination;
+import com.mygdx.game.stages.GrassLands;
 import com.mygdx.game.stages.Map;
 
 public class StageSelectScreen extends Screen{
@@ -31,7 +32,9 @@ public class StageSelectScreen extends Screen{
 	
 	private Texture backgroundTexture;
 	private Texture final_destination_zoomed;
+	private Texture grass_lands_zoomed;
 	private Image final_destination_zoomed_image;
+	private Image grass_lands_zoomed_image;
 	private Texture empty_zoomed;
 	private Image empty_zoomed_image;
 	private Image background;
@@ -48,6 +51,10 @@ public class StageSelectScreen extends Screen{
 	private TextButtonStyle final_destination_style;
 	private TextureAtlas final_destination_atlas;
 	private Skin final_destination_skin;
+	
+	private TextButtonStyle grass_lands_style;
+	private TextureAtlas grass_lands_atlas;
+	private Skin grass_lands_skin;
 	
 	private TextButtonStyle backStyle;
 	private TextureAtlas backAtlas;
@@ -102,6 +109,11 @@ public class StageSelectScreen extends Screen{
 		final_destination_zoomed_image.setWidth(ZOOMED_WIDTH);
 		final_destination_zoomed_image.setHeight(ZOOMED_HEIGHT);
 		
+		grass_lands_zoomed = new Texture("stageSelect/stage_image/grass_lands/grass_lands.9.png");
+		grass_lands_zoomed_image = new Image(grass_lands_zoomed);
+		grass_lands_zoomed_image.setWidth(ZOOMED_WIDTH);
+		grass_lands_zoomed_image.setHeight(ZOOMED_HEIGHT);
+		
 		backgroundTexture = new Texture("stageSelect/background.png");
 		background = new Image(backgroundTexture);
 		background.setPosition(0, 0);
@@ -130,6 +142,13 @@ public class StageSelectScreen extends Screen{
 		final_destination_skin.addRegions(final_destination_atlas);
 		final_destination_style.font = font;
 		final_destination_style.up = final_destination_skin.getDrawable("Final_destination");
+		
+		grass_lands_style = new TextButtonStyle();
+		grass_lands_atlas = new TextureAtlas("stageSelect/stage_image/grass_lands/grass_lands.pack");
+		grass_lands_skin = new Skin();
+		grass_lands_skin.addRegions(grass_lands_atlas);
+		grass_lands_style.font = font;
+		grass_lands_style.up = grass_lands_skin.getDrawable("grass_lands");
 		createButtons();
 	}
 	
@@ -174,8 +193,31 @@ public class StageSelectScreen extends Screen{
 			posX = MyGdxGame.GAME_WIDTH/divisor;
 			posY -= buttons[0].getHeight()*1.05F;
 		}
+		
+		buttons[1] = new TextButton("", grass_lands_style);		//Creating the button for final destination
+		buttons[1].setHeight(buttonHeight);
+		buttons[1].setWidth(buttonWidth);
+		buttons[1].setPosition(posX, posY);
+		posX += buttons[1].getWidth()*1.05F;
+		
+		buttons[1].addListener(new ClickListener() {
+			public void enter (InputEvent event, float x, float y, int pointer, Actor fromButton) {
+				addRemoveActors.get(0).remove();
+				addRemoveActors.remove(0);
+				stage.addActor(grass_lands_zoomed_image);
+				addRemoveActors.add(grass_lands_zoomed_image);
+				drawZoomed = true;
+				positionX = -500;
+			}
+		});
+		
+		if(posX + buttons[1].getWidth() > MyGdxGame.GAME_WIDTH) {
+			divisor += 0.2F;
+			posX = MyGdxGame.GAME_WIDTH/divisor;
+			posY -= buttons[1].getHeight()*1.05F;
+		}
 		//=======================================================================================
-		for(int i = 1; i < buttons.length; i++) {
+		for(int i = 2; i < buttons.length; i++) {
 			buttons[i] = new TextButton("", style);
 			buttons[i].setHeight(buttonHeight);
 			buttons[i].setWidth(buttonWidth);
@@ -208,6 +250,17 @@ public class StageSelectScreen extends Screen{
             	return true;
             }
 		});
+		
+		buttons[1].addListener(new ClickListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				GrassLands grassLands = new GrassLands(batch);
+				Map map = grassLands;
+				fight = new FightScreen(game, batch, map, characters, map.getStage());
+				fight.addScreens(back);
+				game.changeScreen(fight);
+            	return true;
+            }
+		});
 	}
 	
 	public void addScreens(Screen back) {
@@ -227,6 +280,7 @@ public class StageSelectScreen extends Screen{
 		}
 		empty_zoomed_image.setPosition(positionX, positionY);
 		final_destination_zoomed_image.setPosition(positionX, positionY);
+		grass_lands_zoomed_image.setPosition(positionX, positionY);
 	}
 	
 	public void show() {

@@ -1,0 +1,12 @@
+
+grass_lands.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+grass_lands
+  rotate: false
+  xy: 1, 1
+  size: 384, 216
+  orig: 384, 216
+  offset: 0, 0
+  index: -1
