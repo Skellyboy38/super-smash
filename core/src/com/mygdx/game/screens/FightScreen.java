@@ -26,13 +26,17 @@ public class FightScreen extends Screen{
 
 	Set<Rectangle> topSurfaceCollisionSet;
 	Set<Rectangle> bottomSurfaceCollisionSet;
-	Set<Rectangle> leftEdgeCollisionSet;
-	Set<Rectangle> rightEdgeCollisionSet;
+	Set<Rectangle> leftSurfaceCollisionSet;
+	Set<Rectangle> rightSurfaceCollisionSet;
+	Set<Rectangle> leftHangCollisionSet;
+	Set<Rectangle> rightHangCollisionSet;
 
 	HashMap<Rectangle, Float> topSurfaces;
 	HashMap<Rectangle, Float> bottomSurfaces;
-	HashMap<Rectangle, Vector2> leftEdges;
-	HashMap<Rectangle, Vector2> rightEdges;
+	HashMap<Rectangle, Float> leftSurfaces;
+	HashMap<Rectangle, Float> rightSurfaces;
+	HashMap<Rectangle, Vector2> leftHangs;
+	HashMap<Rectangle, Vector2> rightHangs;
 
 	HashMap<Fighter, HashMap<Rectangle, Float>> fighterToMapCollisionBoxes;
 
@@ -53,13 +57,17 @@ public class FightScreen extends Screen{
 
 		topSurfaces = map.getTopSurfacesMap();
 		bottomSurfaces = map.getBottomSurfacesMap();
-		leftEdges = map.getLeftEdgesMap();
-		rightEdges = map.getRightEdgesMap();
+		leftSurfaces = map.getLeftEdgesMap();
+		rightSurfaces = map.getRightEdgesMap();
+		leftHangs = map.getLeftHangMap();
+		rightHangs = map.getRightHangMap();
 		
 		topSurfaceCollisionSet = topSurfaces.keySet();
 		bottomSurfaceCollisionSet = bottomSurfaces.keySet();
-		leftEdgeCollisionSet = leftEdges.keySet();
-		rightEdgeCollisionSet = rightEdges.keySet();
+		leftSurfaceCollisionSet = leftSurfaces.keySet();
+		rightSurfaceCollisionSet = rightSurfaces.keySet();
+		leftHangCollisionSet = leftHangs.keySet();
+		rightHangCollisionSet = rightHangs.keySet();
 
 		int counter = 0;
 		for(int i = 0; i < characters.size(); i++)
@@ -132,25 +140,41 @@ public class FightScreen extends Screen{
 				}
 			}
 			
-			if(!contactBottomSurface)
+			if(!contactLeftSurface)
 			{
 				f.enableCapFromTop();
 			}
 			
-			for(Rectangle r : leftEdgeCollisionSet)
+			for(Rectangle r : leftSurfaceCollisionSet)
+			{
+				if(Intersector.overlaps(r, f.getCollisionBoxes()[0]))
+				{
+					f.capFromRight(leftSurfaces.get(r));
+				}
+			}
+			
+			for(Rectangle r : rightSurfaceCollisionSet)
+			{
+				if(Intersector.overlaps(r, f.getCollisionBoxes()[0]))
+				{
+					f.capFromLeft(rightSurfaces.get(r));
+				}
+			}
+			
+			for(Rectangle r : leftHangCollisionSet)
 			{
 				if(Intersector.overlaps(r, f.getCollisionBoxes()[2]))
 				{
-					f.setPosition(leftEdges.get(r).x - f.getWidth()*0.75f, leftEdges.get(r).y - f.getHeight()*0.9f);
+					f.setPosition(leftHangs.get(r).x - f.getWidth()*0.75f, leftHangs.get(r).y - f.getHeight()*0.9f);
 					f.hangLeft();
 				}
 			}
 			
-			for(Rectangle r : rightEdgeCollisionSet)
+			for(Rectangle r : rightHangCollisionSet)
 			{
 				if(Intersector.overlaps(r, f.getCollisionBoxes()[1]))
 				{
-					f.setPosition(rightEdges.get(r).x + r.getWidth() - f.getWidth()*0.245f, rightEdges.get(r).y - f.getHeight()*0.9f);
+					f.setPosition(rightHangs.get(r).x + r.getWidth() - f.getWidth()*0.245f, rightHangs.get(r).y - f.getHeight()*0.9f);
 					f.hangRight();
 				}
 			}

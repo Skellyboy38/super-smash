@@ -13,36 +13,45 @@ public class FinalDestination extends Map{
 	
 	public static final String BACKGROUND_LOCATION = "stages/final_destination/final_destination_background.png";
 	
-	public static final float MAIN_PLATFORM_LOCATION_X = MyGdxGame.GAME_WIDTH/5.59766f;
-	public static final float MAIN_PLATFORM_LOCATION_Y = MyGdxGame.GAME_HEIGHT/2.6535f;
-	public static final float MAIN_COLLISION_WIDTH = MyGdxGame.GAME_WIDTH/1.60267f;
-	public static final float MAIN_COLLISION_HEIGHT = MyGdxGame.GAME_HEIGHT/20f;
+	public static final float MAIN_PLATFORM_LOCATION_X = MyGdxGame.GAME_WIDTH/4.615384f;
+	public static final float MAIN_PLATFORM_LOCATION_Y = MyGdxGame.GAME_HEIGHT/2.41071f;
+	public static final float MAIN_COLLISION_WIDTH = MyGdxGame.GAME_WIDTH/1.71275f;
+	public static final float MAIN_COLLISION_HEIGHT = MyGdxGame.GAME_HEIGHT/16.3636f;
 	
-	public static final float UNDER_COLLISION_WIDTH = MAIN_COLLISION_WIDTH;
-	public static final float UNDER_COLLISION_HEIGHT = MAIN_COLLISION_HEIGHT/10;
-	public static final Vector2 UNDER_COLLISION_POSITION = new Vector2(MAIN_PLATFORM_LOCATION_X, MAIN_PLATFORM_LOCATION_Y - UNDER_COLLISION_HEIGHT);
+	public static final float LEFT_PLATFORM_LOCATION_X = MAIN_PLATFORM_LOCATION_X;
+	public static final float LEFT_PLATFORM_LOCATION_Y = 0;
+	public static final float LEFT_COLLISION_WIDTH = MyGdxGame.GAME_WIDTH/16.13445f;
+	public static final float LEFT_COLLISION_HEIGHT = MyGdxGame.GAME_HEIGHT/2.4161f;
 	
-	public static final float LEFT_COLLISION_WIDTH = 10;
-	public static final float LEFT_COLLISION_HEIGHT = MAIN_COLLISION_HEIGHT*0.8f;
-	
+	public static final float RIGHT_PLATFORM_LOCATION_X = MyGdxGame.GAME_WIDTH/1.34737f;
+	public static final float RIGHT_PLATFORM_LOCATION_Y = 0;
 	public static final float RIGHT_COLLISION_WIDTH = LEFT_COLLISION_WIDTH;
 	public static final float RIGHT_COLLISION_HEIGHT = LEFT_COLLISION_HEIGHT;
 	
+	public static final float LEDGE_COLLISION_WIDTH = 10;
+	public static final float LEDGE_COLLISION_HEIGHT = MAIN_COLLISION_HEIGHT*0.8f;
+	
+	public static final float REDGE_COLLISION_WIDTH = LEDGE_COLLISION_WIDTH;
+	public static final float REDGE_COLLISION_HEIGHT = LEDGE_COLLISION_HEIGHT;
+	
 	public static final float MAIN_CAP = MAIN_PLATFORM_LOCATION_Y + MAIN_COLLISION_HEIGHT*0.9f;
-	public static final float BOTTOM_CAP = UNDER_COLLISION_POSITION.y*1.1f;
+	public static final float LEFT_CAP = LEFT_PLATFORM_LOCATION_X;
+	public static final float RIGHT_CAP = RIGHT_PLATFORM_LOCATION_X + RIGHT_COLLISION_WIDTH;
 	
 	public static final Vector2 LEFT_HANG_POSITION = new Vector2(MAIN_PLATFORM_LOCATION_X, MAIN_PLATFORM_LOCATION_Y + MAIN_COLLISION_HEIGHT);
 	public static final Vector2 RIGHT_HANG_POSITION = new Vector2(MAIN_PLATFORM_LOCATION_X + MAIN_COLLISION_WIDTH, MAIN_PLATFORM_LOCATION_Y + MAIN_COLLISION_HEIGHT);
 	
 	private HashMap<Rectangle,Float> topSurfaces;
 	private HashMap<Rectangle, Float> bottomSurfaces;
+	private HashMap<Rectangle,Float> leftSurfaces;
+	private HashMap<Rectangle, Float> rightSurfaces;
 	private HashMap<Rectangle, Vector2> leftEdges;
 	private HashMap<Rectangle, Vector2> rightEdges;
 	
 	Texture background;
 	Image backgroundImage;
 	
-	Rectangle main, under, leftEdge, rightEdge;
+	Rectangle main, left, right, leftEdge, rightEdge;
 	
 	Vector2 mainPlatform;
 
@@ -50,6 +59,8 @@ public class FinalDestination extends Map{
 		
 		topSurfaces = new HashMap<Rectangle, Float>();
 		bottomSurfaces = new HashMap<Rectangle, Float>();
+		leftSurfaces = new HashMap<Rectangle, Float>();
+		rightSurfaces = new HashMap<Rectangle, Float>();
 		leftEdges = new HashMap<Rectangle, Vector2>();
 		rightEdges = new HashMap<Rectangle, Vector2>();
 
@@ -59,10 +70,10 @@ public class FinalDestination extends Map{
 		backgroundImage.setHeight(MyGdxGame.GAME_HEIGHT);
 		
 		mainPlatform = new Vector2(MAIN_PLATFORM_LOCATION_X, MAIN_PLATFORM_LOCATION_Y);
-		platforms = new Vector2[] {mainPlatform};
 		
 		main = new Rectangle();
-		under = new Rectangle();
+		left = new Rectangle();
+		right = new Rectangle();
 		leftEdge = new Rectangle();
 		rightEdge = new Rectangle();
 		
@@ -70,16 +81,20 @@ public class FinalDestination extends Map{
 		main.setWidth(MAIN_COLLISION_WIDTH);
 		main.setPosition(mainPlatform);
 		
-		under.setHeight(UNDER_COLLISION_HEIGHT);
-		under.setWidth(UNDER_COLLISION_WIDTH);
-		under.setPosition(UNDER_COLLISION_POSITION);
+		left.setHeight(LEFT_COLLISION_HEIGHT);
+		left.setWidth(LEFT_COLLISION_WIDTH);
+		left.setPosition(LEFT_PLATFORM_LOCATION_X, LEFT_PLATFORM_LOCATION_Y);
 		
-		leftEdge.setHeight(LEFT_COLLISION_HEIGHT);
-		leftEdge.setWidth(LEFT_COLLISION_WIDTH);
-		leftEdge.setPosition(MAIN_PLATFORM_LOCATION_X - LEFT_COLLISION_WIDTH, MAIN_PLATFORM_LOCATION_Y);
+		right.setHeight(RIGHT_COLLISION_HEIGHT);
+		right.setWidth(RIGHT_COLLISION_WIDTH);
+		right.setPosition(RIGHT_PLATFORM_LOCATION_X, RIGHT_PLATFORM_LOCATION_Y);
 		
-		rightEdge.setHeight(RIGHT_COLLISION_HEIGHT);
-		rightEdge.setWidth(RIGHT_COLLISION_WIDTH);
+		leftEdge.setHeight(LEDGE_COLLISION_HEIGHT);
+		leftEdge.setWidth(LEDGE_COLLISION_WIDTH);
+		leftEdge.setPosition(MAIN_PLATFORM_LOCATION_X - LEDGE_COLLISION_WIDTH, MAIN_PLATFORM_LOCATION_Y);
+		
+		rightEdge.setHeight(REDGE_COLLISION_HEIGHT);
+		rightEdge.setWidth(REDGE_COLLISION_WIDTH);
 		rightEdge.setPosition(MAIN_PLATFORM_LOCATION_X + MAIN_COLLISION_WIDTH, MAIN_PLATFORM_LOCATION_Y);
 		
 		Vector2 playerOneSpawnPoint = new Vector2(MAIN_PLATFORM_LOCATION_X, MAIN_PLATFORM_LOCATION_Y + MAIN_COLLISION_HEIGHT);
@@ -90,11 +105,12 @@ public class FinalDestination extends Map{
 		spawnPoints = new Vector2[] {playerOneSpawnPoint, playerTwoSpawnPoint, playerThreeSpawnPoint, playerFourSpawnPoint};
 		
 		topSurfaces.put(main, MAIN_CAP);
-		bottomSurfaces.put(under, BOTTOM_CAP);
+		leftSurfaces.put(left, LEFT_CAP);
+		rightSurfaces.put(right, RIGHT_CAP);
 		leftEdges.put(leftEdge, LEFT_HANG_POSITION);
 		rightEdges.put(rightEdge, RIGHT_HANG_POSITION);
 		
-		create(backgroundImage, topSurfaces, bottomSurfaces, leftEdges, rightEdges, batch);
+		create(backgroundImage, topSurfaces, bottomSurfaces, leftSurfaces, rightSurfaces, leftEdges, rightEdges, batch);
 	}
 	
 }

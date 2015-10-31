@@ -59,6 +59,8 @@ public class GrassLands extends Map
 
 	private HashMap<Rectangle,Float> topSurfaces;
 	private HashMap<Rectangle, Float> bottomSurfaces;
+	private HashMap<Rectangle,Float> leftSurfaces;
+	private HashMap<Rectangle, Float> rightSurfaces;
 	private HashMap<Rectangle, Vector2> leftEdges;
 	private HashMap<Rectangle, Vector2> rightEdges;
 
@@ -71,6 +73,8 @@ public class GrassLands extends Map
 
 		topSurfaces = new HashMap<Rectangle, Float>();
 		bottomSurfaces = new HashMap<Rectangle, Float>();
+		leftSurfaces = new HashMap<Rectangle, Float>();
+		rightSurfaces = new HashMap<Rectangle, Float>();
 		leftEdges = new HashMap<Rectangle, Vector2>();
 		rightEdges = new HashMap<Rectangle, Vector2>();
 
@@ -129,6 +133,6 @@ public class GrassLands extends Map
 		rightEdges.put(right1, RIGHT1_HANG_POSITION);
 		rightEdges.put(right2, RIGHT2_HANG_POSITION);
 
-		create(backgroundImage, topSurfaces, bottomSurfaces, leftEdges, rightEdges, batch);
+		create(backgroundImage, topSurfaces, bottomSurfaces, leftSurfaces, rightSurfaces, leftEdges, rightEdges, batch);
 	}
 }

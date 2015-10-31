@@ -366,12 +366,12 @@ public class Fighter implements FighterInterface
 	
 	public void capFromLeft(float length)
 	{
-		
+		positionX = length;
 	}
 	
 	public void capFromRight(float length)
 	{
-		
+		positionX = length - ANIMATION_WIDTH;
 	}
 	
 	public void changeState(State toChange) {		//Method to change states depending on user input.

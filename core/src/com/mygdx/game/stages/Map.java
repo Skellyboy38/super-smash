@@ -19,12 +19,13 @@ public class Map {
 	
 	private HashMap<Rectangle, Float> topSurfacesMap;
 	private HashMap<Rectangle, Float> bottomSurfacesMap;
-	private HashMap<Rectangle, Vector2> leftEdgesMap;
-	private HashMap<Rectangle, Vector2> rightEdgesMap;
+	private HashMap<Rectangle, Float> leftEdgesMap;
+	private HashMap<Rectangle, Float> rightEdgesMap;
+	private HashMap<Rectangle, Vector2> leftHangMap;
+	private HashMap<Rectangle, Vector2> rightHangMap;
 	
 	private ArrayList<Rectangle> allRectangles;
 	
-	protected Vector2[] platforms;
 	protected Vector2[] spawnPoints;
 	
 	boolean showBoxes;
@@ -38,12 +39,15 @@ public class Map {
 	}
 	
 	public void create(Image background, HashMap<Rectangle, Float> topSurfacesMap, 
-			HashMap<Rectangle, Float> bottomSurfacesMap, HashMap<Rectangle, Vector2> leftEdgesMap, HashMap<Rectangle, Vector2> rightEdgesMap, SpriteBatch batch) {
+			HashMap<Rectangle, Float> bottomSurfacesMap, HashMap<Rectangle, Float> leftEdgesMap, HashMap<Rectangle, Float> rightEdgesMap, 
+			HashMap<Rectangle, Vector2> leftHangMap, HashMap<Rectangle, Vector2> rightHangMap, SpriteBatch batch) {
 		this.background = background;
 		this.topSurfacesMap = topSurfacesMap;
 		this.bottomSurfacesMap = bottomSurfacesMap;
 		this.leftEdgesMap = leftEdgesMap;
 		this.rightEdgesMap = rightEdgesMap;
+		this.leftHangMap = leftHangMap;
+		this.rightHangMap = rightHangMap;
 		stage.addActor(background);
 		shapeRenderer.setColor(1,1,0,1);
 		
@@ -69,6 +73,14 @@ public class Map {
 		{
 			allRectangles.add(r);
 		}
+		for(Rectangle r : leftHangMap.keySet())
+		{
+			allRectangles.add(r);
+		}
+		for(Rectangle r : rightHangMap.keySet())
+		{
+			allRectangles.add(r);
+		}
 	}
 	
 	public HashMap<Rectangle, Float> getTopSurfacesMap()
@@ -81,23 +93,28 @@ public class Map {
 		return bottomSurfacesMap;
 	}
 	
-	public HashMap<Rectangle, Vector2> getLeftEdgesMap()
+	public HashMap<Rectangle, Float> getLeftEdgesMap()
 	{
 		return leftEdgesMap;
 	}
 	
-	public HashMap<Rectangle, Vector2> getRightEdgesMap()
+	public HashMap<Rectangle, Float> getRightEdgesMap()
 	{
 		return rightEdgesMap;
 	}
 	
-	public Stage getStage() {
-		return stage;
+	public HashMap<Rectangle, Vector2> getLeftHangMap()
+	{
+		return leftHangMap;
 	}
 	
-	public Vector2[] getPlatforms()
+	public HashMap<Rectangle, Vector2> getRightHangMap()
 	{
-		return platforms;
+		return rightHangMap;
+	}
+	
+	public Stage getStage() {
+		return stage;
 	}
 	
 	public Vector2[] getSpawnPoints()
