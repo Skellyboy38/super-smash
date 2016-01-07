@@ -32,7 +32,6 @@ public class HomeScreen extends Screen{
 	long r = 0;			//Values used to alter the color of the text for the play button.
 	long g = 0;
 	long b = 0;
-	long toDelete = 0;
 	
 	public HomeScreen(MyGdxGame game, SpriteBatch batch) {
 		super(game);	
@@ -48,7 +47,6 @@ public class HomeScreen extends Screen{
 	public void addScreens(Screen next) {
 		this.next = next;
 	}
-
 	
 	public void create() {
 		picture = new Texture("homeScreen/background.png");
