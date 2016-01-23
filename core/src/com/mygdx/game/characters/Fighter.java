@@ -95,6 +95,7 @@ public class Fighter implements FighterInterface
 
 	private boolean canChangeState;
 	private float counter;
+	Vector2 spawnPoint;
 
 	public Fighter(SpriteBatch batch, int[] controls) {
 		this.batch = batch;
@@ -170,6 +171,8 @@ public class Fighter implements FighterInterface
 	
 	public void setSpawnPoint(Vector2 spawn)
 	{
+		spawnPoint = spawn;
+		
 		positionX = spawn.x;
 		positionY = spawn.y;
 	}
@@ -210,6 +213,11 @@ public class Fighter implements FighterInterface
 
 	public Vector2 getPosition() {
 		return new Vector2(positionX, positionY);
+	}
+	
+	public boolean isDead()
+	{
+		return (positionY < (0 - ANIMATION_HEIGHT));
 	}
 
 	public void addAnimations(Animation[] animations) {
@@ -398,7 +406,11 @@ public class Fighter implements FighterInterface
 	public void update() {
 		counter += Gdx.graphics.getDeltaTime();
 		updateCollisionBoxes();
-
+		if(isDead())
+		{
+			setPosition(spawnPoint);
+		}
+		
 		if(canChangeState)
 		{
 			if(currentState == standingLeft)
@@ -937,7 +949,7 @@ public class Fighter implements FighterInterface
 			System.out.println("falling\n");
 			canChangeState = true;
 			currentFrame = jumpingLeftAnimation.getKeyFrame(counter, false);
-			if(fallingSpeed > -5) {
+			if(fallingSpeed > -10) {
 				fallingSpeed -= fallingAcceleration;
 			}
 			if(Gdx.input.isKeyPressed(left)) {
@@ -967,7 +979,7 @@ public class Fighter implements FighterInterface
 			System.out.println("falling\n");
 			canChangeState = true;
 			currentFrame = jumpingRightAnimation.getKeyFrame(counter, false);
-			if(fallingSpeed > -5) {
+			if(fallingSpeed > -10) {
 				fallingSpeed -= fallingAcceleration;
 			}
 			else if(Gdx.input.isKeyPressed(right)) {
